@@ -115,6 +115,6 @@ ALTER TABLE "trait" RENAME CONSTRAINT "PK_trait" TO "trait_pkey";--> statement-b
 ALTER TABLE "uploaded_resource_log" RENAME CONSTRAINT "PK_uploaded_resource_log" TO "uploaded_resource_log_pkey";--> statement-breakpoint
 ALTER TABLE "whitelist" RENAME CONSTRAINT "PK_whitelist" TO "whitelist_pkey";--> statement-breakpoint
 ALTER TABLE "rmc_patron_tiers" ALTER COLUMN "discord_role" SET DEFAULT '0';--> statement-breakpoint
-ALTER TABLE "preference" ALTER COLUMN "construction_favorites" SET DEFAULT ARRAY::text[];--> statement-breakpoint
+ALTER TABLE "preference" ALTER COLUMN "construction_favorites" SET DEFAULT ARRAY[]::text[];--> statement-breakpoint
 CREATE UNIQUE INDEX "table_created_at_index" ON "table" ("created_at");--> statement-breakpoint
 CREATE UNIQUE INDEX "table_updated_at_index" ON "table" ("updated_at");
