@@ -1,1 +1,1 @@
-# template_next
+# didactic-succotash

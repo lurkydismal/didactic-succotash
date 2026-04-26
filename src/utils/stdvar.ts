@@ -64,7 +64,7 @@ export const buildYear = buildDate.getFullYear();
  * Name of the application.
  * - Used in logging, UI, or headers.
  */
-export const appName = "template_next";
+export const appName = "didactic-succotash";
 
 /**
  * Version of the application.
