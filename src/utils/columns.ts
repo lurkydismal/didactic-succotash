@@ -13,6 +13,7 @@
  * - Call `normalizeColumns(rawColumns, options)` where you need the final GridColDef[]
  */
 
+import { FieldConfig } from "@/components/TableDataGrid/RowDialog";
 import { toCamelCase } from "@/utils/stdfunc";
 import { GridColDef } from "@mui/x-data-grid";
 
@@ -26,9 +27,13 @@ type NormalizeOptions = {
 };
 
 /**
- * Normalize a list of partial GridColDef entries into a readonly GridColDef[].
+ * Normalize and enrich all column definitions:
+ * - Center-align headers and cell content
+ * - Ensure `flex` is set (default: 1)
+ * - Ensure `minWidth` is set (derived from `flex`)
+ * - Ensure `field` exists (derived from headerName if missing)
  */
-export default function normalizeColumns(
+export function normalizeColumns(
     cols: readonly Partial<GridColDef>[],
     options: NormalizeOptions = {},
 ): readonly GridColDef[] {
@@ -59,4 +64,16 @@ export default function normalizeColumns(
                 : {}),
         } as GridColDef;
     }) as readonly GridColDef[];
+}
+
+export function columnsFromFields<
+    R extends Record<string, unknown>,
+    RI extends Record<string, unknown>,
+>(fields: FieldConfig<R, RI>[]): readonly GridColDef[] {
+
+    return normalizeColumns(fields.map((field) => ({
+        field: String(field.key),
+        headerName: field.label,
+        flex: 1,
+    })));
 }

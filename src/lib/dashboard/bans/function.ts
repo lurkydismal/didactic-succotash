@@ -2,7 +2,7 @@
 
 import { TableRowInsert } from "@/db/types";
 import { create } from "@/lib/create";
-import { getRows } from "@/lib/dashboard/table/get";
+import { getRows } from "@/lib/dashboard/bans/get";
 import { updateAction } from "@/lib/update";
 import log from "@/utils/stdlog";
 import { DbTarget } from "@/lib/types";

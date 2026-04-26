@@ -13,6 +13,7 @@ import { useSnackbar } from "@/providers/snackbar";
 import CustomToolbar from "./Toolbar";
 import { useGridApiRef, GridRowsProp, GridRowParams, GridColDef } from "@mui/x-data-grid";
 import { Box, CircularProgress } from "@mui/material";
+import { columnsFromFields } from "@/utils/columns";
 
 export default function TableDataGrid<
     R extends Record<string, unknown>,
@@ -24,7 +25,6 @@ export default function TableDataGrid<
     updateRowAction,
     extraButtons,
     fields,
-    columns,
     isRowChanged,
 }: Readonly<{
     emptyRow: RI;
@@ -33,7 +33,6 @@ export default function TableDataGrid<
     updateRowAction: (fd: FormData) => Promise<boolean>;
     extraButtons?: React.ReactNode; // optionally a ReactElement expecting props
     fields: FieldConfig<R, RI>[];
-    columns: readonly GridColDef[];
     isRowChanged?: (row: R, values: Partial<RI>) => boolean;
 }>) {
     const { showError } = useSnackbar();
@@ -133,6 +132,8 @@ export default function TableDataGrid<
             },
         )
         : extraButtons;
+
+    const columns = columnsFromFields(fields);
 
     return currentRows === null ? (
         <Box
