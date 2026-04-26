@@ -5,7 +5,7 @@ import { CrudConfig } from "./config";
 import { getRows } from "./get";
 import { saveFromFormData } from "./save";
 
-export function makeCrudActions<R, RI extends Record<string, unknown>>(
+export async function makeCrudActions<R, RI extends Record<string, unknown>>(
     config: CrudConfig,
 ) {
     return {
