@@ -4,7 +4,7 @@ import {
     createSelectSchema,
     createUpdateSchema,
 } from "drizzle-zod";
-import { categories, users } from "@/db/schema";
+import { users } from "@/db/schema";
 import dayjs from "@/utils/dayjs";
 import { Dayjs } from "dayjs";
 
@@ -74,20 +74,6 @@ export const userSelectPublicSchema = userSelectSchema
         username: z.string().trim().min(1),
         username_normalized: z.string().trim().min(1).lowercase(),
     });
-
-/**
- * Category schemas for select, insert, and update operations.
- * - `categorySelectSchema` – full category selection
- * - `categoryInsertSchema` – insertion fields
- * - `categoryUpdateSchema` – update fields
- * - `categorySelectPublicSchema` – public-facing version with only name
- */
-export const categorySelectSchema = createSelectSchema(categories);
-export const categoryInsertSchema = createInsertSchema(categories);
-export const categoryUpdateSchema = createUpdateSchema(categories);
-export const categorySelectPublicSchema = categorySelectSchema
-    .pick({ name: true })
-    .extend({ name: z.string().trim().min(1) });
 
 // TODO: Document
 export const idSchema = z.number();

@@ -43,13 +43,3 @@ export const users = pgTable(
         ),
     ],
 );
-
-export const categories = pgTable(
-    "categories",
-    {
-        id: serial().primaryKey(),
-        name: varchar({ length: 50 }).unique().notNull(),
-        ...timestamps,
-    },
-    (t) => [check("name_not_blank", sql`length(trim(${t.name})) > 0`)],
-);
