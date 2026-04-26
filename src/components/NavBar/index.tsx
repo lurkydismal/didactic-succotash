@@ -3,7 +3,7 @@
 import DesktopNav from "./DesktopNav";
 import { items } from "@/data/navbat";
 import MobileNav from "./MobileNav";
-import { styled, Toolbar, alpha, AppBar, Container } from "@mui/material";
+import { styled, Toolbar, alpha, AppBar, Container, MenuList } from "@mui/material";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
     alignItems: "center",
@@ -40,7 +40,9 @@ export default function NavBar() {
                         containerSx={{ display: "flex", alignItems: "center" }}
                     />
 
-                    {/* <MobileNav items={items} /> */}
+                    <MenuList>
+                        <MobileNav items={items} />
+                    </MenuList>
                 </StyledToolbar>
             </Container>
         </AppBar>

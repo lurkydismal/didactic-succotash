@@ -28,8 +28,8 @@ type DefaultFieldType = "text" | "multiline" | "custom";
 
 export type FieldConfig<
     R,
-    _RI = unknown,
-    K extends PropertyKey = keyof R | string,
+    RI = unknown,
+    K extends PropertyKey = keyof R | keyof RI | string,
 > = {
     key: K; // property key in row/insert (string allowed for synthetic fields)
     label: string;
