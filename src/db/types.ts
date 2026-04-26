@@ -48,7 +48,6 @@ import {
     whitelist,
 } from "./schema";
 
-
 export type TableRow = typeof table.$inferSelect;
 export type TableRowInsert = typeof table.$inferInsert;
 
@@ -60,7 +59,8 @@ export type UsersRowPublic = Omit<
 >;
 
 export type EfMigrationsHistoryRow = typeof efMigrationsHistory.$inferSelect;
-export type EfMigrationsHistoryRowInsert = typeof efMigrationsHistory.$inferInsert;
+export type EfMigrationsHistoryRowInsert =
+    typeof efMigrationsHistory.$inferInsert;
 
 export type AdminRow = typeof admin.$inferSelect;
 export type AdminRowInsert = typeof admin.$inferInsert;
@@ -117,7 +117,10 @@ export type PlayTimeRowInsert = typeof playTime.$inferInsert;
 
 export type PlayerRow = typeof player.$inferSelect;
 export type PlayerRowInsert = typeof player.$inferInsert;
-export type PlayerRowPublic = Omit<PlayerRow, "lastSeenAddress" | "lastSeenHwid">;
+export type PlayerRowPublic = Omit<
+    PlayerRow,
+    "lastSeenAddress" | "lastSeenHwid"
+>;
 
 export type PlayerRoundRow = typeof playerRound.$inferSelect;
 export type PlayerRoundRowInsert = typeof playerRound.$inferInsert;
@@ -132,28 +135,41 @@ export type ProfileLoadoutRow = typeof profileLoadout.$inferSelect;
 export type ProfileLoadoutRowInsert = typeof profileLoadout.$inferInsert;
 
 export type ProfileLoadoutGroupRow = typeof profileLoadoutGroup.$inferSelect;
-export type ProfileLoadoutGroupRowInsert = typeof profileLoadoutGroup.$inferInsert;
+export type ProfileLoadoutGroupRowInsert =
+    typeof profileLoadoutGroup.$inferInsert;
 
 export type ProfileRoleLoadoutRow = typeof profileRoleLoadout.$inferSelect;
-export type ProfileRoleLoadoutRowInsert = typeof profileRoleLoadout.$inferInsert;
+export type ProfileRoleLoadoutRowInsert =
+    typeof profileRoleLoadout.$inferInsert;
 
 export type RmcDiscordAccountsRow = typeof rmcDiscordAccounts.$inferSelect;
-export type RmcDiscordAccountsRowInsert = typeof rmcDiscordAccounts.$inferInsert;
+export type RmcDiscordAccountsRowInsert =
+    typeof rmcDiscordAccounts.$inferInsert;
 
 export type RmcLinkedAccountsRow = typeof rmcLinkedAccounts.$inferSelect;
 export type RmcLinkedAccountsRowInsert = typeof rmcLinkedAccounts.$inferInsert;
-export type RmcLinkedAccountsRowPublic = Omit<RmcLinkedAccountsRow, "discordId">;
+export type RmcLinkedAccountsRowPublic = Omit<
+    RmcLinkedAccountsRow,
+    "discordId"
+>;
 
-export type RmcLinkedAccountsLogsRow = typeof rmcLinkedAccountsLogs.$inferSelect;
-export type RmcLinkedAccountsLogsRowInsert = typeof rmcLinkedAccountsLogs.$inferInsert;
-export type RmcLinkedAccountsLogsRowPublic = Omit<RmcLinkedAccountsLogsRow, "discordId">;
+export type RmcLinkedAccountsLogsRow =
+    typeof rmcLinkedAccountsLogs.$inferSelect;
+export type RmcLinkedAccountsLogsRowInsert =
+    typeof rmcLinkedAccountsLogs.$inferInsert;
+export type RmcLinkedAccountsLogsRowPublic = Omit<
+    RmcLinkedAccountsLogsRow,
+    "discordId"
+>;
 
 export type RmcLinkingCodesRow = typeof rmcLinkingCodes.$inferSelect;
 export type RmcLinkingCodesRowInsert = typeof rmcLinkingCodes.$inferInsert;
 export type RmcLinkingCodesRowPublic = Omit<RmcLinkingCodesRow, "code">;
 
-export type RmcPatronLobbyMessagesRow = typeof rmcPatronLobbyMessages.$inferSelect;
-export type RmcPatronLobbyMessagesRowInsert = typeof rmcPatronLobbyMessages.$inferInsert;
+export type RmcPatronLobbyMessagesRow =
+    typeof rmcPatronLobbyMessages.$inferSelect;
+export type RmcPatronLobbyMessagesRowInsert =
+    typeof rmcPatronLobbyMessages.$inferInsert;
 
 export type RmcPatronRoundEndNtShoutoutsRow =
     typeof rmcPatronRoundEndNtShoutouts.$inferSelect;
@@ -180,7 +196,8 @@ export type ServerBanRowInsert = typeof serverBan.$inferInsert;
 export type ServerBanRowPublic = Omit<ServerBanRow, "address" | "hwid">;
 
 export type ServerBanExemptionRow = typeof serverBanExemption.$inferSelect;
-export type ServerBanExemptionRowInsert = typeof serverBanExemption.$inferInsert;
+export type ServerBanExemptionRowInsert =
+    typeof serverBanExemption.$inferInsert;
 
 export type ServerBanHitRow = typeof serverBanHit.$inferSelect;
 export type ServerBanHitRowInsert = typeof serverBanHit.$inferInsert;
@@ -199,7 +216,8 @@ export type TraitRow = typeof trait.$inferSelect;
 export type TraitRowInsert = typeof trait.$inferInsert;
 
 export type UploadedResourceLogRow = typeof uploadedResourceLog.$inferSelect;
-export type UploadedResourceLogRowInsert = typeof uploadedResourceLog.$inferInsert;
+export type UploadedResourceLogRowInsert =
+    typeof uploadedResourceLog.$inferInsert;
 
 export type WhitelistRow = typeof whitelist.$inferSelect;
 export type WhitelistRowInsert = typeof whitelist.$inferInsert;

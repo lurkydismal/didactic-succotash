@@ -70,10 +70,11 @@ export function columnsFromFields<
     R extends Record<string, unknown>,
     RI extends Record<string, unknown>,
 >(fields: FieldConfig<R, RI>[]): readonly GridColDef[] {
-
-    return normalizeColumns(fields.map((field) => ({
-        field: String(field.key),
-        headerName: field.label,
-        flex: 1,
-    })));
+    return normalizeColumns(
+        fields.map((field) => ({
+            field: String(field.key),
+            headerName: field.label,
+            flex: 1,
+        })),
+    );
 }

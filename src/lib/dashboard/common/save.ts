@@ -52,7 +52,11 @@ export async function saveFromFormData(
             } else {
                 await db
                     .insert(table)
-                    .values({ content: parsed.content, author: actor, last_editor: actor })
+                    .values({
+                        content: parsed.content,
+                        author: actor,
+                        last_editor: actor,
+                    })
                     .execute();
             }
 
@@ -63,7 +67,8 @@ export async function saveFromFormData(
             const parsed = banInputSchema.parse(payload);
 
             if (opts.isUpdate) {
-                if (!parsed.serverBanId) throw new Error("Missing serverBanId for update");
+                if (!parsed.serverBanId)
+                    throw new Error("Missing serverBanId for update");
 
                 await db
                     .update(serverBan)

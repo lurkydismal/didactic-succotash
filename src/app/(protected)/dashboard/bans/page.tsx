@@ -1,7 +1,10 @@
 "use client";
 
 import TableDataGrid from "@/components/TableDataGrid";
-import { ServerBanRow as TableRow, ServerBanRowInsert as TableRowInsert } from "@/db/types";
+import {
+    ServerBanRow as TableRow,
+    ServerBanRowInsert as TableRowInsert,
+} from "@/db/types";
 import ExtraToolbarButtons from "@/components/dashboard/ExtraToolbarButtons";
 import {
     _getRowsAction,
@@ -14,7 +17,7 @@ export default function Page() {
     const emptyRow: TableRowInsert = {
         address: "-",
         banTime: new Date(),
-        reason: ""
+        reason: "",
     };
 
     // Optional: custom change detector (compares trimmed content)

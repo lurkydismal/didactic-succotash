@@ -7,10 +7,16 @@ import log from "@/utils/stdlog";
 import { desc } from "drizzle-orm";
 import { CrudConfig } from "./config";
 
-export async function getRows(config: CrudConfig): Promise<ActionResult<unknown[]>> {
+export async function getRows(
+    config: CrudConfig,
+): Promise<ActionResult<unknown[]>> {
     try {
         if (config.target === "table") {
-            const data = await db.select().from(table).orderBy(desc(table.id)).execute();
+            const data = await db
+                .select()
+                .from(table)
+                .orderBy(desc(table.id))
+                .execute();
             return { ok: true, data };
         }
 

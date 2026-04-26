@@ -57,10 +57,12 @@ export const users = pgTable(
     ],
 );
 
-export const efMigrationsHistory = pgTable("__EFMigrationsHistory", {
-    migrationId: varchar("MigrationId", { length: 150 }),
-    productVersion: varchar("ProductVersion", { length: 32 }).notNull(),
-},
+export const efMigrationsHistory = pgTable(
+    "__EFMigrationsHistory",
+    {
+        migrationId: varchar("MigrationId", { length: 150 }),
+        productVersion: varchar("ProductVersion", { length: 32 }).notNull(),
+    },
     (table) => [
         primaryKey({
             name: "PK___EFMigrationsHistory",
@@ -96,8 +98,7 @@ export const admin = pgTable(
 export const adminFlag = pgTable(
     "admin_flag",
     {
-        adminFlagId: integer("admin_flag_id")
-            .generatedByDefaultAsIdentity(),
+        adminFlagId: integer("admin_flag_id").generatedByDefaultAsIdentity(),
         flag: text().notNull(),
         negative: boolean().notNull(),
         adminId: uuid("admin_id")
@@ -177,8 +178,8 @@ export const adminLogPlayer = pgTable(
 export const adminMessages = pgTable(
     "admin_messages",
     {
-        adminMessagesId: integer("admin_messages_id")
-            .generatedByDefaultAsIdentity(),
+        adminMessagesId:
+            integer("admin_messages_id").generatedByDefaultAsIdentity(),
         roundId: integer("round_id").references(() => round.roundId),
         playerUserId: uuid("player_user_id").references(() => player.userId, {
             onDelete: "cascade",
@@ -235,8 +236,7 @@ export const adminMessages = pgTable(
 export const adminNotes = pgTable(
     "admin_notes",
     {
-        adminNotesId: integer("admin_notes_id")
-            .generatedByDefaultAsIdentity(),
+        adminNotesId: integer("admin_notes_id").generatedByDefaultAsIdentity(),
         roundId: integer("round_id").references(() => round.roundId),
         playerUserId: uuid("player_user_id").references(() => player.userId, {
             onDelete: "cascade",
@@ -293,23 +293,25 @@ export const adminNotes = pgTable(
     ],
 );
 
-export const adminRank = pgTable("admin_rank", {
-    adminRankId: integer("admin_rank_id")
-        .generatedByDefaultAsIdentity(),
-    name: text().notNull(),
-},
+export const adminRank = pgTable(
+    "admin_rank",
+    {
+        adminRankId: integer("admin_rank_id").generatedByDefaultAsIdentity(),
+        name: text().notNull(),
+    },
     (table) => [
         primaryKey({
             name: "PK_admin_rank",
             columns: [table.adminRankId],
         }),
-    ],);
+    ],
+);
 
 export const adminRankFlag = pgTable(
     "admin_rank_flag",
     {
-        adminRankFlagId: integer("admin_rank_flag_id")
-            .generatedByDefaultAsIdentity(),
+        adminRankFlagId:
+            integer("admin_rank_flag_id").generatedByDefaultAsIdentity(),
         flag: text().notNull(),
         adminRankId: integer("admin_rank_id")
             .notNull()
@@ -335,8 +337,9 @@ export const adminRankFlag = pgTable(
 export const adminWatchlists = pgTable(
     "admin_watchlists",
     {
-        adminWatchlistsId: integer("admin_watchlists_id")
-            .generatedByDefaultAsIdentity(),
+        adminWatchlistsId: integer(
+            "admin_watchlists_id",
+        ).generatedByDefaultAsIdentity(),
         roundId: integer("round_id").references(() => round.roundId),
         playerUserId: uuid("player_user_id").references(() => player.userId, {
             onDelete: "cascade",
@@ -392,8 +395,7 @@ export const adminWatchlists = pgTable(
 export const antag = pgTable(
     "antag",
     {
-        antagId: integer("antag_id")
-            .generatedByDefaultAsIdentity(),
+        antagId: integer("antag_id").generatedByDefaultAsIdentity(),
         profileId: integer("profile_id")
             .notNull()
             .references(() => profile.profileId, { onDelete: "cascade" }),
@@ -415,8 +417,9 @@ export const antag = pgTable(
 export const assignedUserId = pgTable(
     "assigned_user_id",
     {
-        assignedUserIdId: integer("assigned_user_id_id")
-            .generatedByDefaultAsIdentity(),
+        assignedUserIdId: integer(
+            "assigned_user_id_id",
+        ).generatedByDefaultAsIdentity(),
         userName: text("user_name").notNull(),
         userId: uuid("user_id").notNull(),
     },
@@ -436,39 +439,45 @@ export const assignedUserId = pgTable(
     ],
 );
 
-export const banTemplate = pgTable("ban_template", {
-    banTemplateId: integer("ban_template_id")
-        .generatedByDefaultAsIdentity(),
-    title: text().notNull(),
-    length: interval().notNull(),
-    reason: text().notNull(),
-    exemptFlags: integer("exempt_flags").notNull(),
-    severity: integer().notNull(),
-    autoDelete: boolean("auto_delete").notNull(),
-    hidden: boolean().notNull(),
-},
+export const banTemplate = pgTable(
+    "ban_template",
+    {
+        banTemplateId:
+            integer("ban_template_id").generatedByDefaultAsIdentity(),
+        title: text().notNull(),
+        length: interval().notNull(),
+        reason: text().notNull(),
+        exemptFlags: integer("exempt_flags").notNull(),
+        severity: integer().notNull(),
+        autoDelete: boolean("auto_delete").notNull(),
+        hidden: boolean().notNull(),
+    },
     (table) => [
         primaryKey({
             name: "PK_ban_template",
             columns: [table.banTemplateId],
         }),
-    ],);
+    ],
+);
 
-export const blacklist = pgTable("blacklist", {
-    userId: uuid("user_id"),
-},
+export const blacklist = pgTable(
+    "blacklist",
+    {
+        userId: uuid("user_id"),
+    },
     (table) => [
         primaryKey({
             name: "PK_blacklist",
             columns: [table.userId],
         }),
-    ],);
+    ],
+);
 
 export const connectionLog = pgTable(
     "connection_log",
     {
-        connectionLogId: integer("connection_log_id")
-            .generatedByDefaultAsIdentity(),
+        connectionLogId:
+            integer("connection_log_id").generatedByDefaultAsIdentity(),
         userId: uuid("user_id").notNull(),
         userName: text("user_name").notNull(),
         time: timestamp({ withTimezone: true }).notNull(),
@@ -505,8 +514,8 @@ export const connectionLog = pgTable(
 export const ipintelCache = pgTable(
     "ipintel_cache",
     {
-        ipintelCacheId: integer("ipintel_cache_id")
-            .generatedByDefaultAsIdentity(),
+        ipintelCacheId:
+            integer("ipintel_cache_id").generatedByDefaultAsIdentity(),
         address: inet().notNull(),
         time: timestamp({ withTimezone: true }).notNull(),
         score: real().notNull(),
@@ -556,8 +565,7 @@ export const job = pgTable(
 export const playTime = pgTable(
     "play_time",
     {
-        playTimeId: integer("play_time_id")
-            .generatedByDefaultAsIdentity(),
+        playTimeId: integer("play_time_id").generatedByDefaultAsIdentity(),
         playerId: uuid("player_id").notNull(),
         tracker: text().notNull(),
         timeSpent: interval("time_spent").notNull(),
@@ -578,8 +586,7 @@ export const playTime = pgTable(
 export const player = pgTable(
     "player",
     {
-        playerId: integer("player_id")
-            .generatedByDefaultAsIdentity(),
+        playerId: integer("player_id").generatedByDefaultAsIdentity(),
         userId: uuid("user_id").notNull(),
         firstSeenTime: timestamp("first_seen_time", {
             withTimezone: true,
@@ -640,8 +647,7 @@ export const playerRound = pgTable(
 export const preference = pgTable(
     "preference",
     {
-        preferenceId: integer("preference_id")
-            .generatedByDefaultAsIdentity(),
+        preferenceId: integer("preference_id").generatedByDefaultAsIdentity(),
         userId: uuid("user_id").notNull(),
         selectedCharacterSlot: integer("selected_character_slot").notNull(),
         adminOocColor: text("admin_ooc_color").default("#ff0000").notNull(),
@@ -670,8 +676,7 @@ export const preference = pgTable(
 export const profile = pgTable(
     "profile",
     {
-        profileId: integer("profile_id")
-            .generatedByDefaultAsIdentity(),
+        profileId: integer("profile_id").generatedByDefaultAsIdentity(),
         slot: integer().notNull(),
         charName: text("char_name").notNull(),
         age: integer().notNull(),
@@ -719,8 +724,8 @@ export const profile = pgTable(
 export const profileLoadout = pgTable(
     "profile_loadout",
     {
-        profileLoadoutId: integer("profile_loadout_id")
-            .generatedByDefaultAsIdentity(),
+        profileLoadoutId:
+            integer("profile_loadout_id").generatedByDefaultAsIdentity(),
         profileLoadoutGroupId: integer("profile_loadout_group_id")
             .notNull()
             .references(() => profileLoadoutGroup.profileLoadoutGroupId, {
@@ -743,8 +748,9 @@ export const profileLoadout = pgTable(
 export const profileLoadoutGroup = pgTable(
     "profile_loadout_group",
     {
-        profileLoadoutGroupId: integer("profile_loadout_group_id")
-            .generatedByDefaultAsIdentity(),
+        profileLoadoutGroupId: integer(
+            "profile_loadout_group_id",
+        ).generatedByDefaultAsIdentity(),
         profileRoleLoadoutId: integer("profile_role_loadout_id")
             .notNull()
             .references(() => profileRoleLoadout.profileRoleLoadoutId, {
@@ -767,8 +773,9 @@ export const profileLoadoutGroup = pgTable(
 export const profileRoleLoadout = pgTable(
     "profile_role_loadout",
     {
-        profileRoleLoadoutId: integer("profile_role_loadout_id")
-            .generatedByDefaultAsIdentity(),
+        profileRoleLoadoutId: integer(
+            "profile_role_loadout_id",
+        ).generatedByDefaultAsIdentity(),
         profileId: integer("profile_id")
             .notNull()
             .references(() => profile.profileId, { onDelete: "cascade" }),
@@ -787,24 +794,28 @@ export const profileRoleLoadout = pgTable(
     ],
 );
 
-export const rmcDiscordAccounts = pgTable("rmc_discord_accounts", {
-    rmcDiscordAccountsId: numeric("rmc_discord_accounts_id", {
-        precision: 20,
-        scale: 0,
-    }),
-},
+export const rmcDiscordAccounts = pgTable(
+    "rmc_discord_accounts",
+    {
+        rmcDiscordAccountsId: numeric("rmc_discord_accounts_id", {
+            precision: 20,
+            scale: 0,
+        }),
+    },
     (table) => [
         primaryKey({
             name: "PK_rmc_discord_accounts",
             columns: [table.rmcDiscordAccountsId],
         }),
-    ],);
+    ],
+);
 
 export const rmcLinkedAccounts = pgTable(
     "rmc_linked_accounts",
     {
-        playerId: uuid("player_id")
-            .references(() => player.userId, { onDelete: "cascade" }),
+        playerId: uuid("player_id").references(() => player.userId, {
+            onDelete: "cascade",
+        }),
         discordId: numeric("discord_id", { precision: 20, scale: 0 })
             .notNull()
             .references(() => rmcDiscordAccounts.rmcDiscordAccountsId, {
@@ -826,8 +837,9 @@ export const rmcLinkedAccounts = pgTable(
 export const rmcLinkedAccountsLogs = pgTable(
     "rmc_linked_accounts_logs",
     {
-        rmcLinkedAccountsLogsId: integer("rmc_linked_accounts_logs_id")
-            .generatedByDefaultAsIdentity(),
+        rmcLinkedAccountsLogsId: integer(
+            "rmc_linked_accounts_logs_id",
+        ).generatedByDefaultAsIdentity(),
         playerId: uuid("player_id")
             .notNull()
             .references(() => player.userId, { onDelete: "cascade" }),
@@ -861,8 +873,9 @@ export const rmcLinkedAccountsLogs = pgTable(
 export const rmcLinkingCodes = pgTable(
     "rmc_linking_codes",
     {
-        playerId: uuid("player_id")
-            .references(() => player.userId, { onDelete: "cascade" }),
+        playerId: uuid("player_id").references(() => player.userId, {
+            onDelete: "cascade",
+        }),
         code: uuid().notNull(),
         creationTime: timestamp("creation_time", {
             withTimezone: true,
@@ -880,23 +893,28 @@ export const rmcLinkingCodes = pgTable(
     ],
 );
 
-export const rmcPatronLobbyMessages = pgTable("rmc_patron_lobby_messages", {
-    patronId: uuid("patron_id")
-        .references(() => rmcPatrons.playerId, { onDelete: "cascade" }),
-    message: varchar({ length: 500 }).notNull(),
-},
+export const rmcPatronLobbyMessages = pgTable(
+    "rmc_patron_lobby_messages",
+    {
+        patronId: uuid("patron_id").references(() => rmcPatrons.playerId, {
+            onDelete: "cascade",
+        }),
+        message: varchar({ length: 500 }).notNull(),
+    },
     (table) => [
         primaryKey({
             name: "PK_rmc_patron_lobby_messages",
             columns: [table.patronId],
         }),
-    ],);
+    ],
+);
 
 export const rmcPatronRoundEndNtShoutouts = pgTable(
     "rmc_patron_round_end_nt_shoutouts",
     {
-        patronId: uuid("patron_id")
-            .references(() => rmcPatrons.playerId, { onDelete: "cascade" }),
+        patronId: uuid("patron_id").references(() => rmcPatrons.playerId, {
+            onDelete: "cascade",
+        }),
         name: varchar({ length: 100 }).notNull(),
     },
     (table) => [
@@ -910,8 +928,9 @@ export const rmcPatronRoundEndNtShoutouts = pgTable(
 export const rmcPatronTiers = pgTable(
     "rmc_patron_tiers",
     {
-        rmcPatronTiersId: integer("rmc_patron_tiers_id")
-            .generatedByDefaultAsIdentity(),
+        rmcPatronTiersId: integer(
+            "rmc_patron_tiers_id",
+        ).generatedByDefaultAsIdentity(),
         showOnCredits: boolean("show_on_credits").notNull(),
         lobbyMessage: boolean("lobby_message").notNull(),
         roundEndShoutout: boolean("round_end_shoutout").notNull(),
@@ -949,8 +968,9 @@ export const rmcPatronTiers = pgTable(
 export const rmcPatrons = pgTable(
     "rmc_patrons",
     {
-        playerId: uuid("player_id")
-            .references(() => player.userId, { onDelete: "cascade" }),
+        playerId: uuid("player_id").references(() => player.userId, {
+            onDelete: "cascade",
+        }),
         tierId: integer("tier_id")
             .notNull()
             .references(() => rmcPatronTiers.rmcPatronTiersId, {
@@ -989,8 +1009,7 @@ export const roleWhitelists = pgTable(
 export const round = pgTable(
     "round",
     {
-        roundId: integer("round_id")
-            .generatedByDefaultAsIdentity(),
+        roundId: integer("round_id").generatedByDefaultAsIdentity(),
         serverId: integer("server_id")
             .default(0)
             .notNull()
@@ -1013,22 +1032,26 @@ export const round = pgTable(
     ],
 );
 
-export const server = pgTable("server", {
-    serverId: integer("server_id").primaryKey().generatedByDefaultAsIdentity(),
-    name: text().notNull(),
-},
+export const server = pgTable(
+    "server",
+    {
+        serverId: integer("server_id")
+            .primaryKey()
+            .generatedByDefaultAsIdentity(),
+        name: text().notNull(),
+    },
     (table) => [
         primaryKey({
             name: "PK_server",
             columns: [table.serverId],
         }),
-    ],);
+    ],
+);
 
 export const serverBan = pgTable(
     "server_ban",
     {
-        serverBanId: integer("server_ban_id")
-            .generatedByDefaultAsIdentity(),
+        serverBanId: integer("server_ban_id").generatedByDefaultAsIdentity(),
         playerUserId: uuid("player_user_id"),
         address: inet(),
         banTime: timestamp("ban_time", { withTimezone: true }).notNull(),
@@ -1107,8 +1130,8 @@ export const serverBanExemption = pgTable(
 export const serverBanHit = pgTable(
     "server_ban_hit",
     {
-        serverBanHitId: integer("server_ban_hit_id")
-            .generatedByDefaultAsIdentity(),
+        serverBanHitId:
+            integer("server_ban_hit_id").generatedByDefaultAsIdentity(),
         banId: integer("ban_id")
             .notNull()
             .references(() => serverBan.serverBanId, { onDelete: "cascade" }),
@@ -1137,8 +1160,8 @@ export const serverBanHit = pgTable(
 export const serverRoleBan = pgTable(
     "server_role_ban",
     {
-        serverRoleBanId: integer("server_role_ban_id")
-            .generatedByDefaultAsIdentity(),
+        serverRoleBanId:
+            integer("server_role_ban_id").generatedByDefaultAsIdentity(),
         playerUserId: uuid("player_user_id"),
         address: inet(),
         hwid: customType({ dataType: () => "bytea" })(),
@@ -1205,8 +1228,7 @@ export const serverRoleBan = pgTable(
 export const serverRoleUnban = pgTable(
     "server_role_unban",
     {
-        roleUnbanId: integer("role_unban_id")
-            .generatedByDefaultAsIdentity(),
+        roleUnbanId: integer("role_unban_id").generatedByDefaultAsIdentity(),
         banId: integer("ban_id")
             .notNull()
             .references(() => serverRoleBan.serverRoleBanId, {
@@ -1230,8 +1252,7 @@ export const serverRoleUnban = pgTable(
 export const serverUnban = pgTable(
     "server_unban",
     {
-        unbanId: integer("unban_id")
-            .generatedByDefaultAsIdentity(),
+        unbanId: integer("unban_id").generatedByDefaultAsIdentity(),
         banId: integer("ban_id")
             .notNull()
             .references(() => serverBan.serverBanId, { onDelete: "cascade" }),
@@ -1253,8 +1274,7 @@ export const serverUnban = pgTable(
 export const trait = pgTable(
     "trait",
     {
-        traitId: integer("trait_id")
-            .generatedByDefaultAsIdentity(),
+        traitId: integer("trait_id").generatedByDefaultAsIdentity(),
         profileId: integer("profile_id")
             .notNull()
             .references(() => profile.profileId, { onDelete: "cascade" }),
@@ -1273,27 +1293,34 @@ export const trait = pgTable(
     ],
 );
 
-export const uploadedResourceLog = pgTable("uploaded_resource_log", {
-    uploadedResourceLogId: integer("uploaded_resource_log_id")
-        .generatedByDefaultAsIdentity(),
-    date: timestamp({ withTimezone: true }).notNull(),
-    userId: uuid("user_id").notNull(),
-    path: text().notNull(),
-    data: customType({ dataType: () => "bytea" })().notNull(),
-},
+export const uploadedResourceLog = pgTable(
+    "uploaded_resource_log",
+    {
+        uploadedResourceLogId: integer(
+            "uploaded_resource_log_id",
+        ).generatedByDefaultAsIdentity(),
+        date: timestamp({ withTimezone: true }).notNull(),
+        userId: uuid("user_id").notNull(),
+        path: text().notNull(),
+        data: customType({ dataType: () => "bytea" })().notNull(),
+    },
     (table) => [
         primaryKey({
             name: "PK_uploaded_resource_log",
             columns: [table.uploadedResourceLogId],
         }),
-    ],);
+    ],
+);
 
-export const whitelist = pgTable("whitelist", {
-    userId: uuid("user_id"),
-},
+export const whitelist = pgTable(
+    "whitelist",
+    {
+        userId: uuid("user_id"),
+    },
     (table) => [
         primaryKey({
             name: "PK_whitelist",
             columns: [table.userId],
         }),
-    ],);
+    ],
+);
