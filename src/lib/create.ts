@@ -2,7 +2,7 @@
 
 import { TableRowInsert } from "@/db/types";
 import { ActionResult, DbTarget } from "@/lib/types";
-import { parseForm, save } from "@/lib/update_create";
+import { parseForm, save } from "@/lib/dashboard/table/update_create";
 
 export async function create(
     rawTarget: DbTarget,

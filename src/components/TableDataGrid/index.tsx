@@ -8,11 +8,10 @@ import React, {
     isValidElement,
 } from "react";
 import CustomDataGrid from "./CustomDataGrid";
-import columns from "@/data/dashboard/table/columns";
 import RowDialog, { FieldConfig } from "./RowDialog";
 import { useSnackbar } from "@/providers/snackbar";
 import CustomToolbar from "./Toolbar";
-import { useGridApiRef, GridRowsProp, GridRowParams } from "@mui/x-data-grid";
+import { useGridApiRef, GridRowsProp, GridRowParams, GridColDef } from "@mui/x-data-grid";
 import { Box, CircularProgress } from "@mui/material";
 
 export default function TableDataGrid<
@@ -25,6 +24,7 @@ export default function TableDataGrid<
     updateRowAction,
     extraButtons,
     fields,
+    columns,
     isRowChanged,
 }: Readonly<{
     emptyRow: RI;
@@ -33,6 +33,7 @@ export default function TableDataGrid<
     updateRowAction: (fd: FormData) => Promise<boolean>;
     extraButtons?: React.ReactNode; // optionally a ReactElement expecting props
     fields: FieldConfig<R, RI>[];
+    columns: readonly GridColDef[];
     isRowChanged?: (row: R, values: Partial<RI>) => boolean;
 }>) {
     const { showError } = useSnackbar();

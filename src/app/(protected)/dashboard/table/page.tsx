@@ -7,8 +7,9 @@ import {
     _getRowsAction,
     createRowAction,
     updateRowAction,
-} from "@/lib/table/function";
+} from "@/lib/dashboard/table/function";
 import fields from "@/data/dashboard/table/fields";
+import columns from "@/data/dashboard/table/columns";
 
 export default function Page() {
     const emptyRow: TableRowInsert = {
@@ -27,6 +28,7 @@ export default function Page() {
             createRowAction={createRowAction}
             emptyRow={emptyRow}
             fields={fields}
+            columns={columns}
             getRowsAction={_getRowsAction}
             isRowChanged={isRowChanged}
             updateRowAction={updateRowAction}

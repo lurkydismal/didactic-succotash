@@ -1,10 +1,7 @@
 import z from "zod";
-import { users, table } from "@/db/schema";
+import * as schema from "@/db/schema";
 
-export const TABLES = {
-    table: table,
-    users: users,
-} as const;
+export const TABLES = schema;
 
 export type DbTarget = keyof typeof TABLES;
 
