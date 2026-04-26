@@ -32,6 +32,7 @@ export default function Page() {
             getRowsAction={_getRowsAction}
             isRowChanged={isRowChanged}
             updateRowAction={updateRowAction}
+            idKey="serverBanId"
             extraButtons={
                 <ExtraToolbarButtons
                     emptyRow={emptyRow}
