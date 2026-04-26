@@ -10,12 +10,37 @@ export interface NavItem {
 export const items: NavItem[] = [
     {
         name: "Bans",
-        href: "/bans",
+        href: "/dashboard/bans",
+        position: "left",
+    },
+    {
+        name: "Role bans",
+        href: "/dashboard/role-bans",
+        position: "left",
+    },
+    {
+        name: "Players",
+        href: "/dashboard/players",
+        position: "left",
+    },
+    {
+        name: "Connections",
+        href: "/dashboard/connections",
         position: "left",
     },
     {
         name: "Logs",
-        href: "/logs",
+        href: "/dashboard/logs",
+        position: "right",
+    },
+    {
+        name: "Characters",
+        href: "/dashboard/characters",
+        position: "right",
+    },
+    {
+        name: "Whitelist",
+        href: "/dashboard/whitelist",
         position: "right",
     },
 ];

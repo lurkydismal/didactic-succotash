@@ -1,24 +1,26 @@
 "use client";
 
 import TableDataGrid from "@/components/TableDataGrid";
-import { TableRow, TableRowInsert } from "@/db/types";
+import { ServerBanRow as TableRow, ServerBanRowInsert as TableRowInsert } from "@/db/types";
 import ExtraToolbarButtons from "@/components/dashboard/ExtraToolbarButtons";
 import {
     _getRowsAction,
     createRowAction,
     updateRowAction,
 } from "@/lib/table/function";
-import fields from "@/data/dashboard/table/fields";
+import fields from "@/data/dashboard/bans/fields";
 
 export default function Page() {
     const emptyRow: TableRowInsert = {
-        content: "-",
+        address: "-",
+        banTime: new Date(),
+        reason: ""
     };
 
     // Optional: custom change detector (compares trimmed content)
     const isRowChanged = (row: TableRow, values: Partial<TableRowInsert>) => {
-        const a = String(row.content ?? "").trim();
-        const b = String(values.content ?? "").trim();
+        const a = String(row.address ?? "").trim();
+        const b = String(values.address ?? "").trim();
         return a !== b;
     };
 
