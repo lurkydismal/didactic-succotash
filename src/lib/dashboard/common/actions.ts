@@ -1,7 +1,6 @@
 "use server";
 
-import log from "@/utils/stdlog";
-import { CrudConfig } from "./config";
+import { BANS_CRUD_CONFIG, CrudConfig } from "./config";
 import { getRows } from "./get";
 import { saveFromFormData } from "./save";
 
@@ -15,7 +14,6 @@ export async function makeCrudActions<R, RI extends Record<string, unknown>>(
             if (result.ok) return result.data as R[];
 
             const message = `Failed to get rows in action: ${result.error}`;
-            log.error(message);
             throw new Error(message);
         },
         createRowAction: async (row: RI): Promise<boolean> => {
@@ -33,13 +31,12 @@ export async function makeCrudActions<R, RI extends Record<string, unknown>>(
                 }
             }
 
-            const result = await saveFromFormData(config, fd, {
+            const result = await saveFromFormData(BANS_CRUD_CONFIG, fd, {
                 isUpdate: false,
             });
 
             if (!result.ok) {
                 const message = `Failed to create row in action: ${result.error}`;
-                log.error(message);
                 throw new Error(message);
             }
 
@@ -48,13 +45,12 @@ export async function makeCrudActions<R, RI extends Record<string, unknown>>(
         updateRowAction: async (fd: FormData): Promise<boolean> => {
             "use server";
 
-            const result = await saveFromFormData(config, fd, {
+            const result = await saveFromFormData(BANS_CRUD_CONFIG, fd, {
                 isUpdate: true,
             });
 
             if (!result.ok) {
                 const message = `Failed to update row in action: ${result.error}`;
-                log.error(message);
                 throw new Error(message);
             }
 

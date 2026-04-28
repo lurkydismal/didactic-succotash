@@ -15,9 +15,10 @@ import fields from "@/data/dashboard/bans/fields";
 
 export default function Page() {
     const emptyRow: TableRowInsert = {
-        address: "-",
+        serverBanId: 1,
+        address: "123",
+        reason: "-",
         banTime: new Date(),
-        reason: "",
     };
 
     // Optional: custom change detector (compares trimmed content)
