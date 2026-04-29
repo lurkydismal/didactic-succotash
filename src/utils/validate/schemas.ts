@@ -74,3 +74,12 @@ export const userSelectPublicSchema = userSelectSchema
         username: z.string().trim().min(1),
         username_normalized: z.string().trim().min(1).lowercase(),
     });
+
+// TODO: Comment
+export const mutationInputSchema = z
+    .record(z.string(), z.unknown())
+    .and(
+        z.object({
+            id: z.coerce.number().int().positive().optional(),
+        }),
+    );

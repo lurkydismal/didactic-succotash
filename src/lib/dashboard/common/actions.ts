@@ -8,7 +8,7 @@ import {
 } from "@/lib/dashboard/common/function";
 import { AnyColumn } from "drizzle-orm";
 
-export function makeCrudActions<R, RI extends Record<string, unknown>>(
+export function makeCrudActions<RI extends Record<string, unknown>>(
     target: DbTarget,
     id: AnyColumn,
 ) {
@@ -26,7 +26,7 @@ export function makeCrudActions<R, RI extends Record<string, unknown>>(
         updateRowAction: async (fd: FormData): ReturnType<typeof updateRowAction> => {
             "use server";
 
-            return updateRowAction(target, fd);
+            return updateRowAction(target, id, fd);
         },
     };
 }

@@ -26,8 +26,12 @@ export async function createRowAction<RI extends Record<string, unknown>>(target
     }
 };
 
-export async function updateRowAction(target: DbTarget, fd: FormData) {
-    const result = await updateAction(target, fd);
+export async function updateRowAction(
+    target: DbTarget,
+    id: AnyColumn,
+    fd: FormData,
+) {
+    const result = await updateAction(target, id, fd);
 
     if (!result.ok) {
         const message = `Failed to update row in action: ${result.error}`;

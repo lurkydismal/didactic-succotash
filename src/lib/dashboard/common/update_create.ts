@@ -1,30 +1,35 @@
 import db from "@/db";
 import { getSessionData } from "@/lib/auth";
 import { ActionResult, DbTarget, parseRawTarget } from "@/lib/types";
+import { mutationInputSchema } from "@/utils/validate/schemas";
 import log from "@/utils/stdlog";
-import { eq } from "drizzle-orm";
+import { AnyColumn, eq } from "drizzle-orm";
+import { createInsertSchema, createUpdateSchema } from "drizzle-zod";
 
-type Input = {
-    id?: number;
-    content: string;
+type MutationRow = Record<string, unknown>;
+
+type SaveOptions = {
+    isUpdate?: boolean;
+    idColumn?: AnyColumn;
 };
 
-function buildMutation(
-    parsed: {
-        content: string;
-    },
+function toDbMutation(
+    parsedRow: MutationRow,
     actor: string,
-    opts: { isUpdate?: boolean },
-): Partial<TableRowInsert> {
+    opts: SaveOptions,
+): MutationRow {
+    const base = { ...parsedRow };
+
     if (opts.isUpdate) {
+        delete base.id;
         return {
-            content: parsed.content,
+            ...base,
             last_editor: actor,
         };
     }
 
     return {
-        content: parsed.content,
+        ...base,
         author: actor,
         last_editor: actor,
     };
@@ -32,16 +37,16 @@ function buildMutation(
 
 export async function save(
     rawTarget: DbTarget,
-    input: Input,
-    opts: { isUpdate?: boolean } = {},
+    input: MutationRow,
+    opts: SaveOptions = {},
 ): Promise<ActionResult> {
     try {
         const table = parseRawTarget(rawTarget);
+        const parsedInput = await mutationInputSchema.parseAsync(input);
 
-        const parsed = await rowSchema.parseAsync({
-            id: input.id,
-            content: input.content,
-        });
+        const schema = opts.isUpdate
+            ? createUpdateSchema(table)
+            : createInsertSchema(table);
 
         const sessionUser = await getSessionData();
         const actor = sessionUser?.username;
@@ -50,19 +55,21 @@ export async function save(
             throw new Error("Missing authenticated user");
         }
 
-        const row = buildMutation(
-            {
-                content: parsed.content,
-            },
-            actor,
-            opts,
-        );
+        const row = await schema.parseAsync(toDbMutation(parsedInput, actor, opts));
 
         if (opts.isUpdate) {
+            if (parsedInput.id === undefined) {
+                throw new Error("Missing id for update");
+            }
+
+            if (!opts.idColumn) {
+                throw new Error("Missing id column for update");
+            }
+
             await db
                 .update(table)
                 .set(row)
-                .where(eq(table.id, parsed.id!))
+                .where(eq(opts.idColumn, parsedInput.id))
                 .execute();
         } else {
             await db.insert(table).values(row).execute();
@@ -78,12 +85,15 @@ export async function save(
     }
 }
 
-// FormData parsing helper reused by both actions
-export function parseForm(formData: FormData): Input {
-    const rawId = formData.get("id");
-    const id = rawId == null ? undefined : Number(rawId);
-    return {
-        id,
-        content: String(formData.get("content") ?? ""),
-    };
+export function parseForm(formData: FormData): MutationRow {
+    const entries = Object.fromEntries(formData.entries()) as MutationRow;
+
+    if (entries.id !== undefined) {
+        const parsedId = Number(entries.id);
+        if (!Number.isNaN(parsedId)) {
+            entries.id = parsedId;
+        }
+    }
+
+    return entries;
 }
