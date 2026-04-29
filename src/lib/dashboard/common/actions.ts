@@ -1,49 +1,32 @@
+"use server";
+
+import { DbTarget } from "@/lib/types";
+import {
+    getRowsAction,
+    createRowAction,
+    updateRowAction,
+} from "@/lib/dashboard/common/function";
+import { AnyColumn } from "drizzle-orm";
 
 export function makeCrudActions<R, RI extends Record<string, unknown>>(
-    config: CrudConfig,
+    target: DbTarget,
+    id: AnyColumn,
 ) {
     return {
-        _getRowsAction: async (): Promise<Readonly<R[]>> => {
-            const result = await getRows(config);
-
-            if (result.ok) return result.data as R[];
-
-            const message = `Failed to get rows in action: ${result.error}`;
-            log.error(message);
-            throw new Error(message);
-        },
-        createRowAction: async (row: RI): Promise<boolean> => {
-            "use server";
-            const fd = new FormData();
-
-            for (const [key, value] of Object.entries(row)) {
-                if (value !== undefined && value !== null) {
-                    fd.set(key, value instanceof Date ? value.toISOString() : String(value));
-                }
-            }
-
-            const result = await saveFromFormData(config, fd, { isUpdate: false });
-
-            if (!result.ok) {
-                const message = `Failed to create row in action: ${result.error}`;
-                log.error(message);
-                throw new Error(message);
-            }
-
-            return true;
-        },
-        updateRowAction: async (fd: FormData): Promise<boolean> => {
+        getRowsAction: async (): ReturnType<typeof getRowsAction> => {
             "use server";
 
-            const result = await saveFromFormData(config, fd, { isUpdate: true });
+            return getRowsAction(target, id);
+        },
+        createRowAction: async (row: RI): ReturnType<typeof createRowAction> => {
+            "use server";
 
-            if (!result.ok) {
-                const message = `Failed to update row in action: ${result.error}`;
-                log.error(message);
-                throw new Error(message);
-            }
+            return createRowAction(target, row);
+        },
+        updateRowAction: async (fd: FormData): ReturnType<typeof updateRowAction> => {
+            "use server";
 
-            return true;
+            return updateRowAction(target, fd);
         },
     };
 }

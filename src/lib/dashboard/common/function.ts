@@ -1,16 +1,13 @@
 "use server";
 
-import { TableRowInsert } from "@/db/types";
 import { create } from "@/lib/dashboard/common/create";
 import { getRows } from "@/lib/dashboard/common/get";
 import { update } from "@/lib/dashboard/common/update";
 import { DbTarget } from "@/lib/types";
 import { AnyColumn } from "drizzle-orm";
 
-const table: DbTarget = "table";
-
-export const getRowsAction = async (id: AnyColumn) => {
-    const result = await getRows(table, id);
+export const getRowsAction = async (target: DbTarget, id: AnyColumn) => {
+    const result = await getRows(target, id);
 
     if (result.ok) {
         return result.data;
@@ -20,8 +17,8 @@ export const getRowsAction = async (id: AnyColumn) => {
     }
 };
 
-export const createRowAction = async (row: TableRowInsert) => {
-    const result = await create(table, row);
+export const createRowAction = async (target: DbTarget, row: any) => {
+    const result = await create(target, row);
 
     if (!result.ok) {
         const message = `Failed to create row in action: ${result.error}`;
@@ -29,8 +26,8 @@ export const createRowAction = async (row: TableRowInsert) => {
     }
 };
 
-export const updateRowAction = async (row: TableRowInsert) => {
-    const result = await update(table, row);
+export const updateRowAction = async (target: DbTarget, row: any) => {
+    const result = await update(target, row);
 
     if (!result.ok) {
         const message = `Failed to update row in action: ${result.error}`;

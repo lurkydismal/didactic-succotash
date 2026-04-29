@@ -3,14 +3,17 @@
 import TableDataGrid from "@/components/TableDataGrid";
 import { TableRow, TableRowInsert } from "@/db/types";
 import ExtraToolbarButtons from "@/components/dashboard/ExtraToolbarButtons";
-import {
-    getRowsAction,
-    createRowAction,
-    updateRowAction,
-} from "@/lib/dashboard/common/function";
 import fields from "@/data/dashboard/table/fields";
+import { makeCrudActions } from "@/lib/dashboard/common/actions";
+import { table } from "@/db/schema";
 
 export default function Page() {
+    const {
+        getRowsAction,
+        createRowAction,
+        updateRowAction,
+    } = makeCrudActions<TableRow, TableRowInsert>("table", table.id);
+
     const emptyRow: TableRowInsert = {
         content: "-",
     };
