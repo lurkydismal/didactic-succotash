@@ -26,7 +26,6 @@ export default function TableDataGrid<
     extraButtons,
     fields,
     isRowChanged,
-    idKey,
 }: Readonly<{
     emptyRow: RI;
     getRowsAction: () => Promise<Readonly<GridRowsProp>>;
@@ -35,7 +34,6 @@ export default function TableDataGrid<
     extraButtons?: React.ReactNode; // optionally a ReactElement expecting props
     fields: FieldConfig<R, RI>[];
     isRowChanged?: (row: R, values: Partial<RI>) => boolean;
-    idKey?: keyof R;
 }>) {
     const { showError } = useSnackbar();
     const apiRef = useGridApiRef();
@@ -177,7 +175,6 @@ export default function TableDataGrid<
                 setSelectedRow={setSelectedRow}
                 updateRowAction={updateRowAction}
                 onUpdated={_getRows}
-                idKey={idKey}
             />
         </>
     );

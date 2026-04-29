@@ -1,12 +1,18 @@
 "use server";
 
+import { TableRowInsert } from "@/db/types";
 import { ActionResult, DbTarget } from "@/lib/types";
-import { getCrudConfigByTarget } from "@/lib/dashboard/common/config";
-import { saveFromFormData } from "@/lib/dashboard/common/save";
+import { parseForm, save } from "@/lib/dashboard/table/update_create";
 
-export async function updateAction(formData: FormData): Promise<ActionResult> {
+export async function update(
+    rawTarget: DbTarget,
+    row: TableRowInsert,
+): Promise<ActionResult> {
+    return save(rawTarget, row, { isUpdate: true });
+}
+
+export async function updateAction(formData: FormData) {
     const rawTarget = formData.get("target") as DbTarget;
-    const config = getCrudConfigByTarget(rawTarget);
-
-    return saveFromFormData(config, formData, { isUpdate: true });
+    const input = parseForm(formData);
+    return save(rawTarget, input, { isUpdate: true });
 }

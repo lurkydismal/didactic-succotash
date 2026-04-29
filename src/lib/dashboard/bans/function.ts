@@ -1,8 +1,50 @@
 "use server";
 
-import { ServerBanRow, ServerBanRowInsert } from "@/db/types";
-import { makeCrudActions } from "@/lib/dashboard/common/actions";
-import { BANS_CRUD_CONFIG } from "@/lib/dashboard/common/config";
+import { TableRowInsert } from "@/db/types";
+import { create } from "@/lib/create";
+import { getRows } from "@/lib/dashboard/bans/get";
+import { updateAction } from "@/lib/update";
+import log from "@/utils/stdlog";
+import { DbTarget } from "@/lib/types";
 
-export const { _getRowsAction, createRowAction, updateRowAction } =
-    await makeCrudActions<ServerBanRow, ServerBanRowInsert>(BANS_CRUD_CONFIG);
+const table: DbTarget = "serverBan";
+
+export const _getRowsAction = async () => {
+    const result = await getRows(table);
+
+    if (result.ok) {
+        return result.data;
+    } else {
+        const message = `Failed to get rows in action: ${result.error}`;
+        log.error(message);
+        throw new Error(message);
+    }
+};
+
+export const createRowAction = async (row: TableRowInsert) => {
+    "use server";
+
+    const result = await create(table, row);
+
+    if (!result.ok) {
+        const message = `Failed to create row in action: ${result.error}`;
+        log.error(message);
+        throw new Error(message);
+    }
+};
+
+export const updateRowAction = async (fd: FormData) => {
+    "use server";
+
+    fd.set("target", table);
+
+    const result = await updateAction(fd);
+
+    if (!result.ok) {
+        const message = `Failed to update row in action: ${result.error}`;
+        log.error(message);
+        throw new Error(message);
+    }
+
+    return result.ok;
+};
