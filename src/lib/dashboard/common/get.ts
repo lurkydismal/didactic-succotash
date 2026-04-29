@@ -8,17 +8,16 @@ import { ActionResult } from "@/lib/types";
 import { GridValidRowModel } from "@mui/x-data-grid";
 
 // TODO: Validate what returns
-export async function getRows(rawTarget: DbTarget, id: AnyColumn): Promise<ActionResult<readonly GridValidRowModel[]>> {
+export async function getRows(
+    rawTarget: DbTarget,
+    id: AnyColumn,
+): Promise<ActionResult<readonly GridValidRowModel[]>> {
     try {
         const table = parseRawTarget(rawTarget);
 
         return {
             ok: true,
-            data: await db
-                .select()
-                .from(table)
-                .orderBy(desc(id))
-                .execute(),
+            data: await db.select().from(table).orderBy(desc(id)).execute(),
         };
     } catch (err) {
         // err is a ZodError on validation failure or other error

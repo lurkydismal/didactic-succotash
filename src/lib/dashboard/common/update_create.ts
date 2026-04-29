@@ -55,7 +55,9 @@ export async function save(
             throw new Error("Missing authenticated user");
         }
 
-        const row = await schema.parseAsync(toDbMutation(parsedInput, actor, opts));
+        const row = await schema.parseAsync(
+            toDbMutation(parsedInput, actor, opts),
+        );
 
         if (opts.isUpdate) {
             if (parsedInput.id === undefined) {

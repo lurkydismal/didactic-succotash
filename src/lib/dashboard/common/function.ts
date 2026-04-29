@@ -17,14 +17,17 @@ export async function getRowsAction(target: DbTarget, id: AnyColumn) {
     }
 }
 
-export async function createRowAction<RI extends Record<string, unknown>>(target: DbTarget, row: RI) {
+export async function createRowAction<RI extends Record<string, unknown>>(
+    target: DbTarget,
+    row: RI,
+) {
     const result = await create(target, row);
 
     if (!result.ok) {
         const message = `Failed to create row in action: ${result.error}`;
         throw new Error(message);
     }
-};
+}
 
 export async function updateRowAction(
     target: DbTarget,
@@ -39,4 +42,4 @@ export async function updateRowAction(
     }
 
     return result.ok;
-};
+}

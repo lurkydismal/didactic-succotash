@@ -11,11 +11,10 @@ import { makeCrudActions } from "@/lib/dashboard/common/actions";
 import { serverBan } from "@/db/schema";
 
 export default function Page() {
-    const {
-        getRowsAction,
-        createRowAction,
-        updateRowAction,
-    } = makeCrudActions<TableRow, TableRowInsert>("table", serverBan.serverBanId);
+    const { getRowsAction, createRowAction, updateRowAction } = makeCrudActions<
+        TableRow,
+        TableRowInsert
+    >("table", serverBan.serverBanId);
 
     const emptyRow: TableRowInsert = {
         serverBanId: 1,

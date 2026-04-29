@@ -8,11 +8,10 @@ import { makeCrudActions } from "@/lib/dashboard/common/actions";
 import { table } from "@/db/schema";
 
 export default function Page() {
-    const {
-        getRowsAction,
-        createRowAction,
-        updateRowAction,
-    } = makeCrudActions<TableRow, TableRowInsert>("table", table.id);
+    const { getRowsAction, createRowAction, updateRowAction } = makeCrudActions<
+        TableRow,
+        TableRowInsert
+    >("table", table.id);
 
     const emptyRow: TableRowInsert = {
         content: "-",

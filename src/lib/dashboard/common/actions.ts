@@ -18,12 +18,16 @@ export function makeCrudActions<RI extends Record<string, unknown>>(
 
             return getRowsAction(target, id);
         },
-        createRowAction: async (row: RI): ReturnType<typeof createRowAction> => {
+        createRowAction: async (
+            row: RI,
+        ): ReturnType<typeof createRowAction> => {
             "use server";
 
             return createRowAction(target, row);
         },
-        updateRowAction: async (fd: FormData): ReturnType<typeof updateRowAction> => {
+        updateRowAction: async (
+            fd: FormData,
+        ): ReturnType<typeof updateRowAction> => {
             "use server";
 
             return updateRowAction(target, id, fd);
