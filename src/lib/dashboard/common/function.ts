@@ -16,7 +16,6 @@ export const _getRowsAction = async () => {
         return result.data;
     } else {
         const message = `Failed to get rows in action: ${result.error}`;
-        log.error(message);
         throw new Error(message);
     }
 };
@@ -28,7 +27,6 @@ export const createRowAction = async (row: TableRowInsert) => {
 
     if (!result.ok) {
         const message = `Failed to create row in action: ${result.error}`;
-        log.error(message);
         throw new Error(message);
     }
 };
@@ -42,7 +40,6 @@ export const updateRowAction = async (fd: FormData) => {
 
     if (!result.ok) {
         const message = `Failed to update row in action: ${result.error}`;
-        log.error(message);
         throw new Error(message);
     }
 
