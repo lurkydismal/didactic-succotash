@@ -1,13 +1,13 @@
 "use server";
 
 import { TableRowInsert } from "@/db/types";
-import { create } from "@/lib/create";
-import { getRows } from "@/lib/dashboard/bans/get";
-import { updateAction } from "@/lib/update";
+import { create } from "@/lib/dashboard/common/create";
+import { getRows } from "@/lib/dashboard/common/get";
+import { updateAction } from "@/lib/dashboard/common/update";
 import log from "@/utils/stdlog";
 import { DbTarget } from "@/lib/types";
 
-const table: DbTarget = "serverBan";
+const table: DbTarget = "table";
 
 export const _getRowsAction = async () => {
     const result = await getRows(table);

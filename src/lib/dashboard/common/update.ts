@@ -2,17 +2,17 @@
 
 import { TableRowInsert } from "@/db/types";
 import { ActionResult, DbTarget } from "@/lib/types";
-import { parseForm, save } from "@/lib/dashboard/table/update_create";
+import { parseForm, save } from "@/lib/dashboard/common/update_create";
 
-export async function create(
+export async function update(
     rawTarget: DbTarget,
     row: TableRowInsert,
 ): Promise<ActionResult> {
-    return save(rawTarget, row, { isUpdate: false });
+    return save(rawTarget, row, { isUpdate: true });
 }
 
-export async function createAction(formData: FormData) {
+export async function updateAction(formData: FormData) {
     const rawTarget = formData.get("target") as DbTarget;
     const input = parseForm(formData);
-    return save(rawTarget, input, { isUpdate: false });
+    return save(rawTarget, input, { isUpdate: true });
 }

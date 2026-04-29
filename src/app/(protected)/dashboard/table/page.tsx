@@ -7,7 +7,7 @@ import {
     _getRowsAction,
     createRowAction,
     updateRowAction,
-} from "@/lib/dashboard/table/function";
+} from "@/lib/dashboard/common/function";
 import fields from "@/data/dashboard/table/fields";
 
 export default function Page() {
