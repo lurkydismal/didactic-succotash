@@ -12,7 +12,6 @@ import { serverBan } from "@/db/schema";
 
 export default function Page() {
     const { getRowsAction, createRowAction, updateRowAction } = makeCrudActions<
-        TableRow,
         TableRowInsert
     >("table", serverBan.serverBanId);
 

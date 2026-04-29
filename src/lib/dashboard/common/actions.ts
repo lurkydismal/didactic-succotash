@@ -8,7 +8,7 @@ import {
 } from "@/lib/dashboard/common/function";
 import { AnyColumn } from "drizzle-orm";
 
-export function makeCrudActions<RI extends Record<string, unknown>>(
+export async function makeCrudActions<RI extends Record<string, unknown>>(
     target: DbTarget,
     id: AnyColumn,
 ) {
