@@ -1,6 +1,5 @@
 "use client";
 
-import { TableRowInsert } from "@/db/types";
 import CustomDivider from "@/components/TableDataGrid/CustomDivider";
 import { useSnackbar } from "@/providers/snackbar";
 import uuid from "@/utils/uuid";
@@ -11,12 +10,15 @@ import {
 import { Tooltip } from "@mui/material";
 import { ToolbarButton } from "@mui/x-data-grid";
 
-export default function ExtraToolbarButtons({
+export default function ExtraToolbarButtons<
+    R extends Record<string, unknown>,
+    RI extends Record<string, unknown>,
+>({
     emptyRow,
     createRowAction,
 }: Readonly<{
-    emptyRow: TableRowInsert;
-    createRowAction: (row: TableRowInsert) => Promise<unknown>;
+    emptyRow: RI;
+    createRowAction: (row: RI) => Promise<void>;
 }>) {
     const { showMessage, showSuccess, showError, showWarning, showInfo } =
         useSnackbar();

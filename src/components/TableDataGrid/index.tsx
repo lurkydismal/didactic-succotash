@@ -30,7 +30,7 @@ export default function TableDataGrid<
     emptyRow: RI;
     getRowsAction: () => Promise<Readonly<GridRowsProp>>;
     createRowAction: (row: RI) => Promise<void>;
-    updateRowAction: (row: RI) => Promise<boolean>;
+    updateRowAction: (fd: FormData) => Promise<boolean>;
     extraButtons?: React.ReactNode; // optionally a ReactElement expecting props
     fields: FieldConfig<R, RI>[];
     isRowChanged?: (row: R, values: Partial<RI>) => boolean;

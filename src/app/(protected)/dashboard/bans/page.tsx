@@ -6,14 +6,17 @@ import {
     ServerBanRowInsert as TableRowInsert,
 } from "@/db/types";
 import ExtraToolbarButtons from "@/components/dashboard/ExtraToolbarButtons";
-import {
-    getRowsAction,
-    createRowAction,
-    updateRowAction,
-} from "@/lib/dashboard/common/function";
 import fields from "@/data/dashboard/bans/fields";
+import { makeCrudActions } from "@/lib/dashboard/common/actions";
+import { serverBan } from "@/db/schema";
 
 export default function Page() {
+    const {
+        getRowsAction,
+        createRowAction,
+        updateRowAction,
+    } = makeCrudActions<TableRow, TableRowInsert>("table", serverBan.serverBanId);
+
     const emptyRow: TableRowInsert = {
         serverBanId: 1,
         address: "123",
