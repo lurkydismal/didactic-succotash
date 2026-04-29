@@ -1,12 +1,12 @@
 "use server";
 
-import { TableRowInsert } from "@/db/types";
 import { ActionResult, DbTarget } from "@/lib/types";
 import { parseForm, save } from "@/lib/dashboard/common/update_create";
+import { InferInsertModel, Table } from "drizzle-orm";
 
-export async function create(
+export async function create<TTable extends Table>(
     rawTarget: DbTarget,
-    row: TableRowInsert,
+    row: InferInsertModel<TTable>,
 ): Promise<ActionResult> {
     return save(rawTarget, row, { isUpdate: false });
 }

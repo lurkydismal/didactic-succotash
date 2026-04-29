@@ -5,9 +5,10 @@ import log from "@/utils/stdlog";
 import { AnyColumn, desc } from "drizzle-orm";
 import { DbTarget, parseRawTarget } from "@/lib/types";
 import { ActionResult } from "@/lib/types";
+import { GridValidRowModel } from "@mui/x-data-grid";
 
 // TODO: Validate what returns
-export async function getRows(rawTarget: DbTarget, id: AnyColumn): Promise<ActionResult> {
+export async function getRows(rawTarget: DbTarget, id: AnyColumn): Promise<ActionResult<readonly GridValidRowModel[]>> {
     try {
         const table = parseRawTarget(rawTarget);
 

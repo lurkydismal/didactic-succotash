@@ -10,7 +10,7 @@ export const getRowsAction = async (target: DbTarget, id: AnyColumn) => {
     const result = await getRows(target, id);
 
     if (result.ok) {
-        return result.data;
+        return result.data!;
     } else {
         const message = `Failed to get rows in action: ${result.error}`;
         throw new Error(message);

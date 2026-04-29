@@ -1,9 +1,7 @@
 import db from "@/db";
-import { TableRowInsert } from "@/db/types";
 import { getSessionData } from "@/lib/auth";
 import { ActionResult, DbTarget, parseRawTarget } from "@/lib/types";
 import log from "@/utils/stdlog";
-import { rowSchema } from "@/utils/validate/schemas";
 import { eq } from "drizzle-orm";
 
 type Input = {

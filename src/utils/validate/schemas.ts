@@ -74,15 +74,3 @@ export const userSelectPublicSchema = userSelectSchema
         username: z.string().trim().min(1),
         username_normalized: z.string().trim().min(1).lowercase(),
     });
-
-// TODO: Document
-export const idSchema = z.number();
-
-// TODO: Document
-export const contentSchema = z.string();
-
-// TODO: Document
-export const rowSchema = z.object({
-    id: idSchema.optional(),
-    content: contentSchema,
-});
