@@ -20,8 +20,6 @@ import {
 import log from "@/utils/stdlog";
 import { useSnackbar } from "@/providers/snackbar";
 import { isBlob } from "@/utils/stdfunc";
-import { parseForm } from "@/lib/dashboard/common/update_create";
-import { StringValue } from "ms";
 import { Dayjs } from "dayjs";
 
 /* ----------------------------
@@ -315,7 +313,7 @@ function RowDialogContent<
                         Author
                     </Typography>
                     <Typography variant="subtitle2" sx={{ display: "block" }}>
-                        {(row as { author?: StringValue }).author ?? "—"}
+                        {(row as { author?: string }).author ?? "—"}
                     </Typography>
                 </Grid>
 

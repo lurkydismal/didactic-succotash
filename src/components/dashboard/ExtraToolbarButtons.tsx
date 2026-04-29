@@ -11,7 +11,7 @@ import { Tooltip } from "@mui/material";
 import { ToolbarButton } from "@mui/x-data-grid";
 
 export default function ExtraToolbarButtons<
-    R extends Record<string, unknown>,
+    // R extends Record<string, unknown>,
     RI extends Record<string, unknown>,
 >({
     emptyRow,
