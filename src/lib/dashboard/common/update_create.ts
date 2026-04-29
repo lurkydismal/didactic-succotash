@@ -78,8 +78,7 @@ export async function save(
     }
 }
 
-/* FormData parsing helper reused by both actions */
-
+// FormData parsing helper reused by both actions
 export function parseForm(formData: FormData): Input {
     const rawId = formData.get("id");
     const id = rawId == null ? undefined : Number(rawId);
