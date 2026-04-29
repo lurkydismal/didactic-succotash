@@ -1,5 +1,3 @@
-"use client";
-
 import TableDataGrid from "@/components/TableDataGrid";
 import {
     ServerBanRow as TableRow,
@@ -10,8 +8,8 @@ import fields from "@/data/dashboard/bans/fields";
 import { makeCrudActions } from "@/lib/dashboard/common/actions";
 import { serverBan } from "@/db/schema";
 
-export default function Page() {
-    const { getRowsAction, createRowAction, updateRowAction } = makeCrudActions<
+export default async function Page() {
+    const { getRowsAction, createRowAction, updateRowAction } = await makeCrudActions<
         TableRowInsert
     >("table", serverBan.serverBanId);
 
@@ -22,20 +20,12 @@ export default function Page() {
         banTime: new Date(),
     };
 
-    // Optional: custom change detector (compares trimmed content)
-    const isRowChanged = (row: TableRow, values: Partial<TableRowInsert>) => {
-        const a = String(row.address ?? "").trim();
-        const b = String(values.address ?? "").trim();
-        return a !== b;
-    };
-
     return (
         <TableDataGrid<TableRow, TableRowInsert>
             createRowAction={createRowAction}
             emptyRow={emptyRow}
             fields={fields}
             getRowsAction={getRowsAction}
-            isRowChanged={isRowChanged}
             updateRowAction={updateRowAction}
             extraButtons={
                 <ExtraToolbarButtons

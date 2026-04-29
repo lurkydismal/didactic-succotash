@@ -58,7 +58,6 @@ type RowDialogContentProps<R, RI> = {
     registerSubmit: (fn: (() => Promise<boolean>) | null) => void;
     updateRowAction: UpdateRowAction;
     onUpdated?: () => Promise<void> | void;
-    isRowChanged?: (row: R, values: Partial<RI>) => boolean;
     idKey?: keyof R; // defaults to "id"
 };
 
@@ -71,7 +70,6 @@ function RowDialogContent<
     registerSubmit,
     updateRowAction,
     onUpdated,
-    isRowChanged,
     idKey = "id" as keyof R,
 }: RowDialogContentProps<R, RI>) {
     const { showError } = useSnackbar();
@@ -101,7 +99,7 @@ function RowDialogContent<
     const setValue = (key: string, v: unknown) =>
         setValues((s) => ({ ...s, [key]: v }));
 
-    // default comparator if user didn't provide isRowChanged
+    // default comparator for row changes
     const defaultIsChanged = useCallback(
         (rowObj: R, newValues: Partial<RI>) => {
             for (const f of fields) {
@@ -143,10 +141,7 @@ function RowDialogContent<
         // values typed as Partial<RI>
         const currentValues = values as Partial<RI>;
 
-        const changed =
-            typeof isRowChanged === "function"
-                ? isRowChanged(row, currentValues)
-                : defaultIsChanged(row, currentValues);
+        const changed = defaultIsChanged(row, currentValues);
 
         if (!changed) return true;
 
@@ -176,7 +171,7 @@ function RowDialogContent<
         }
 
         return await _updateRow(fd);
-    }, [_updateRow, defaultIsChanged, fields, isRowChanged, row, values]);
+    }, [_updateRow, defaultIsChanged, fields, row, values]);
 
     useEffect(() => {
         registerSubmit(submit);
@@ -344,7 +339,6 @@ export default function RowDialog<
     updateRowAction,
     onUpdated,
     fields,
-    isRowChanged,
     idKey = "id" as keyof R,
 }: {
     dialogOpen: boolean;
@@ -354,7 +348,6 @@ export default function RowDialog<
     updateRowAction: UpdateRowAction;
     onUpdated?: () => Promise<void> | void;
     fields: FieldConfig<R, RI>[];
-    isRowChanged?: (row: R, values: Partial<RI>) => boolean;
     idKey?: keyof R;
 }) {
     const submitFnRef = useRef<(() => Promise<boolean>) | null>(null);
@@ -400,8 +393,7 @@ export default function RowDialog<
                         registerSubmit={registerSubmit}
                         updateRowAction={updateRowAction}
                         onUpdated={onUpdated}
-                        isRowChanged={isRowChanged}
-                        idKey={idKey}
+                                idKey={idKey}
                     />
                 )}
             </DialogContent>
