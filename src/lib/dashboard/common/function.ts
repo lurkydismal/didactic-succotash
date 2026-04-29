@@ -3,14 +3,14 @@
 import { TableRowInsert } from "@/db/types";
 import { create } from "@/lib/dashboard/common/create";
 import { getRows } from "@/lib/dashboard/common/get";
-import { updateAction } from "@/lib/dashboard/common/update";
-import log from "@/utils/stdlog";
+import { update } from "@/lib/dashboard/common/update";
 import { DbTarget } from "@/lib/types";
+import { AnyColumn } from "drizzle-orm";
 
 const table: DbTarget = "table";
 
-export const _getRowsAction = async () => {
-    const result = await getRows(table);
+export const getRowsAction = async (id: AnyColumn) => {
+    const result = await getRows(table, id);
 
     if (result.ok) {
         return result.data;
@@ -21,8 +21,6 @@ export const _getRowsAction = async () => {
 };
 
 export const createRowAction = async (row: TableRowInsert) => {
-    "use server";
-
     const result = await create(table, row);
 
     if (!result.ok) {
@@ -31,12 +29,8 @@ export const createRowAction = async (row: TableRowInsert) => {
     }
 };
 
-export const updateRowAction = async (fd: FormData) => {
-    "use server";
-
-    fd.set("target", table);
-
-    const result = await updateAction(fd);
+export const updateRowAction = async (row: TableRowInsert) => {
+    const result = await update(table, row);
 
     if (!result.ok) {
         const message = `Failed to update row in action: ${result.error}`;

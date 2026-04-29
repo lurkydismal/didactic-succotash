@@ -11,8 +11,7 @@ export async function update(
     return save(rawTarget, row, { isUpdate: true });
 }
 
-export async function updateAction(formData: FormData) {
-    const rawTarget = formData.get("target") as DbTarget;
+export async function updateAction(rawTarget: DbTarget, formData: FormData) {
     const input = parseForm(formData);
     return save(rawTarget, input, { isUpdate: true });
 }

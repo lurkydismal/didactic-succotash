@@ -4,7 +4,7 @@ import TableDataGrid from "@/components/TableDataGrid";
 import { TableRow, TableRowInsert } from "@/db/types";
 import ExtraToolbarButtons from "@/components/dashboard/ExtraToolbarButtons";
 import {
-    _getRowsAction,
+    getRowsAction,
     createRowAction,
     updateRowAction,
 } from "@/lib/dashboard/common/function";
@@ -27,7 +27,7 @@ export default function Page() {
             createRowAction={createRowAction}
             emptyRow={emptyRow}
             fields={fields}
-            getRowsAction={_getRowsAction}
+            getRowsAction={getRowsAction}
             isRowChanged={isRowChanged}
             updateRowAction={updateRowAction}
             extraButtons={

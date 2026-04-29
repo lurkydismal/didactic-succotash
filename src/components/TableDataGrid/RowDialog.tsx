@@ -20,6 +20,9 @@ import {
 import log from "@/utils/stdlog";
 import { useSnackbar } from "@/providers/snackbar";
 import { isBlob } from "@/utils/stdfunc";
+import { parseForm } from "@/lib/dashboard/common/update_create";
+import { StringValue } from "ms";
+import { Dayjs } from "dayjs";
 
 /* ----------------------------
    Types
@@ -111,7 +114,7 @@ function RowDialogContent<
                     typeof f.isChanged === "function"
                         ? !f.isChanged(rowVal, newVal)
                         : String((rowVal ?? "").toString()).trim() ===
-                          String((newVal ?? "").toString()).trim();
+                        String((newVal ?? "").toString()).trim();
                 if (!eq) return true;
             }
             return false;
@@ -253,14 +256,14 @@ function RowDialogContent<
                 {/* Hidden id if present */}
                 {((row as Record<string, unknown>)[String(idKey)] ?? null) !==
                     null && (
-                    <input
-                        type="hidden"
-                        name={String(idKey)}
-                        value={String(
-                            (row as Record<string, unknown>)[String(idKey)],
-                        )}
-                    />
-                )}
+                        <input
+                            type="hidden"
+                            name={String(idKey)}
+                            value={String(
+                                (row as Record<string, unknown>)[String(idKey)],
+                            )}
+                        />
+                    )}
 
                 {fields.map((field, index) => (
                     <Grid
@@ -281,7 +284,7 @@ function RowDialogContent<
                     </Typography>
                     <Typography variant="subtitle2" sx={{ display: "block" }}>
                         {formatDate(
-                            (row as { created_at?: unknown }).created_at,
+                            (row as unknown as { created_at: string | Date | Dayjs }).created_at,
                             true,
                         )}
                     </Typography>
@@ -293,7 +296,7 @@ function RowDialogContent<
                     </Typography>
                     <Typography variant="subtitle2" sx={{ display: "block" }}>
                         {formatDate(
-                            (row as { updated_at?: unknown }).updated_at,
+                            (row as unknown as { updated_at: string | Date | Dayjs }).updated_at,
                             true,
                         )}
                     </Typography>
@@ -304,7 +307,7 @@ function RowDialogContent<
                         Author
                     </Typography>
                     <Typography variant="subtitle2" sx={{ display: "block" }}>
-                        {(row as { author?: unknown }).author ?? "—"}
+                        {(row as { author?: StringValue }).author ?? "—"}
                     </Typography>
                 </Grid>
 
@@ -313,7 +316,7 @@ function RowDialogContent<
                         Last editor
                     </Typography>
                     <Typography variant="subtitle2" sx={{ display: "block" }}>
-                        {(row as { last_editor?: unknown }).last_editor ?? "—"}
+                        {(row as { last_editor?: string }).last_editor ?? "—"}
                     </Typography>
                 </Grid>
             </Grid>

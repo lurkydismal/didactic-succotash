@@ -7,10 +7,10 @@ import {
 } from "@/db/types";
 import ExtraToolbarButtons from "@/components/dashboard/ExtraToolbarButtons";
 import {
-    _getRowsAction,
+    getRowsAction,
     createRowAction,
     updateRowAction,
-} from "@/lib/dashboard/bans/function";
+} from "@/lib/dashboard/common/function";
 import fields from "@/data/dashboard/bans/fields";
 
 export default function Page() {
@@ -33,7 +33,7 @@ export default function Page() {
             createRowAction={createRowAction}
             emptyRow={emptyRow}
             fields={fields}
-            getRowsAction={_getRowsAction}
+            getRowsAction={getRowsAction}
             isRowChanged={isRowChanged}
             updateRowAction={updateRowAction}
             extraButtons={

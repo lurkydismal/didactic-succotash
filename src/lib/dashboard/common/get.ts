@@ -2,12 +2,12 @@
 
 import db from "@/db";
 import log from "@/utils/stdlog";
-import { desc } from "drizzle-orm";
+import { AnyColumn, desc } from "drizzle-orm";
 import { DbTarget, parseRawTarget } from "@/lib/types";
 import { ActionResult } from "@/lib/types";
 
 // TODO: Validate what returns
-export async function getRows(rawTarget: DbTarget): Promise<ActionResult> {
+export async function getRows(rawTarget: DbTarget, id: AnyColumn): Promise<ActionResult> {
     try {
         const table = parseRawTarget(rawTarget);
 
@@ -16,7 +16,7 @@ export async function getRows(rawTarget: DbTarget): Promise<ActionResult> {
             data: await db
                 .select()
                 .from(table)
-                .orderBy(desc(table.id))
+                .orderBy(desc(id))
                 .execute(),
         };
     } catch (err) {
@@ -25,11 +25,4 @@ export async function getRows(rawTarget: DbTarget): Promise<ActionResult> {
 
         return { ok: false, error: "Get error" };
     }
-}
-
-export async function getRowsAction(formData: FormData) {
-    const rawTarget = formData.get("target");
-
-    // Cast and delegate to main upload function
-    return await getRows(rawTarget as DbTarget);
 }

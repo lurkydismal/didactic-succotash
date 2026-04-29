@@ -29,8 +29,8 @@ export default function TableDataGrid<
 }: Readonly<{
     emptyRow: RI;
     getRowsAction: () => Promise<Readonly<GridRowsProp>>;
-    createRowAction: (row: RI) => Promise<unknown>;
-    updateRowAction: (fd: FormData) => Promise<boolean>;
+    createRowAction: (row: RI) => Promise<void>;
+    updateRowAction: (row: RI) => Promise<boolean>;
     extraButtons?: React.ReactNode; // optionally a ReactElement expecting props
     fields: FieldConfig<R, RI>[];
     isRowChanged?: (row: R, values: Partial<RI>) => boolean;
@@ -60,7 +60,7 @@ export default function TableDataGrid<
     const createAndRefresh = useCallback(
         async (row: RI) => {
             try {
-                const created = await createRowAction(row);
+                await createRowAction(row);
                 // Option A: re-fetch full list (safe)
                 await _getRows();
 
@@ -68,8 +68,6 @@ export default function TableDataGrid<
                 // if (created && created.id !== undefined && apiRef?.current?.updateRows) {
                 //   apiRef.current.updateRows([{ id: created.id, ...created }]);
                 // }
-
-                return created;
             } catch (err) {
                 showError(err);
             }
@@ -108,7 +106,7 @@ export default function TableDataGrid<
             }
 
             e.preventDefault();
-            void submit();
+            submit();
         };
 
         window.addEventListener("keydown", onKeyDown);
@@ -125,12 +123,12 @@ export default function TableDataGrid<
     // If extraButtons is a React element, clone it and inject createRowAction + emptyRow
     const injectedExtraButtons = isValidElement(extraButtons)
         ? cloneElement(
-              extraButtons as React.ReactElement<Record<string, unknown>>,
-              {
-                  createRowAction: createAndRefresh,
-                  emptyRow,
-              },
-          )
+            extraButtons as React.ReactElement<Record<string, unknown>>,
+            {
+                createRowAction: createAndRefresh,
+                emptyRow,
+            },
+        )
         : extraButtons;
 
     const columns = columnsFromFields(fields);
