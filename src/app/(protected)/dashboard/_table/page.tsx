@@ -3,7 +3,7 @@
 import TableDataGrid from "@/components/TableDataGrid";
 import { TableRow, TableRowInsert } from "@/db/types";
 import ExtraToolbarButtons from "@/components/dashboard/ExtraToolbarButtons";
-import fields from "@/data/dashboard/table/fields";
+import fields from "@/data/dashboard/_table/fields";
 import { createRowAction, getRowsAction, updateRowAction } from "@/lib/dashboard/table/function";
 
 export default function Page() {
