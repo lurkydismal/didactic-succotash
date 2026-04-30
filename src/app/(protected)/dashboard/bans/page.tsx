@@ -8,12 +8,12 @@ import {
 import ExtraToolbarButtons from "@/components/dashboard/ExtraToolbarButtons";
 import fields from "@/data/dashboard/bans/fields";
 import { createRowAction, getRowsAction, updateRowAction } from "@/lib/dashboard/bans/function";
+import { uuid4 } from "@/utils/uuid";
 
 export default function Page() {
     const emptyRow: TableRowInsert = {
-        serverBanId: 1,
-        address: "123",
-        reason: "-",
+        playerUserId: uuid4(),
+        reason: "123",
         banTime: new Date(),
     };
 

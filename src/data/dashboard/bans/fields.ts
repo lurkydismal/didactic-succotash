@@ -4,7 +4,7 @@ import {
     ServerBanRowInsert as TableRowInsert,
 } from "@/db/types";
 
-// simple fields for your schema (content is the only editable column)
+// TODO: Also derive empty row from this
 const fields: FieldConfig<TableRow, TableRowInsert>[] = [
     {
         key: "address",
