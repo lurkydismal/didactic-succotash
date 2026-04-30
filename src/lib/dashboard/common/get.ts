@@ -26,16 +26,16 @@ export async function getRows(
         // Check if "id" already exists
         const hasId = "id" in rows[0];
 
-        log.debug({ id, hasId, rows });
+        log.trace({ id, hasId, rows });
 
         const result = hasId
             ? rows
             : rows.map((row: any) => ({
                 ...row,
-                id: row[toCamelCase(id.name)], // <-- pull value from provided column
+                id: row[toCamelCase(id.name)], // pull value from provided column
             }));
 
-        log.debug({ result });
+        log.trace({ result });
 
         return {
             ok: true,
