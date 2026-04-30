@@ -15,6 +15,13 @@ import { useGridApiRef, GridRowsProp, GridRowParams } from "@mui/x-data-grid";
 import { Box, CircularProgress } from "@mui/material";
 import { columnsFromFields } from "@/utils/columns";
 
+function normalizeFields<
+    R extends Record<string, unknown>,
+    RI extends Record<string, unknown>,
+>(fields: FieldConfig<R, RI>[]): FieldConfig<R, RI>[] {
+    return fields;
+}
+
 export default function TableDataGrid<
     R extends Record<string, unknown>,
     RI extends Record<string, unknown>,
@@ -25,6 +32,7 @@ export default function TableDataGrid<
     updateRowAction,
     extraButtons,
     fields,
+    idKey = "id" as keyof R,
 }: Readonly<{
     emptyRow: RI;
     getRowsAction: () => Promise<Readonly<GridRowsProp>>;
@@ -32,6 +40,7 @@ export default function TableDataGrid<
     updateRowAction: (fd: FormData) => Promise<void>;
     extraButtons?: React.ReactNode; // optionally a ReactElement expecting props
     fields: FieldConfig<R, RI>[];
+    idKey?: keyof R;
 }>) {
     const { showError } = useSnackbar();
     const apiRef = useGridApiRef();
@@ -164,7 +173,7 @@ export default function TableDataGrid<
 
             <RowDialog<R, RI>
                 dialogOpen={dialogOpen}
-                fields={fields}
+                fields={normalizeFields(fields)}
                 handleClose={handleClose}
                 selectedRow={selectedRow}
                 setSelectedRow={setSelectedRow}
