@@ -1,0 +1,6988 @@
+{
+  "version": "8",
+  "dialect": "postgres",
+  "id": "0999b5a3-bd13-4178-83c1-20601a04a50e",
+  "prevIds": [
+    "4b4586fb-a887-41e9-a0e4-54864f2f7beb"
+  ],
+  "ddl": [
+    {
+      "isRlsEnabled": false,
+      "name": "admin",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "admin_flag",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "admin_log",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "admin_log_player",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "admin_messages",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "admin_notes",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "admin_rank",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "admin_rank_flag",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "admin_watchlists",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "antag",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "assigned_user_id",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "ban_template",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "blacklist",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "connection_log",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "__EFMigrationsHistory",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "ipintel_cache",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "job",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "play_time",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "player",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "player_round",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "preference",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "profile",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "profile_loadout",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "profile_loadout_group",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "profile_role_loadout",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "rmc_discord_accounts",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "rmc_linked_accounts",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "rmc_linked_accounts_logs",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "rmc_linking_codes",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "rmc_patron_lobby_messages",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "rmc_patron_round_end_nt_shoutouts",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "rmc_patron_tiers",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "rmc_patrons",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "role_whitelists",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "round",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "server",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "server_ban",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "server_ban_exemption",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "server_ban_hit",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "server_role_ban",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "server_role_unban",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "server_unban",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "table",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "trait",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "uploaded_resource_log",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "users",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "whitelist",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "title",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "admin_rank_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "false",
+      "generated": null,
+      "identity": null,
+      "name": "deadminned",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "false",
+      "generated": null,
+      "identity": null,
+      "name": "suspended",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "admin_flag_admin_flag_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "admin_flag_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_flag"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "flag",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_flag"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "negative",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_flag"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "admin_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_flag"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "admin_log_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_log"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "round_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_log"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "type",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_log"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "date",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_log"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "message",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_log"
+    },
+    {
+      "type": "jsonb",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "json",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_log"
+    },
+    {
+      "type": "smallint",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "0",
+      "generated": null,
+      "identity": null,
+      "name": "impact",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_log"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "player_user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_log_player"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "log_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_log_player"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "round_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_log_player"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "admin_messages_admin_messages_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "admin_messages_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "round_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "player_user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "type": "interval",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "playtime_at_note",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "type": "varchar(4096)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "message",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "created_by_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "last_edited_by_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "last_edited_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "expiration_time",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "deleted",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "deleted_by_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "deleted_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "seen",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "false",
+      "generated": null,
+      "identity": null,
+      "name": "dismissed",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "admin_notes_admin_notes_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "admin_notes_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "round_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "player_user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "type": "varchar(4096)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "message",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "created_by_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "last_edited_by_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "last_edited_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "deleted",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "deleted_by_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "deleted_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "secret",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "expiration_time",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "1",
+      "generated": null,
+      "identity": null,
+      "name": "severity",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "type": "interval",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'00:00:00'",
+      "generated": null,
+      "identity": null,
+      "name": "playtime_at_note",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "admin_rank_admin_rank_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "admin_rank_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_rank"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_rank"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "admin_rank_flag_admin_rank_flag_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "admin_rank_flag_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_rank_flag"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "flag",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_rank_flag"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "admin_rank_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_rank_flag"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "admin_watchlists_admin_watchlists_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "admin_watchlists_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_watchlists"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "round_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_watchlists"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "player_user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_watchlists"
+    },
+    {
+      "type": "interval",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "playtime_at_note",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_watchlists"
+    },
+    {
+      "type": "varchar(4096)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "message",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_watchlists"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "created_by_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_watchlists"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_watchlists"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "last_edited_by_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_watchlists"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "last_edited_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_watchlists"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "expiration_time",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_watchlists"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "deleted",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_watchlists"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "deleted_by_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_watchlists"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "deleted_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "admin_watchlists"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "antag_antag_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "antag_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "antag"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "profile_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "antag"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "antag_name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "antag"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "assigned_user_id_assigned_user_id_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "assigned_user_id_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "assigned_user_id"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "user_name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "assigned_user_id"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "assigned_user_id"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "ban_template_ban_template_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "ban_template_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "ban_template"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "title",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "ban_template"
+    },
+    {
+      "type": "interval",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "length",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "ban_template"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "reason",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "ban_template"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "exempt_flags",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "ban_template"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "severity",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "ban_template"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "auto_delete",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "ban_template"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "hidden",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "ban_template"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "blacklist"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "connection_log_connection_log_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "connection_log_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "connection_log"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "connection_log"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "user_name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "connection_log"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "time",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "connection_log"
+    },
+    {
+      "type": "inet",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "address",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "connection_log"
+    },
+    {
+      "type": "bytea",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "hwid",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "connection_log"
+    },
+    {
+      "type": "smallint",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "denied",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "connection_log"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "0",
+      "generated": null,
+      "identity": null,
+      "name": "server_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "connection_log"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": "0",
+      "generated": null,
+      "identity": null,
+      "name": "hwid_type",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "connection_log"
+    },
+    {
+      "type": "real",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "0",
+      "generated": null,
+      "identity": null,
+      "name": "trust",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "connection_log"
+    },
+    {
+      "type": "varchar(150)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "MigrationId",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "__EFMigrationsHistory"
+    },
+    {
+      "type": "varchar(32)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "ProductVersion",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "__EFMigrationsHistory"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "ipintel_cache_ipintel_cache_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "ipintel_cache_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "ipintel_cache"
+    },
+    {
+      "type": "inet",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "address",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "ipintel_cache"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "time",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "ipintel_cache"
+    },
+    {
+      "type": "real",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "score",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "ipintel_cache"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "job_job_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "job_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "job"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "profile_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "job"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "job_name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "job"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "priority",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "job"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "play_time_play_time_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "play_time_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "play_time"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "player_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "play_time"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "tracker",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "play_time"
+    },
+    {
+      "type": "interval",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "time_spent",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "play_time"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "player_player_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "player_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "player"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "player"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "first_seen_time",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "player"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "last_seen_user_name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "player"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "last_seen_time",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "player"
+    },
+    {
+      "type": "inet",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "last_seen_address",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "player"
+    },
+    {
+      "type": "bytea",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "last_seen_hwid",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "player"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "last_read_rules",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "player"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": "0",
+      "generated": null,
+      "identity": null,
+      "name": "last_seen_hwid_type",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "player"
+    },
+    {
+      "type": "interval",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "last_rolled_antag",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "player"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "players_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "player_round"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "rounds_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "player_round"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "preference_preference_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "preference_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "preference"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "preference"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "selected_character_slot",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "preference"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'#ff0000'",
+      "generated": null,
+      "identity": null,
+      "name": "admin_ooc_color",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "preference"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 1,
+      "default": "ARRAY",
+      "generated": null,
+      "identity": null,
+      "name": "construction_favorites",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "preference"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "profile_profile_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "profile_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "slot",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "char_name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "age",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "sex",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "hair_name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "hair_color",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "facial_hair_name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "facial_hair_color",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "eye_color",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "skin_color",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "pref_unavailable",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "preference_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "''",
+      "generated": null,
+      "identity": null,
+      "name": "gender",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "''",
+      "generated": null,
+      "identity": null,
+      "name": "species",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "type": "jsonb",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "markings",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "''",
+      "generated": null,
+      "identity": null,
+      "name": "flavor_text",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "0",
+      "generated": null,
+      "identity": null,
+      "name": "spawn_priority",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "''",
+      "generated": null,
+      "identity": null,
+      "name": "borg_name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "type": "real",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "1",
+      "generated": null,
+      "identity": null,
+      "name": "height",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "type": "real",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "1",
+      "generated": null,
+      "identity": null,
+      "name": "width",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "''",
+      "generated": null,
+      "identity": null,
+      "name": "voice",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "''",
+      "generated": null,
+      "identity": null,
+      "name": "body_type",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "profile_loadout_profile_loadout_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "profile_loadout_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile_loadout"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "profile_loadout_group_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile_loadout"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "loadout_name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile_loadout"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "profile_loadout_group_profile_loadout_group_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "profile_loadout_group_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile_loadout_group"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "profile_role_loadout_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile_loadout_group"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "group_name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile_loadout_group"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "profile_role_loadout_profile_role_loadout_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "profile_role_loadout_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile_role_loadout"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "profile_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile_role_loadout"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "role_name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile_role_loadout"
+    },
+    {
+      "type": "varchar(256)",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "entity_name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profile_role_loadout"
+    },
+    {
+      "type": "numeric(20,0)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "rmc_discord_accounts_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "rmc_discord_accounts"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "player_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "rmc_linked_accounts"
+    },
+    {
+      "type": "numeric(20,0)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "discord_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "rmc_linked_accounts"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "rmc_linked_accounts_logs_rmc_linked_accounts_logs_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "rmc_linked_accounts_logs_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "rmc_linked_accounts_logs"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "player_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "rmc_linked_accounts_logs"
+    },
+    {
+      "type": "numeric(20,0)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "discord_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "rmc_linked_accounts_logs"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "rmc_linked_accounts_logs"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "player_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "rmc_linking_codes"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "code",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "rmc_linking_codes"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "creation_time",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "rmc_linking_codes"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "patron_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "rmc_patron_lobby_messages"
+    },
+    {
+      "type": "varchar(500)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "message",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "rmc_patron_lobby_messages"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "patron_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "rmc_patron_round_end_nt_shoutouts"
+    },
+    {
+      "type": "varchar(100)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "rmc_patron_round_end_nt_shoutouts"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "rmc_patron_tiers_rmc_patron_tiers_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "rmc_patron_tiers_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "rmc_patron_tiers"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "show_on_credits",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "rmc_patron_tiers"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "lobby_message",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "rmc_patron_tiers"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "round_end_shoutout",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "rmc_patron_tiers"
+    },
+    {
+      "type": "numeric(20,0)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'0'",
+      "generated": null,
+      "identity": null,
+      "name": "discord_role",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "rmc_patron_tiers"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "''",
+      "generated": null,
+      "identity": null,
+      "name": "name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "rmc_patron_tiers"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "0",
+      "generated": null,
+      "identity": null,
+      "name": "priority",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "rmc_patron_tiers"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "false",
+      "generated": null,
+      "identity": null,
+      "name": "ghost_color",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "rmc_patron_tiers"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "player_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "rmc_patrons"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "tier_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "rmc_patrons"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "ghost_color",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "rmc_patrons"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "player_user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "role_whitelists"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "role_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "role_whitelists"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "round_round_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "round_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "round"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "0",
+      "generated": null,
+      "identity": null,
+      "name": "server_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "round"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "start_date",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "round"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "server_server_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "server_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "server_ban_server_ban_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "server_ban_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "player_user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "type": "inet",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "address",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "ban_time",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "expiration_time",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "reason",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "banning_admin",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "type": "bytea",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "hwid",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "0",
+      "generated": null,
+      "identity": null,
+      "name": "exempt_flags",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "false",
+      "generated": null,
+      "identity": null,
+      "name": "auto_delete",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "false",
+      "generated": null,
+      "identity": null,
+      "name": "hidden",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "last_edited_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "last_edited_by_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "type": "interval",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'00:00:00'",
+      "generated": null,
+      "identity": null,
+      "name": "playtime_at_note",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "round_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "3",
+      "generated": null,
+      "identity": null,
+      "name": "severity",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": "0",
+      "generated": null,
+      "identity": null,
+      "name": "hwid_type",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "type": "varchar(32)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'system'",
+      "generated": null,
+      "identity": null,
+      "name": "author",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "type": "varchar(32)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'system'",
+      "generated": null,
+      "identity": null,
+      "name": "last_editor",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "type": "timestamp(0) with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "type": "timestamp(0) with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban_exemption"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "flags",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban_exemption"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "server_ban_hit_server_ban_hit_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "server_ban_hit_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban_hit"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "ban_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban_hit"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "connection_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_ban_hit"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "server_role_ban_server_role_ban_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "server_role_ban_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "player_user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "type": "inet",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "address",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "type": "bytea",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "hwid",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "ban_time",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "expiration_time",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "reason",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "banning_admin",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "role_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "true",
+      "generated": null,
+      "identity": null,
+      "name": "hidden",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "last_edited_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "last_edited_by_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "type": "interval",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'00:00:00'",
+      "generated": null,
+      "identity": null,
+      "name": "playtime_at_note",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "round_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "2",
+      "generated": null,
+      "identity": null,
+      "name": "severity",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": "0",
+      "generated": null,
+      "identity": null,
+      "name": "hwid_type",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "server_role_unban_role_unban_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "role_unban_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_role_unban"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "ban_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_role_unban"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "unbanning_admin",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_role_unban"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "unban_time",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_role_unban"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "server_unban_unban_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "unban_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_unban"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "ban_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_unban"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "unbanning_admin",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_unban"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "unban_time",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "server_unban"
+    },
+    {
+      "type": "serial",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "table"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "content",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "table"
+    },
+    {
+      "type": "varchar(32)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'system'",
+      "generated": null,
+      "identity": null,
+      "name": "author",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "table"
+    },
+    {
+      "type": "varchar(32)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'system'",
+      "generated": null,
+      "identity": null,
+      "name": "last_editor",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "table"
+    },
+    {
+      "type": "timestamp(0) with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "table"
+    },
+    {
+      "type": "timestamp(0) with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "table"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "trait_trait_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "trait_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "trait"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "profile_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "trait"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "trait_name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "trait"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "uploaded_resource_log_uploaded_resource_log_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "uploaded_resource_log_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "uploaded_resource_log"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "date",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "uploaded_resource_log"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "uploaded_resource_log"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "path",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "uploaded_resource_log"
+    },
+    {
+      "type": "bytea",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "data",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "uploaded_resource_log"
+    },
+    {
+      "type": "serial",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "varchar(32)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "username",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "varchar(32)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "username_normalized",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "password_hash",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "timestamp(0) with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "timestamp(0) with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "whitelist"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "admin_rank_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_admin_admin_rank_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "admin"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "admin_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_admin_flag_admin_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "admin_flag"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "flag",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "admin_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_admin_flag_flag_admin_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "admin_flag"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "date",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_admin_log_date",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "admin_log"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "to_tsvector('english'::regconfig, message)",
+          "isExpression": true,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "gin",
+      "concurrently": false,
+      "name": "IX_admin_log_message",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "admin_log"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "type",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_admin_log_type",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "admin_log"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "player_user_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_admin_log_player_player_user_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "admin_log_player"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "created_by_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_admin_messages_created_by_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "deleted_by_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_admin_messages_deleted_by_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "last_edited_by_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_admin_messages_last_edited_by_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "player_user_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_admin_messages_player_user_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "round_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_admin_messages_round_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "created_by_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_admin_notes_created_by_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "deleted_by_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_admin_notes_deleted_by_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "last_edited_by_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_admin_notes_last_edited_by_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "player_user_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_admin_notes_player_user_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "round_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_admin_notes_round_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "admin_rank_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_admin_rank_flag_admin_rank_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "admin_rank_flag"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "flag",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "admin_rank_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_admin_rank_flag_flag_admin_rank_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "admin_rank_flag"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "created_by_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_admin_watchlists_created_by_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "admin_watchlists"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "deleted_by_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_admin_watchlists_deleted_by_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "admin_watchlists"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "last_edited_by_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_admin_watchlists_last_edited_by_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "admin_watchlists"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "player_user_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_admin_watchlists_player_user_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "admin_watchlists"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "round_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_admin_watchlists_round_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "admin_watchlists"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "profile_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "antag_name",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_antag_profile_id_antag_name",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "antag"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "user_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_assigned_user_id_user_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "assigned_user_id"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "user_name",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_assigned_user_id_user_name",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "assigned_user_id"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "time",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_connection_log_time",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "connection_log"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "user_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_connection_log_user_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "connection_log"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "address",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "idx_ipintel_cache_address",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "ipintel_cache"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "profile_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": "(priority = 3)",
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_job_one_high_priority",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "job"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "profile_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_job_profile_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "job"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "profile_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "job_name",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_job_profile_id_job_name",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "job"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "player_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "tracker",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_play_time_player_id_tracker",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "play_time"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "last_seen_user_name",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_player_last_seen_user_name",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "player"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "user_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_player_user_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "player"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "rounds_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_player_round_rounds_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "player_round"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "user_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_preference_user_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "preference"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "preference_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_profile_preference_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "slot",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "preference_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_profile_slot_preference_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "profile_loadout_group_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_profile_loadout_profile_loadout_group_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "profile_loadout"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "profile_role_loadout_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_profile_loadout_group_profile_role_loadout_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "profile_loadout_group"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "profile_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_profile_role_loadout_profile_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "profile_role_loadout"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "discord_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_rmc_linked_accounts_discord_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "rmc_linked_accounts"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "at",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_rmc_linked_accounts_logs_at",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "rmc_linked_accounts_logs"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "discord_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_rmc_linked_accounts_logs_discord_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "rmc_linked_accounts_logs"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "player_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_rmc_linked_accounts_logs_player_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "rmc_linked_accounts_logs"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "code",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_rmc_linking_codes_code",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "rmc_linking_codes"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "discord_role",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_rmc_patron_tiers_discord_role",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "rmc_patron_tiers"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "lobby_message",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_rmc_patron_tiers_lobby_message",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "rmc_patron_tiers"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "round_end_shoutout",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_rmc_patron_tiers_round_end_shoutout",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "rmc_patron_tiers"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "tier_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_rmc_patrons_tier_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "rmc_patrons"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "server_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_round_server_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "round"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "start_date",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_round_start_date",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "round"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "address",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_server_ban_address",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "banning_admin",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_server_ban_banning_admin",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "last_edited_by_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_server_ban_last_edited_by_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "player_user_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_server_ban_player_user_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "round_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_server_ban_round_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "ban_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_server_ban_hit_ban_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "server_ban_hit"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "connection_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_server_ban_hit_connection_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "server_ban_hit"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "address",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_server_role_ban_address",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "banning_admin",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_server_role_ban_banning_admin",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "last_edited_by_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_server_role_ban_last_edited_by_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "player_user_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_server_role_ban_player_user_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "round_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_server_role_ban_round_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "ban_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_server_role_unban_ban_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "server_role_unban"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "ban_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_server_unban_ban_id",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "server_unban"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "created_at",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "table_created_at_index",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "table"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "updated_at",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "table_updated_at_index",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "table"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "profile_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "trait_name",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "IX_trait_profile_id_trait_name",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "trait"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "admin_rank_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "admin_rank",
+      "columnsTo": [
+        "admin_rank_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "admin_admin_rank_id_admin_rank_admin_rank_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "admin"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "admin_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "admin",
+      "columnsTo": [
+        "user_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "admin_flag_admin_id_admin_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "admin_flag"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "round_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "round",
+      "columnsTo": [
+        "round_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "admin_log_round_id_round_round_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "admin_log"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "player_user_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "player",
+      "columnsTo": [
+        "user_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "admin_log_player_player_user_id_player_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "admin_log_player"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "round_id",
+        "log_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "admin_log",
+      "columnsTo": [
+        "round_id",
+        "admin_log_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "FK_admin_log_player_admin_log_round_id_log_id",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "admin_log_player"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "round_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "round",
+      "columnsTo": [
+        "round_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "admin_messages_round_id_round_round_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "player_user_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "player",
+      "columnsTo": [
+        "user_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "admin_messages_player_user_id_player_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "created_by_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "player",
+      "columnsTo": [
+        "user_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "admin_messages_created_by_id_player_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "last_edited_by_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "player",
+      "columnsTo": [
+        "user_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "admin_messages_last_edited_by_id_player_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "deleted_by_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "player",
+      "columnsTo": [
+        "user_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "admin_messages_deleted_by_id_player_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "round_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "round",
+      "columnsTo": [
+        "round_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "admin_notes_round_id_round_round_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "player_user_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "player",
+      "columnsTo": [
+        "user_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "admin_notes_player_user_id_player_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "created_by_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "player",
+      "columnsTo": [
+        "user_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "admin_notes_created_by_id_player_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "last_edited_by_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "player",
+      "columnsTo": [
+        "user_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "admin_notes_last_edited_by_id_player_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "deleted_by_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "player",
+      "columnsTo": [
+        "user_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "admin_notes_deleted_by_id_player_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "admin_rank_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "admin_rank",
+      "columnsTo": [
+        "admin_rank_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "admin_rank_flag_admin_rank_id_admin_rank_admin_rank_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "admin_rank_flag"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "round_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "round",
+      "columnsTo": [
+        "round_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "admin_watchlists_round_id_round_round_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "admin_watchlists"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "player_user_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "player",
+      "columnsTo": [
+        "user_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "admin_watchlists_player_user_id_player_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "admin_watchlists"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "created_by_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "player",
+      "columnsTo": [
+        "user_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "admin_watchlists_created_by_id_player_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "admin_watchlists"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "last_edited_by_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "player",
+      "columnsTo": [
+        "user_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "admin_watchlists_last_edited_by_id_player_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "admin_watchlists"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "deleted_by_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "player",
+      "columnsTo": [
+        "user_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "admin_watchlists_deleted_by_id_player_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "admin_watchlists"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "profile_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "profile",
+      "columnsTo": [
+        "profile_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "antag_profile_id_profile_profile_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "antag"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "server_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "server",
+      "columnsTo": [
+        "server_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "connection_log_server_id_server_server_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "connection_log"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "profile_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "profile",
+      "columnsTo": [
+        "profile_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "job_profile_id_profile_profile_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "job"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "players_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "player",
+      "columnsTo": [
+        "player_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "player_round_players_id_player_player_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "player_round"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "rounds_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "round",
+      "columnsTo": [
+        "round_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "player_round_rounds_id_round_round_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "player_round"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "selected_character_slot",
+        "preference_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "profile",
+      "columnsTo": [
+        "slot",
+        "preference_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "FK_preference_profile_selected_character_slot_preference_id",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "preference"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "preference_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "preference",
+      "columnsTo": [
+        "preference_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "profile_preference_id_preference_preference_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "profile_loadout_group_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "profile_loadout_group",
+      "columnsTo": [
+        "profile_loadout_group_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "profile_loadout_yRwBphGLhtsb_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "profile_loadout"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "profile_role_loadout_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "profile_role_loadout",
+      "columnsTo": [
+        "profile_role_loadout_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "profile_loadout_group_nWsGFsJBkb10_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "profile_loadout_group"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "profile_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "profile",
+      "columnsTo": [
+        "profile_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "profile_role_loadout_profile_id_profile_profile_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "profile_role_loadout"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "player_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "player",
+      "columnsTo": [
+        "user_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "rmc_linked_accounts_player_id_player_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "rmc_linked_accounts"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "discord_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "rmc_discord_accounts",
+      "columnsTo": [
+        "rmc_discord_accounts_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "rmc_linked_accounts_diTJsSyqBqC6_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "rmc_linked_accounts"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "player_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "player",
+      "columnsTo": [
+        "user_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "rmc_linked_accounts_logs_player_id_player_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "rmc_linked_accounts_logs"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "discord_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "rmc_discord_accounts",
+      "columnsTo": [
+        "rmc_discord_accounts_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "rmc_linked_accounts_logs_Z2uN5FWHfxDU_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "rmc_linked_accounts_logs"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "player_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "player",
+      "columnsTo": [
+        "user_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "rmc_linking_codes_player_id_player_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "rmc_linking_codes"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "patron_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "rmc_patrons",
+      "columnsTo": [
+        "player_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "rmc_patron_lobby_messages_patron_id_rmc_patrons_player_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "rmc_patron_lobby_messages"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "patron_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "rmc_patrons",
+      "columnsTo": [
+        "player_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "rmc_patron_round_end_nt_shoutouts_t6m1VavOtZyg_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "rmc_patron_round_end_nt_shoutouts"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "player_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "player",
+      "columnsTo": [
+        "user_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "rmc_patrons_player_id_player_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "rmc_patrons"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "tier_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "rmc_patron_tiers",
+      "columnsTo": [
+        "rmc_patron_tiers_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "rmc_patrons_tier_id_rmc_patron_tiers_rmc_patron_tiers_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "rmc_patrons"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "player_user_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "player",
+      "columnsTo": [
+        "user_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "role_whitelists_player_user_id_player_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "role_whitelists"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "server_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "server",
+      "columnsTo": [
+        "server_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "round_server_id_server_server_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "round"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "banning_admin"
+      ],
+      "schemaTo": "public",
+      "tableTo": "player",
+      "columnsTo": [
+        "user_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "server_ban_banning_admin_player_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "last_edited_by_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "player",
+      "columnsTo": [
+        "user_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "server_ban_last_edited_by_id_player_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "round_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "round",
+      "columnsTo": [
+        "round_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "server_ban_round_id_round_round_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "ban_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "server_ban",
+      "columnsTo": [
+        "server_ban_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "server_ban_hit_ban_id_server_ban_server_ban_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "server_ban_hit"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "connection_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "connection_log",
+      "columnsTo": [
+        "connection_log_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "server_ban_hit_j6KWjm0ZFgYQ_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "server_ban_hit"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "banning_admin"
+      ],
+      "schemaTo": "public",
+      "tableTo": "player",
+      "columnsTo": [
+        "user_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "server_role_ban_banning_admin_player_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "last_edited_by_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "player",
+      "columnsTo": [
+        "user_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "server_role_ban_last_edited_by_id_player_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "round_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "round",
+      "columnsTo": [
+        "round_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "server_role_ban_round_id_round_round_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "ban_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "server_role_ban",
+      "columnsTo": [
+        "server_role_ban_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "server_role_unban_uV9LcZzaWf8j_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "server_role_unban"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "ban_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "server_ban",
+      "columnsTo": [
+        "server_ban_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "server_unban_ban_id_server_ban_server_ban_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "server_unban"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "profile_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "profile",
+      "columnsTo": [
+        "profile_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "trait_profile_id_profile_profile_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "trait"
+    },
+    {
+      "columns": [
+        "user_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_admin",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "admin"
+    },
+    {
+      "columns": [
+        "admin_flag_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_admin_flag",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "admin_flag"
+    },
+    {
+      "columns": [
+        "round_id",
+        "admin_log_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_admin_log",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "admin_log"
+    },
+    {
+      "columns": [
+        "round_id",
+        "log_id",
+        "player_user_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_admin_log_player",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "admin_log_player"
+    },
+    {
+      "columns": [
+        "admin_messages_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_admin_messages",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "columns": [
+        "admin_notes_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_admin_notes",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "admin_notes"
+    },
+    {
+      "columns": [
+        "admin_rank_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_admin_rank",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "admin_rank"
+    },
+    {
+      "columns": [
+        "admin_rank_flag_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_admin_rank_flag",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "admin_rank_flag"
+    },
+    {
+      "columns": [
+        "admin_watchlists_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_admin_watchlists",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "admin_watchlists"
+    },
+    {
+      "columns": [
+        "antag_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_antag",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "antag"
+    },
+    {
+      "columns": [
+        "assigned_user_id_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_assigned_user_id",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "assigned_user_id"
+    },
+    {
+      "columns": [
+        "ban_template_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_ban_template",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "ban_template"
+    },
+    {
+      "columns": [
+        "user_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_blacklist",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "blacklist"
+    },
+    {
+      "columns": [
+        "connection_log_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_connection_log",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "connection_log"
+    },
+    {
+      "columns": [
+        "MigrationId"
+      ],
+      "nameExplicit": true,
+      "name": "PK___EFMigrationsHistory",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "__EFMigrationsHistory"
+    },
+    {
+      "columns": [
+        "ipintel_cache_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_ipintel_cache",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "ipintel_cache"
+    },
+    {
+      "columns": [
+        "job_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_job",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "job"
+    },
+    {
+      "columns": [
+        "play_time_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_play_time",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "play_time"
+    },
+    {
+      "columns": [
+        "player_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_player",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "player"
+    },
+    {
+      "columns": [
+        "players_id",
+        "rounds_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_player_round",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "player_round"
+    },
+    {
+      "columns": [
+        "preference_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_preference",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "preference"
+    },
+    {
+      "columns": [
+        "profile_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_profile",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "profile"
+    },
+    {
+      "columns": [
+        "profile_loadout_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_profile_loadout",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "profile_loadout"
+    },
+    {
+      "columns": [
+        "profile_loadout_group_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_profile_loadout_group",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "profile_loadout_group"
+    },
+    {
+      "columns": [
+        "profile_role_loadout_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_profile_role_loadout",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "profile_role_loadout"
+    },
+    {
+      "columns": [
+        "rmc_discord_accounts_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_rmc_discord_accounts",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "rmc_discord_accounts"
+    },
+    {
+      "columns": [
+        "player_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_rmc_linked_accounts",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "rmc_linked_accounts"
+    },
+    {
+      "columns": [
+        "rmc_linked_accounts_logs_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_rmc_linked_accounts_logs",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "rmc_linked_accounts_logs"
+    },
+    {
+      "columns": [
+        "player_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_rmc_linking_codes",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "rmc_linking_codes"
+    },
+    {
+      "columns": [
+        "patron_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_rmc_patron_lobby_messages",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "rmc_patron_lobby_messages"
+    },
+    {
+      "columns": [
+        "patron_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_rmc_patron_round_end_nt_shoutouts",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "rmc_patron_round_end_nt_shoutouts"
+    },
+    {
+      "columns": [
+        "rmc_patron_tiers_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_rmc_patron_tiers",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "rmc_patron_tiers"
+    },
+    {
+      "columns": [
+        "player_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_rmc_patrons",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "rmc_patrons"
+    },
+    {
+      "columns": [
+        "player_user_id",
+        "role_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_role_whitelists",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "role_whitelists"
+    },
+    {
+      "columns": [
+        "round_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_round",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "round"
+    },
+    {
+      "columns": [
+        "server_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_server",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "server"
+    },
+    {
+      "columns": [
+        "server_ban_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_server_ban",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "columns": [
+        "user_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_server_ban_exemption",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "server_ban_exemption"
+    },
+    {
+      "columns": [
+        "server_ban_hit_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_server_ban_hit",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "server_ban_hit"
+    },
+    {
+      "columns": [
+        "server_role_ban_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_server_role_ban",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "columns": [
+        "role_unban_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_server_role_unban",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "server_role_unban"
+    },
+    {
+      "columns": [
+        "unban_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_server_unban",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "server_unban"
+    },
+    {
+      "columns": [
+        "trait_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_trait",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "trait"
+    },
+    {
+      "columns": [
+        "uploaded_resource_log_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_uploaded_resource_log",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "uploaded_resource_log"
+    },
+    {
+      "columns": [
+        "user_id"
+      ],
+      "nameExplicit": true,
+      "name": "PK_whitelist",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "whitelist"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "table_pkey",
+      "schema": "public",
+      "table": "table",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "users_pkey",
+      "schema": "public",
+      "table": "users",
+      "entityType": "pks"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "user_id"
+      ],
+      "nullsNotDistinct": false,
+      "name": "ak_player_user_id",
+      "entityType": "uniques",
+      "schema": "public",
+      "table": "player"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "username"
+      ],
+      "nullsNotDistinct": false,
+      "name": "users_username_key",
+      "schema": "public",
+      "table": "users",
+      "entityType": "uniques"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "username_normalized"
+      ],
+      "nullsNotDistinct": false,
+      "name": "users_username_normalized_key",
+      "schema": "public",
+      "table": "users",
+      "entityType": "uniques"
+    },
+    {
+      "value": "((NOT dismissed) OR seen)",
+      "name": "NotDismissedAndSeen",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "admin_messages"
+    },
+    {
+      "value": "(NOT ('::ffff:0.0.0.0/96'::inet >>= address))",
+      "name": "AddressNotIPv6MappedIPv4",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "connection_log"
+    },
+    {
+      "value": "(NOT ('::ffff:0.0.0.0/96'::inet >>= last_seen_address))",
+      "name": "LastSeenAddressNotIPv6MappedIPv4",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "player"
+    },
+    {
+      "value": "(NOT ('::ffff:0.0.0.0/96'::inet >>= address))",
+      "name": "AddressNotIPv6MappedIPv4",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "value": "((address IS NOT NULL) OR (player_user_id IS NOT NULL) OR (hwid IS NOT NULL))",
+      "name": "HaveEitherAddressOrUserIdOrHWId",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "server_ban"
+    },
+    {
+      "value": "(flags <> 0)",
+      "name": "FlagsNotZero",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "server_ban_exemption"
+    },
+    {
+      "value": "(NOT ('::ffff:0.0.0.0/96'::inet >>= address))",
+      "name": "CK_server_role_ban_AddressNotIPv6MappedIPv4",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "value": "((address IS NOT NULL) OR (player_user_id IS NOT NULL) OR (hwid IS NOT NULL))",
+      "name": "CK_server_role_ban_HaveEitherAddressOrUserIdOrHWId",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "value": "((address IS NOT NULL) OR (player_user_id IS NOT NULL) OR (hwid IS NOT NULL))",
+      "name": "HaveEitherAddressOrUserIdOrHWId",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "server_role_ban"
+    },
+    {
+      "value": "length(trim(\"content\")) > 0",
+      "name": "content_not_blank",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "table"
+    },
+    {
+      "value": "length(trim(\"author\")) > 0",
+      "name": "author_not_blank",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "table"
+    },
+    {
+      "value": "length(trim(\"last_editor\")) > 0",
+      "name": "last_editor_not_blank",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "table"
+    },
+    {
+      "value": "length(trim(\"username\")) > 0",
+      "name": "username_not_blank",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "value": "length(trim(\"username_normalized\")) > 0",
+      "name": "username_normalized_not_blank",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "value": "\"username_normalized\" = lower(\"username_normalized\")",
+      "name": "username_normalized_lowercase",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "users"
+    }
+  ],
+  "renames": []
+}

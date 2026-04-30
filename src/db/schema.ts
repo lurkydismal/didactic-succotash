@@ -23,6 +23,7 @@ import {
     unique,
 } from "drizzle-orm/pg-core";
 import { timestamps } from "./helpers";
+import { metadata } from "./helpers";
 import { sql } from "drizzle-orm";
 import { template_table } from "./templates";
 
@@ -1075,6 +1076,7 @@ export const serverBan = pgTable(
         roundId: integer("round_id").references(() => round.roundId),
         severity: integer().default(3).notNull(),
         hwidType: integer("hwid_type").default(0),
+        ...metadata,
     },
     (table) => [
         primaryKey({

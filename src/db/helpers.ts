@@ -1,4 +1,4 @@
-import { timestamp } from "drizzle-orm/pg-core";
+import { timestamp, varchar } from "drizzle-orm/pg-core";
 
 /**
  * timestamps
@@ -29,6 +29,7 @@ export const timestamps = {
         .notNull(),
 };
 
+// * NOTE: PSQL function to automatically update updated_at on any row change
 /*
 -- Functions
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -45,3 +46,14 @@ BEFORE UPDATE ON "table"
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column();
 */
+
+// TODO: Rename
+export const editInfo = {
+    author: varchar({ length: 32 }).default("system").notNull(),
+    last_editor: varchar({ length: 32 }).default("system").notNull(),
+};
+
+export const metadata = {
+    ...editInfo,
+    ...timestamps,
+};

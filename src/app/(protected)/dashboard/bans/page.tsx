@@ -22,7 +22,6 @@ export default function Page() {
             createRowAction={createRowAction}
             emptyRow={emptyRow}
             fields={fields}
-            idKey="serverBanId"
             getRowsAction={getRowsAction}
             updateRowAction={updateRowAction}
             extraButtons={

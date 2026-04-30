@@ -43,7 +43,9 @@ export function toCamelCase(text: string): string {
     return text
         .trim()
         .toLowerCase()
+        .replace(/[_-]+/g, " ")
         .replace(/[^a-z0-9 ]+/g, "")
+        .replace(/\s+/g, " ")
         .replace(/\s+([a-z0-9])/g, (_, c) => c.toUpperCase());
 }
 
