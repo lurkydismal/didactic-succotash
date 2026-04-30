@@ -40,6 +40,4 @@ export async function updateRowAction(
         const message = `Failed to update row in action: ${result.error}`;
         throw new Error(message);
     }
-
-    return result.ok;
 }

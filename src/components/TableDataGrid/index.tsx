@@ -29,7 +29,7 @@ export default function TableDataGrid<
     emptyRow: RI;
     getRowsAction: () => Promise<Readonly<GridRowsProp>>;
     createRowAction: (row: RI) => Promise<void>;
-    updateRowAction: (fd: FormData) => Promise<boolean>;
+    updateRowAction: (fd: FormData) => Promise<void>;
     extraButtons?: React.ReactNode; // optionally a ReactElement expecting props
     fields: FieldConfig<R, RI>[];
 }>) {
@@ -121,12 +121,12 @@ export default function TableDataGrid<
     // If extraButtons is a React element, clone it and inject createRowAction + emptyRow
     const injectedExtraButtons = isValidElement(extraButtons)
         ? cloneElement(
-              extraButtons as React.ReactElement<Record<string, unknown>>,
-              {
-                  createRowAction: createAndRefresh,
-                  emptyRow,
-              },
-          )
+            extraButtons as React.ReactElement<Record<string, unknown>>,
+            {
+                createRowAction: createAndRefresh,
+                emptyRow,
+            },
+        )
         : extraButtons;
 
     const columns = columnsFromFields(fields);

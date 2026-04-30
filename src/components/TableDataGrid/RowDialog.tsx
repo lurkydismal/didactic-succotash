@@ -50,7 +50,7 @@ export type FieldConfig<
     isChanged?: (rowValue: unknown, currentValue: unknown) => boolean;
 };
 
-type UpdateRowAction = (fd: FormData) => Promise<boolean>;
+type UpdateRowAction = (fd: FormData) => Promise<void>;
 
 type RowDialogContentProps<R, RI> = {
     row: R;
@@ -110,7 +110,7 @@ function RowDialogContent<
                     typeof f.isChanged === "function"
                         ? !f.isChanged(rowVal, newVal)
                         : String((rowVal ?? "").toString()).trim() ===
-                          String((newVal ?? "").toString()).trim();
+                        String((newVal ?? "").toString()).trim();
                 if (!eq) return true;
             }
             return false;
@@ -121,14 +121,11 @@ function RowDialogContent<
     const _updateRow = useCallback(
         async (fd: FormData): Promise<boolean> => {
             try {
-                const status = await updateRowAction(fd);
+                await updateRowAction(fd);
 
-                if (status) {
-                    await onUpdated?.();
-                    return true;
-                }
+                await onUpdated?.();
 
-                return false;
+                return true;
             } catch (err) {
                 showError(err);
                 return false;
@@ -249,14 +246,14 @@ function RowDialogContent<
                 {/* Hidden id if present */}
                 {((row as Record<string, unknown>)[String(idKey)] ?? null) !==
                     null && (
-                    <input
-                        type="hidden"
-                        name={String(idKey)}
-                        value={String(
-                            (row as Record<string, unknown>)[String(idKey)],
-                        )}
-                    />
-                )}
+                        <input
+                            type="hidden"
+                            name={String(idKey)}
+                            value={String(
+                                (row as Record<string, unknown>)[String(idKey)],
+                            )}
+                        />
+                    )}
 
                 {fields.map((field, index) => (
                     <Grid
@@ -393,7 +390,7 @@ export default function RowDialog<
                         registerSubmit={registerSubmit}
                         updateRowAction={updateRowAction}
                         onUpdated={onUpdated}
-                                idKey={idKey}
+                        idKey={idKey}
                     />
                 )}
             </DialogContent>
