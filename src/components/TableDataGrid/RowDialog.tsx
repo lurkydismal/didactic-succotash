@@ -200,6 +200,7 @@ function RowDialogContent<
                         </Typography>
                         <TextField
                             name={name}
+                            required={!!f.required}
                             id={`${key}-multiline`}
                             value={val ?? ""}
                             onChange={(e: ChangeEvent<HTMLInputElement>) =>
@@ -228,6 +229,7 @@ function RowDialogContent<
                             onChange={(e: ChangeEvent<HTMLInputElement>) =>
                                 setValue(key, e.target.value)
                             }
+                            fullWidth
                         />
                     </div>
                 );
