@@ -13,6 +13,7 @@ import {
     ToolbarPropsOverrides,
 } from "@mui/x-data-grid";
 import {
+    Badge,
     InputAdornment,
     Menu,
     MenuItem,
@@ -199,14 +200,24 @@ export default function CustomToolbar({ extraButtons }: CustomToolbarProps) {
             <FilterPanelTrigger
                 render={(triggerProps, state) => (
                     <Tooltip title="Filters">
-                        <ToolbarButton
-                            {...triggerProps}
-                            color={
-                                state.filterCount > 0 ? "primary" : "default"
-                            }
+                        <Badge
+                            badgeContent={state.filterCount}
+                            color="info"
+                            overlap="circular"
+                            variant="dot"
+                            anchorOrigin={{
+                                horizontal: "right",
+                            }}
                         >
-                            <FilterListIcon fontSize="small" />
-                        </ToolbarButton>
+                            <ToolbarButton
+                                {...triggerProps}
+                                color={
+                                    state.filterCount > 0 ? "primary" : "default"
+                                }
+                            >
+                                <FilterListIcon fontSize="small" />
+                            </ToolbarButton>
+                        </Badge>
                     </Tooltip>
                 )}
             />
