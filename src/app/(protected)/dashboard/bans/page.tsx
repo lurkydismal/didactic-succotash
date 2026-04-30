@@ -9,30 +9,31 @@ import { makeCrudActions } from "@/lib/dashboard/common/actions";
 import { serverBan } from "@/db/schema";
 
 export default async function Page() {
-    const { getRowsAction, createRowAction, updateRowAction } = await makeCrudActions<
-        TableRowInsert
-    >("table", serverBan.serverBanId);
+    return <div></div>;
+    // const { getRowsAction, createRowAction, updateRowAction } = await makeCrudActions<
+    //     TableRowInsert
+    // >("table", serverBan.serverBanId);
 
-    const emptyRow: TableRowInsert = {
-        serverBanId: 1,
-        address: "123",
-        reason: "-",
-        banTime: new Date(),
-    };
+    // const emptyRow: TableRowInsert = {
+    //     serverBanId: 1,
+    //     address: "123",
+    //     reason: "-",
+    //     banTime: new Date(),
+    // };
 
-    return (
-        <TableDataGrid<TableRow, TableRowInsert>
-            createRowAction={createRowAction}
-            emptyRow={emptyRow}
-            fields={fields}
-            getRowsAction={getRowsAction}
-            updateRowAction={updateRowAction}
-            extraButtons={
-                <ExtraToolbarButtons
-                    emptyRow={emptyRow}
-                    createRowAction={createRowAction}
-                />
-            }
-        />
-    );
+    // return (
+    //     <TableDataGrid<TableRow, TableRowInsert>
+    //         createRowAction={createRowAction}
+    //         emptyRow={emptyRow}
+    //         fields={fields}
+    //         getRowsAction={getRowsAction}
+    //         updateRowAction={updateRowAction}
+    //         extraButtons={
+    //             <ExtraToolbarButtons
+    //                 emptyRow={emptyRow}
+    //                 createRowAction={createRowAction}
+    //             />
+    //         }
+    //     />
+    // );
 }
