@@ -1,16 +1,11 @@
-import { getSessionData } from "@/lib/auth";
-import { unauthorized } from "next/navigation";
+import { getSessionDataOrUnauthorized } from "@/lib/auth";
 
 export default async function Template({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const user = await getSessionData();
-
-    if (!user) {
-        unauthorized();
-    }
+    const user = await getSessionDataOrUnauthorized();
 
     return children;
 }

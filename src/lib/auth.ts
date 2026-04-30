@@ -42,6 +42,7 @@ import z from "zod";
 import ms from "ms";
 import { storageKeys } from "@/utils/stdvar";
 import log from "@/utils/stdlog";
+import { unauthorized } from "next/navigation";
 
 /*
  * Environment-configured values.
@@ -472,4 +473,15 @@ export async function getSessionData(): Promise<null | UsersRowPublic> {
     const parsed: UsersRowPublic = userSelectPublicSchema.parse(payload);
 
     return parsed;
+}
+
+// TODO: Comment
+export async function getSessionDataOrUnauthorized(): ReturnType<typeof getSessionData> {
+    const user = await getSessionData();
+
+    if (!user) {
+        unauthorized();
+    }
+
+    return user;
 }
