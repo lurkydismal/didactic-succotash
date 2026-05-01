@@ -49,11 +49,17 @@ export async function getPlayerAddressOptionsAction(): Promise<string[]> {
     const rows = await db
         .select({ address: player.lastSeenAddress })
         .from(player)
-        .where(ne(player.lastSeenAddress, ""))
+        .where(sql`${player.lastSeenAddress} IS NOT NULL`)
         .orderBy(asc(player.lastSeenAddress))
         .execute();
 
-    return [...new Set(rows.map((row) => row.address.trim()).filter(Boolean))];
+    return [
+        ...new Set(
+            rows
+                .map((row) => (row.address ? row.address.trim() : ""))
+                .filter(Boolean),
+        ),
+    ];
 }
 
 export async function getPlayerHwidOptionsAction(): Promise<string[]> {
