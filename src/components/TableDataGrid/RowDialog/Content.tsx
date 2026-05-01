@@ -6,6 +6,7 @@ import { Divider, Grid, Typography } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FieldConfig, UpdateRowAction } from "./types";
 import CustomFieldInput from "./CustomFieldInput";
+import DateTimeFieldInput from "./DateTimeFieldInput";
 import MultilineFieldInput from "./MultilineFieldInput";
 import TextFieldInput from "./TextFieldInput";
 import AutocompleteFieldInput from "./AutocompleteFieldInput";
@@ -168,6 +169,25 @@ export default function RowDialogContent<
                     open={field.autocompleteOpen}
                     onOpen={field.onAutocompleteOpen}
                     onClose={field.onAutocompleteClose}
+                    onValueChange={(nextValue) => setValue(key, nextValue)}
+                />
+            );
+        }
+
+        if (
+            field.type === "date" ||
+            field.type === "time" ||
+            field.type === "datetime"
+        ) {
+            return (
+                <DateTimeFieldInput
+                    key={`${key}-${idx}`}
+                    fieldKey={key}
+                    label={field.label}
+                    name={name}
+                    required={!!field.required}
+                    type={field.type}
+                    value={value}
                     onValueChange={(nextValue) => setValue(key, nextValue)}
                 />
             );

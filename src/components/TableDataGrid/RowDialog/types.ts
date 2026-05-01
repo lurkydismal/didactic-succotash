@@ -1,6 +1,13 @@
 export type AutocompleteOption = string | number | boolean | { label: string };
 
-export type DefaultFieldType = "text" | "multiline" | "custom" | "autocomplete";
+export type DefaultFieldType =
+    | "text"
+    | "multiline"
+    | "custom"
+    | "autocomplete"
+    | "date"
+    | "time"
+    | "datetime";
 
 export type FieldConfig<
     R,
