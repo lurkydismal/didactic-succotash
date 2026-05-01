@@ -319,6 +319,10 @@ export const relations = defineRelations(schema, (r) => ({
         }),
     },
     serverBan: {
+        player: r.one.player({
+            from: r.serverBan.playerUserId,
+            to: r.player.userId,
+        }),
         playerBanningAdmin: r.one.player({
             from: r.serverBan.banningAdmin,
             to: r.player.userId,
