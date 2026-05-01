@@ -17,6 +17,7 @@ import {
 } from "@/lib/dashboard/bans/function";
 import { FieldConfig } from "@/components/TableDataGrid/RowDialog";
 import { useEffect, useState } from "react";
+import MainFallback from "@/components/MainFallback";
 
 export default function Page() {
     const [resolvedFields, setResolvedFields] =
@@ -33,22 +34,22 @@ export default function Page() {
             setResolvedFields((prev) =>
                 prev.map((field) =>
                     field.key === "playerUsername" ||
-                    field.key === "banningAdmin"
+                        field.key === "banningAdmin"
                         ? {
-                              ...field,
-                              autocompleteOptions: usernameOptions,
-                          }
+                            ...field,
+                            autocompleteOptions: usernameOptions,
+                        }
                         : field.key === "address"
-                          ? {
+                            ? {
                                 ...field,
                                 autocompleteOptions: addressOptions,
                             }
-                          : field.key === "hwid"
-                            ? {
-                                  ...field,
-                                  autocompleteOptions: hwidOptions,
-                              }
-                            : field,
+                            : field.key === "hwid"
+                                ? {
+                                    ...field,
+                                    autocompleteOptions: hwidOptions,
+                                }
+                                : field,
                 ),
             );
         };
@@ -57,14 +58,18 @@ export default function Page() {
     }, []);
 
     return (
-        <TableDataGrid<TableRow, TableRowInsert>
-            createRowAction={createRowAction}
-            fields={resolvedFields}
-            getRowsAction={getRowsAction}
-            updateRowAction={updateRowAction}
-            extraButtons={
-                <ExtraToolbarButtons createRowAction={createRowAction} />
-            }
-        />
+        <>
+            <MainFallback itemsLength={0}>
+                <TableDataGrid<TableRow, TableRowInsert>
+                    createRowAction={createRowAction}
+                    fields={resolvedFields}
+                    getRowsAction={getRowsAction}
+                    updateRowAction={updateRowAction}
+                    extraButtons={
+                        <ExtraToolbarButtons createRowAction={createRowAction} />
+                    }
+                />
+            </MainFallback>
+        </>
     );
 }
