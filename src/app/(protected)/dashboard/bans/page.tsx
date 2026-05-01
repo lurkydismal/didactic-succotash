@@ -22,6 +22,9 @@ import MainFallback from "@/components/MainFallback";
 export default function Page() {
     const [resolvedFields, setResolvedFields] =
         useState<FieldConfig<TableRow, TableRowInsert>[]>(fields);
+    const [playerOptionsCount, setPlayerOptionsCount] = useState<number | null>(
+        null,
+    );
 
     useEffect(() => {
         const loadPlayerOptions = async () => {
@@ -31,6 +34,12 @@ export default function Page() {
                     getPlayerAddressOptionsAction(),
                     getPlayerHwidOptionsAction(),
                 ]);
+            setPlayerOptionsCount(
+                usernameOptions.length +
+                    addressOptions.length +
+                    hwidOptions.length,
+            );
+
             setResolvedFields((prev) =>
                 prev.map((field) =>
                     field.key === "playerUsername" ||
@@ -59,7 +68,7 @@ export default function Page() {
 
     return (
         <>
-            <MainFallback itemsLength={0}>
+            <MainFallback itemsLength={playerOptionsCount}>
                 <TableDataGrid<TableRow, TableRowInsert>
                     createRowAction={createRowAction}
                     fields={resolvedFields}
