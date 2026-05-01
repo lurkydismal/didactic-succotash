@@ -15,7 +15,8 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
     {
         key: "address",
         label: "Address",
-        type: "text",
+        type: "autocomplete",
+        autocompleteOptions: [],
         required: true,
     },
     {
@@ -45,7 +46,8 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
     {
         key: "hwid",
         label: "HWID",
-        type: "text",
+        type: "autocomplete",
+        autocompleteOptions: [],
     },
     {
         key: "roundId",

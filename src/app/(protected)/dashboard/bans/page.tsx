@@ -9,6 +9,8 @@ import ExtraToolbarButtons from "@/components/dashboard/ExtraToolbarButtons";
 import fields from "@/data/dashboard/bans/fields";
 import {
     createRowAction,
+    getPlayerAddressOptionsAction,
+    getPlayerHwidOptionsAction,
     getRowsAction,
     getPlayerUsernameOptionsAction,
     updateRowAction,
@@ -22,16 +24,31 @@ export default function Page() {
 
     useEffect(() => {
         const loadPlayerOptions = async () => {
-            const options = await getPlayerUsernameOptionsAction();
+            const [usernameOptions, addressOptions, hwidOptions] =
+                await Promise.all([
+                    getPlayerUsernameOptionsAction(),
+                    getPlayerAddressOptionsAction(),
+                    getPlayerHwidOptionsAction(),
+                ]);
             setResolvedFields((prev) =>
                 prev.map((field) =>
                     field.key === "playerUsername" ||
                     field.key === "banningAdmin"
                         ? {
                               ...field,
-                              autocompleteOptions: options,
+                              autocompleteOptions: usernameOptions,
                           }
-                        : field,
+                        : field.key === "address"
+                          ? {
+                                ...field,
+                                autocompleteOptions: addressOptions,
+                            }
+                          : field.key === "hwid"
+                            ? {
+                                  ...field,
+                                  autocompleteOptions: hwidOptions,
+                              }
+                            : field,
                 ),
             );
         };
