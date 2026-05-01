@@ -79,15 +79,16 @@ export default function TableDataGrid<
         [createRowAction, _getRows, showError],
     );
 
-    // Keyboard shortcut & other internal creators use createAndRefresh
+    const openCreateDialog = useCallback(() => {
+        setSelectedRow(emptyRow as unknown as R);
+        setDialogOpen(true);
+    }, [emptyRow]);
+
+    // Keyboard shortcut opens create dialog with empty defaults
     useEffect(() => {
-        const submit = async () => {
+        const submit = () => {
             if (!currentRows) return;
-            try {
-                await createAndRefresh(emptyRow);
-            } catch (err) {
-                showError(err);
-            }
+            openCreateDialog();
             // scroll to top row (you might want to select the created row if you can get its id)
             setTimeout(
                 () => apiRef.current?.scrollToIndexes?.({ rowIndex: 0 }),
@@ -115,7 +116,7 @@ export default function TableDataGrid<
 
         window.addEventListener("keydown", onKeyDown);
         return () => window.removeEventListener("keydown", onKeyDown);
-    }, [currentRows, createAndRefresh, emptyRow, showError, apiRef]);
+    }, [currentRows, openCreateDialog, apiRef]);
 
     const handleRowClick = (params: GridRowParams) => {
         setSelectedRow(params.row as R);
@@ -129,7 +130,7 @@ export default function TableDataGrid<
         ? cloneElement(
               extraButtons as React.ReactElement<Record<string, unknown>>,
               {
-                  createRowAction: createAndRefresh,
+                  createRowAction: openCreateDialog,
                   emptyRow,
               },
           )
@@ -174,6 +175,7 @@ export default function TableDataGrid<
                 handleClose={handleClose}
                 selectedRow={selectedRow}
                 setSelectedRow={setSelectedRow}
+                createRowAction={createAndRefresh}
                 updateRowAction={updateRowAction}
                 onUpdated={_getRows}
             />
