@@ -34,13 +34,6 @@ export default function RowDialogContent<
     onUpdated,
     idKey = "id" as keyof R,
 }: RowDialogContentProps<R, RI>) {
-    const { showError } = useSnackbar();
-    const formRef = useRef<HTMLFormElement | null>(null);
-    const form = useForm<Record<string, unknown>>({
-        defaultValues: buildInitial(),
-        mode: "onSubmit",
-    });
-
     const buildInitial = () => {
         const out: Record<string, unknown> = {};
         for (const field of fields) {
@@ -49,6 +42,13 @@ export default function RowDialogContent<
         }
         return out;
     };
+
+    const { showError } = useSnackbar();
+    const formRef = useRef<HTMLFormElement | null>(null);
+    const form = useForm<Record<string, unknown>>({
+        defaultValues: buildInitial(),
+        mode: "onSubmit",
+    });
 
     const [values, setValues] =
         useState<Record<string, unknown>>(buildInitial());
@@ -72,7 +72,7 @@ export default function RowDialogContent<
                     typeof field.isChanged === "function"
                         ? !field.isChanged(rowVal, newVal)
                         : String((rowVal ?? "").toString()).trim() ===
-                          String((newVal ?? "").toString()).trim();
+                        String((newVal ?? "").toString()).trim();
 
                 if (!equal) {
                     return true;
@@ -157,7 +157,7 @@ export default function RowDialogContent<
         required: field.required ? `${field.label} is required` : false,
         validate: field.validate
             ? async (value) =>
-                  (await field.validate?.(value, row, form.getValues())) ?? true
+                (await field.validate?.(value, row, form.getValues())) ?? true
             : undefined,
     });
 
@@ -273,14 +273,14 @@ export default function RowDialogContent<
             <Grid container spacing={2}>
                 {((row as Record<string, unknown>)[String(idKey)] ?? null) !==
                     null && (
-                    <input
-                        type="hidden"
-                        name={String(idKey)}
-                        value={String(
-                            (row as Record<string, unknown>)[String(idKey)],
-                        )}
-                    />
-                )}
+                        <input
+                            type="hidden"
+                            name={String(idKey)}
+                            value={String(
+                                (row as Record<string, unknown>)[String(idKey)],
+                            )}
+                        />
+                    )}
 
                 {fields.map((field, index) => (
                     <Grid
