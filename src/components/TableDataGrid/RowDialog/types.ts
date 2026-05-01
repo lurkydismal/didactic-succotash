@@ -1,4 +1,10 @@
-export type DefaultFieldType = "text" | "multiline" | "custom";
+export type AutocompleteOption = string | number | boolean | { label: string };
+
+export type DefaultFieldType =
+    | "text"
+    | "multiline"
+    | "custom"
+    | "autocomplete";
 
 export type FieldConfig<
     R,
@@ -11,6 +17,11 @@ export type FieldConfig<
     name?: string; // form field name (defaults to key)
     size?: number; // value passed to Grid xs/sm/etc (use 12, 6, 4)
     required?: boolean;
+    autocompleteOptions?: readonly AutocompleteOption[];
+    autocompleteLoading?: boolean;
+    autocompleteOpen?: boolean;
+    onAutocompleteOpen?: () => void;
+    onAutocompleteClose?: () => void;
     // optional custom render: (value, setValue, row) => ReactNode
     render?: (
         value: unknown,
