@@ -34,6 +34,7 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         key: "expirationTime",
         label: "Expiration time",
         type: "datetime",
+        placeholder: null,
     },
     {
         key: "reason",
@@ -46,6 +47,7 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         label: "Banning admin",
         type: "autocomplete",
         autocompleteOptions: [],
+        required: true,
     },
     {
         key: "hwid",
@@ -54,11 +56,13 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         autocompleteOptions: [],
         autocompletePackedKey: "hwid",
         autocompletePackedFields: ["playerUsername", "address", "hwid"],
+        required: true,
     },
     {
         key: "roundId",
         label: "Round ID",
         type: "text",
+        required: true,
     },
 ];
 

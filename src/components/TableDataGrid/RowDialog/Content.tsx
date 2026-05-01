@@ -1,7 +1,7 @@
 import { formatDate } from "@/utils/dayjs";
 import { useSnackbar } from "@/providers/snackbar";
 import { isBlob } from "@/utils/stdfunc";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { Divider, Grid, Typography } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { RegisterOptions, useForm } from "react-hook-form";
@@ -11,6 +11,37 @@ import DateTimeFieldInput from "./DateTimeFieldInput";
 import MultilineFieldInput from "./MultilineFieldInput";
 import TextFieldInput from "./TextFieldInput";
 import AutocompleteFieldInput from "./AutocompleteFieldInput";
+
+
+const toFieldValue = (
+    field: FieldConfig<Record<string, unknown>, Record<string, unknown>>,
+    value: unknown,
+): unknown => {
+    if (value === null || value === undefined) return value;
+
+    if (field.type === "datetime") {
+        if (dayjs.isDayjs(value)) return value.toISOString();
+        if (value instanceof Date) return value.toISOString();
+        return value;
+    }
+
+    if (field.type === "date") {
+        if (dayjs.isDayjs(value)) return value.format("YYYY-MM-DD");
+        if (value instanceof Date) return dayjs(value).format("YYYY-MM-DD");
+        return value;
+    }
+
+    if (field.type === "time") {
+        if (dayjs.isDayjs(value)) return value.format("HH:mm:ss");
+        if (value instanceof Date) return dayjs(value).format("HH:mm:ss");
+        return value;
+    }
+
+    if (dayjs.isDayjs(value)) return value.toISOString();
+    if (value instanceof Date) return value.toISOString();
+
+    return value;
+};
 
 type RowDialogContentProps<R, RI> = {
     row: R;
@@ -145,7 +176,10 @@ export default function RowDialogContent<
         for (const field of fields) {
             const name = field.name ?? String(field.key);
             const key = String(field.key);
-            const value = currentValues[key];
+            const value = toFieldValue(
+                field as FieldConfig<Record<string, unknown>, Record<string, unknown>>,
+                currentValues[key],
+            );
 
             if (field.toFormValue) {
                 const mappedValue = field.toFormValue(value);

@@ -8,6 +8,7 @@ import { updateAction } from "@/lib/dashboard/common/update";
 import { DbTarget } from "@/lib/types";
 import log from "@/utils/stdlog";
 import { asc, desc, eq, getColumns, ne, sql } from "drizzle-orm";
+import { alias } from "drizzle-orm/pg-core";
 
 const target: DbTarget = "serverBan";
 const idColumn = serverBan.serverBanId;
@@ -32,14 +33,22 @@ async function resolvePlayerUserIdByUsername(
 
 export async function getRowsAction() {
     const serverBanColumns = getColumns(serverBan);
+    const banningAdminPlayer = alias(player, "banning_admin_player");
     const rows = await db
         .select({
             ...serverBanColumns,
             id: serverBan.serverBanId,
             playerUsername: player.lastSeenUserName,
+            address: sql<string>`COALESCE(${serverBan.address}, ${player.lastSeenAddress}, NULL)`,
+            hwid: sql<string>`COALESCE(encode(${serverBan.hwid}, 'hex'), encode(${player.lastSeenHwid}, 'hex'), '')`,
+            banningAdmin: banningAdminPlayer.lastSeenUserName,
         })
         .from(serverBan)
         .leftJoin(player, eq(serverBan.playerUserId, player.userId))
+        .leftJoin(
+            banningAdminPlayer,
+            eq(serverBan.banningAdmin, banningAdminPlayer.userId),
+        )
         .orderBy(desc(idColumn))
         .execute();
 
@@ -91,7 +100,7 @@ export async function getPlayerHwidOptionsAction(): Promise<string[]> {
             rows
                 .map((row) =>
                     row.hwid
-                        ? Buffer.from(String(row.hwid)).toString("hex")
+                        ? Buffer.from(row.hwid).toString("hex")
                         : "",
                 )
                 .filter(Boolean),
@@ -124,7 +133,7 @@ export async function getPlayerPackedOptionsAction(): Promise<
         deduped.set(label, {
             playerUsername: label,
             address: row.address?.trim() ?? "",
-            hwid: row.hwid ? Buffer.from(String(row.hwid)).toString("hex") : "",
+            hwid: row.hwid ? Buffer.from(row.hwid).toString("hex") : "",
         });
     }
 
