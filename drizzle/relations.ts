@@ -25,7 +25,10 @@ export const relations = defineRelations(schema, (r) => ({
 			to: r.round.roundId
 		}),
 		players: r.many.player({
-			from: [r.adminLog.roundId.through(adminLogPlayer.roundId), r.adminLog.logId.through(adminLogPlayer.logId)],
+			from: [
+				r.adminLog.roundId.through(r.adminLogPlayer.roundId),
+				r.adminLog.adminLogId.through(r.adminLogPlayer.logId),
+			],
 			to: r.player.userId.through(r.adminLogPlayer.playerUserId)
 		}),
 	},

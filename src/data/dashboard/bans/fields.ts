@@ -3,14 +3,14 @@ import {
     ServerBanRow as TableRow,
     ServerBanRowInsert as TableRowInsert,
 } from "@/db/types";
-import { uuid4 } from "@/utils/uuid";
 
 const fields: FieldConfig<TableRow, TableRowInsert>[] = [
     {
-        key: "playerUserId",
+        key: "playerUsername",
         label: "Player",
-        type: "text",
-        placeholder: uuid4(),
+        type: "autocomplete",
+        placeholder: "",
+        autocompleteOptions: [],
     },
     {
         key: "address",
