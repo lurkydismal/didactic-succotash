@@ -8,6 +8,7 @@ import { FieldConfig, UpdateRowAction } from "./types";
 import CustomFieldInput from "./CustomFieldInput";
 import MultilineFieldInput from "./MultilineFieldInput";
 import TextFieldInput from "./TextFieldInput";
+import AutocompleteFieldInput from "./AutocompleteFieldInput";
 
 type RowDialogContentProps<R, RI> = {
     row: R;
@@ -148,6 +149,25 @@ export default function RowDialogContent<
                     name={name}
                     required={!!field.required}
                     value={value}
+                    onValueChange={(nextValue) => setValue(key, nextValue)}
+                />
+            );
+        }
+
+        if (field.type === "autocomplete") {
+            return (
+                <AutocompleteFieldInput
+                    key={`${key}-${idx}`}
+                    fieldKey={key}
+                    label={field.label}
+                    name={name}
+                    required={!!field.required}
+                    value={value}
+                    options={field.autocompleteOptions ?? []}
+                    loading={field.autocompleteLoading}
+                    open={field.autocompleteOpen}
+                    onOpen={field.onAutocompleteOpen}
+                    onClose={field.onAutocompleteClose}
                     onValueChange={(nextValue) => setValue(key, nextValue)}
                 />
             );
