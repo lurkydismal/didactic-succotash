@@ -11,22 +11,14 @@ import {
 } from "@/lib/dashboard/_table/function";
 
 export default function Page() {
-    const emptyRow: TableRowInsert = {
-        content: "-",
-    };
-
     return (
         <TableDataGrid<TableRow, TableRowInsert>
             createRowAction={createRowAction}
-            emptyRow={emptyRow}
             fields={fields}
             getRowsAction={getRowsAction}
             updateRowAction={updateRowAction}
             extraButtons={
-                <ExtraToolbarButtons
-                    emptyRow={emptyRow}
-                    createRowAction={createRowAction}
-                />
+                <ExtraToolbarButtons createRowAction={createRowAction} />
             }
         />
     );

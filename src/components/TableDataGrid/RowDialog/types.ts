@@ -13,6 +13,7 @@ export type FieldConfig<
     name?: string; // form field name (defaults to key)
     size?: number; // value passed to Grid xs/sm/etc (use 12, 6, 4)
     required?: boolean;
+    placeholder?: unknown;
     autocompleteOptions?: readonly AutocompleteOption[];
     autocompleteLoading?: boolean;
     autocompleteOpen?: boolean;

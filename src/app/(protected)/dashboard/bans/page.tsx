@@ -12,27 +12,16 @@ import {
     getRowsAction,
     updateRowAction,
 } from "@/lib/dashboard/bans/function";
-import { uuid4 } from "@/utils/uuid";
 
 export default function Page() {
-    const emptyRow: TableRowInsert = {
-        playerUserId: uuid4(),
-        reason: "123",
-        banTime: new Date(),
-    };
-
     return (
         <TableDataGrid<TableRow, TableRowInsert>
             createRowAction={createRowAction}
-            emptyRow={emptyRow}
             fields={fields}
             getRowsAction={getRowsAction}
             updateRowAction={updateRowAction}
             extraButtons={
-                <ExtraToolbarButtons
-                    emptyRow={emptyRow}
-                    createRowAction={createRowAction}
-                />
+                <ExtraToolbarButtons createRowAction={createRowAction} />
             }
         />
     );
