@@ -7,7 +7,7 @@ import { create } from "@/lib/dashboard/common/create";
 import { updateAction } from "@/lib/dashboard/common/update";
 import { DbTarget } from "@/lib/types";
 import log from "@/utils/stdlog";
-import { asc, desc, eq, getTableColumns, ne, sql } from "drizzle-orm";
+import { asc, desc, eq, getColumns, ne, sql } from "drizzle-orm";
 
 const target: DbTarget = "serverBan";
 const idColumn = serverBan.serverBanId;
@@ -15,7 +15,7 @@ const idColumn = serverBan.serverBanId;
 type ServerBanMutationInput = TableRowInsert & { playerUsername?: string };
 
 export async function getRowsAction() {
-    const serverBanColumns = getTableColumns(serverBan);
+    const serverBanColumns = getColumns(serverBan);
     const rows = await db
         .select({
             ...serverBanColumns,
@@ -68,7 +68,7 @@ export async function getPlayerHwidOptionsAction(): Promise<string[]> {
         ...new Set(
             rows
                 .map((row) =>
-                    row.hwid ? Buffer.from(row.hwid).toString("hex") : "",
+                    row.hwid ? Buffer.from(String(row.hwid)).toString("hex") : "",
                 )
                 .filter(Boolean),
         ),
