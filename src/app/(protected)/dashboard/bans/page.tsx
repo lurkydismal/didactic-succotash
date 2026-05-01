@@ -44,22 +44,22 @@ export default function Page() {
             setResolvedFields((prev) =>
                 prev.map((field) =>
                     field.key === "playerUsername" ||
-                        field.key === "banningAdmin"
+                    field.key === "banningAdmin"
                         ? {
-                            ...field,
-                            autocompleteOptions: usernameOptions,
-                        }
+                              ...field,
+                              autocompleteOptions: usernameOptions,
+                          }
                         : field.key === "address"
-                            ? {
+                          ? {
                                 ...field,
                                 autocompleteOptions: addressOptions,
                             }
-                            : field.key === "hwid"
-                                ? {
-                                    ...field,
-                                    autocompleteOptions: hwidOptions,
-                                }
-                                : field,
+                          : field.key === "hwid"
+                            ? {
+                                  ...field,
+                                  autocompleteOptions: hwidOptions,
+                              }
+                            : field,
                 ),
             );
 
@@ -99,7 +99,9 @@ export default function Page() {
                     getRowsAction={getRowsAction}
                     updateRowAction={updateRowAction}
                     extraButtons={
-                        <ExtraToolbarButtons createRowAction={createRowAction} />
+                        <ExtraToolbarButtons
+                            createRowAction={createRowAction}
+                        />
                     }
                 />
             </MainFallback>

@@ -74,7 +74,9 @@ export async function getPlayerHwidOptionsAction(): Promise<string[]> {
         ...new Set(
             rows
                 .map((row) =>
-                    row.hwid ? Buffer.from(String(row.hwid)).toString("hex") : "",
+                    row.hwid
+                        ? Buffer.from(String(row.hwid)).toString("hex")
+                        : "",
                 )
                 .filter(Boolean),
         ),
