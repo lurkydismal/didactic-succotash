@@ -4,6 +4,7 @@ import { isBlob } from "@/utils/stdfunc";
 import { Dayjs } from "dayjs";
 import { Divider, Grid, Typography } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { RegisterOptions, useForm } from "react-hook-form";
 import { FieldConfig, UpdateRowAction } from "./types";
 import CustomFieldInput from "./CustomFieldInput";
 import DateTimeFieldInput from "./DateTimeFieldInput";
@@ -33,6 +34,10 @@ export default function RowDialogContent<
 }: RowDialogContentProps<R, RI>) {
     const { showError } = useSnackbar();
     const formRef = useRef<HTMLFormElement | null>(null);
+    const form = useForm<Record<string, unknown>>({
+        defaultValues: buildInitial(),
+        mode: "onSubmit",
+    });
 
     const buildInitial = () => {
         const out: Record<string, unknown> = {};
@@ -48,6 +53,7 @@ export default function RowDialogContent<
 
     useEffect(() => {
         setValues(buildInitial());
+        form.reset(buildInitial());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [row]);
 
@@ -91,7 +97,10 @@ export default function RowDialogContent<
     );
 
     const submit = useCallback(async (): Promise<boolean> => {
-        const currentValues = values as Partial<RI>;
+        const valid = await form.trigger();
+        if (!valid) return false;
+
+        const currentValues = form.getValues() as Partial<RI>;
 
         if (!defaultIsChanged(row, currentValues)) {
             return true;
@@ -117,7 +126,19 @@ export default function RowDialogContent<
         }
 
         return await updateRow(fd);
-    }, [defaultIsChanged, fields, row, updateRow, values]);
+    }, [defaultIsChanged, fields, form, row, updateRow]);
+
+    const getRules = (field: FieldConfig<R, RI>): RegisterOptions<Record<string, unknown>, string> => ({
+        required: field.required ? `${field.label} is required` : false,
+        validate: field.validate
+            ? async (value) =>
+                  (await field.validate?.(
+                      value,
+                      row,
+                      form.getValues(),
+                  )) ?? true
+            : undefined,
+    });
 
     useEffect(() => {
         registerSubmit(submit);
@@ -128,6 +149,8 @@ export default function RowDialogContent<
         const key = String(field.key);
         const name = field.name ?? key;
         const value = values[key];
+        const error = form.formState.errors[name];
+        const rules = getRules(field);
 
         if (typeof field.render === "function") {
             return (
@@ -151,6 +174,9 @@ export default function RowDialogContent<
                     required={!!field.required}
                     value={value}
                     onValueChange={(nextValue) => setValue(key, nextValue)}
+                    control={form.control}
+                    error={error}
+                    rules={rules}
                 />
             );
         }
@@ -170,6 +196,9 @@ export default function RowDialogContent<
                     onOpen={field.onAutocompleteOpen}
                     onClose={field.onAutocompleteClose}
                     onValueChange={(nextValue) => setValue(key, nextValue)}
+                    control={form.control}
+                    error={error}
+                    rules={rules}
                 />
             );
         }
@@ -189,6 +218,9 @@ export default function RowDialogContent<
                     type={field.type}
                     value={value}
                     onValueChange={(nextValue) => setValue(key, nextValue)}
+                    control={form.control}
+                    error={error}
+                    rules={rules}
                 />
             );
         }
@@ -202,6 +234,9 @@ export default function RowDialogContent<
                 required={!!field.required}
                 value={value}
                 onValueChange={(nextValue) => setValue(key, nextValue)}
+                control={form.control}
+                error={error}
+                rules={rules}
             />
         );
     };

@@ -13,6 +13,7 @@ import {
     getPlayerHwidOptionsAction,
     getRowsAction,
     getPlayerUsernameOptionsAction,
+    hasRoundIdAction,
     updateRowAction,
 } from "@/lib/dashboard/bans/function";
 import { FieldConfig } from "@/components/TableDataGrid/RowDialog";
@@ -59,6 +60,29 @@ export default function Page() {
                                     autocompleteOptions: hwidOptions,
                                 }
                                 : field,
+                ),
+            );
+
+            setResolvedFields((prev) =>
+                prev.map((field) =>
+                    field.key === "roundId"
+                        ? {
+                            ...field,
+                            validate: async (value) => {
+                                if (value === null || value === undefined || value === "") {
+                                    return true;
+                                }
+
+                                const parsed = Number(value);
+                                if (!Number.isInteger(parsed)) {
+                                    return "No such ID";
+                                }
+
+                                const exists = await hasRoundIdAction(parsed);
+                                return exists || "No such ID";
+                            },
+                        }
+                        : field,
                 ),
             );
         };
