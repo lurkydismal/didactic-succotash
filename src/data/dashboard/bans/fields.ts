@@ -9,7 +9,6 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         key: "playerUsername",
         label: "Player",
         type: "autocomplete",
-        placeholder: "",
         autocompleteOptions: [],
     },
     {
