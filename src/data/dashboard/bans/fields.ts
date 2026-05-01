@@ -21,14 +21,14 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
     {
         key: "banTime",
         label: "Ban time",
-        type: "text",
+        type: "datetime",
         required: true,
         placeholder: new Date(),
     },
     {
         key: "expirationTime",
         label: "Expiration time",
-        type: "text",
+        type: "datetime",
     },
     {
         key: "reason",
@@ -39,7 +39,8 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
     {
         key: "banningAdmin",
         label: "Banning admin",
-        type: "text",
+        type: "autocomplete",
+        autocompleteOptions: [],
     },
     {
         key: "hwid",

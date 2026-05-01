@@ -25,7 +25,8 @@ export default function Page() {
             const options = await getPlayerUsernameOptionsAction();
             setResolvedFields((prev) =>
                 prev.map((field) =>
-                    field.key === "playerUsername"
+                    field.key === "playerUsername" ||
+                    field.key === "banningAdmin"
                         ? {
                               ...field,
                               autocompleteOptions: options,
