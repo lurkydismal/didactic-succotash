@@ -11,6 +11,7 @@ import {
     createRowAction,
     getPlayerAddressOptionsAction,
     getPlayerHwidOptionsAction,
+    getPlayerPackedOptionsAction,
     getRowsAction,
     getPlayerUsernameOptionsAction,
     hasRoundIdAction,
@@ -19,6 +20,7 @@ import {
 import { FieldConfig } from "@/components/TableDataGrid/RowDialog";
 import { useEffect, useState } from "react";
 import MainFallback from "@/components/MainFallback";
+import { AutocompleteOption } from "@/components/TableDataGrid/RowDialog/types";
 
 export default function Page() {
     const [resolvedFields, setResolvedFields] =
@@ -29,12 +31,17 @@ export default function Page() {
 
     useEffect(() => {
         const loadPlayerOptions = async () => {
-            const [usernameOptions, addressOptions, hwidOptions] =
-                await Promise.all([
-                    getPlayerUsernameOptionsAction(),
-                    getPlayerAddressOptionsAction(),
-                    getPlayerHwidOptionsAction(),
-                ]);
+            const [
+                usernameOptions,
+                addressOptions,
+                hwidOptions,
+                packedOptions,
+            ] = await Promise.all([
+                getPlayerUsernameOptionsAction(),
+                getPlayerAddressOptionsAction(),
+                getPlayerHwidOptionsAction(),
+                getPlayerPackedOptionsAction(),
+            ]);
             setPlayerOptionsCount(
                 usernameOptions.length +
                     addressOptions.length +
@@ -42,25 +49,64 @@ export default function Page() {
             );
 
             setResolvedFields((prev) =>
-                prev.map((field) =>
-                    field.key === "playerUsername" ||
-                    field.key === "banningAdmin"
-                        ? {
-                              ...field,
-                              autocompleteOptions: usernameOptions,
-                          }
-                        : field.key === "address"
-                          ? {
-                                ...field,
-                                autocompleteOptions: addressOptions,
-                            }
-                          : field.key === "hwid"
-                            ? {
-                                  ...field,
-                                  autocompleteOptions: hwidOptions,
-                              }
-                            : field,
-                ),
+                prev.map((field) => {
+                    if (field.autocompletePackedKey) {
+                        const packedFieldNames =
+                            field.autocompletePackedFields ?? [
+                                field.autocompletePackedKey,
+                            ];
+                        const options: AutocompleteOption[] = packedOptions
+                            .map((packedRow) => {
+                                const labelValue =
+                                    packedRow[
+                                        field.autocompletePackedKey as keyof typeof packedRow
+                                    ];
+                                if (!labelValue) return null;
+
+                                const packedValues = packedFieldNames.reduce<
+                                    Record<string, unknown>
+                                >((acc, packedField) => {
+                                    acc[packedField] =
+                                        packedRow[
+                                            packedField as keyof typeof packedRow
+                                        ] ?? "";
+                                    return acc;
+                                }, {});
+
+                                return { label: labelValue, packedValues };
+                            })
+                            .filter(
+                                (
+                                    option,
+                                ): option is {
+                                    label: string;
+                                    packedValues: Record<string, unknown>;
+                                } => option !== null,
+                            );
+
+                        return { ...field, autocompleteOptions: options };
+                    }
+
+                    if (field.key === "banningAdmin") {
+                        return {
+                            ...field,
+                            autocompleteOptions: usernameOptions,
+                        };
+                    }
+
+                    if (field.key === "address") {
+                        return {
+                            ...field,
+                            autocompleteOptions: addressOptions,
+                        };
+                    }
+
+                    if (field.key === "hwid") {
+                        return { ...field, autocompleteOptions: hwidOptions };
+                    }
+
+                    return field;
+                }),
             );
 
             setResolvedFields((prev) =>

@@ -62,6 +62,17 @@ export default function RowDialogContent<
     const setValue = (key: string, value: unknown) =>
         setValues((state) => ({ ...state, [key]: value }));
 
+    const setValueAndForm = useCallback(
+        (key: string, value: unknown) => {
+            setValue(key, value);
+            form.setValue(key, value, {
+                shouldDirty: true,
+                shouldValidate: true,
+            });
+        },
+        [form],
+    );
+
     const defaultIsChanged = useCallback(
         (rowObj: R, newValues: Partial<RI>) => {
             for (const field of fields) {
@@ -72,7 +83,7 @@ export default function RowDialogContent<
                     typeof field.isChanged === "function"
                         ? !field.isChanged(rowVal, newVal)
                         : String((rowVal ?? "").toString()).trim() ===
-                        String((newVal ?? "").toString()).trim();
+                          String((newVal ?? "").toString()).trim();
 
                 if (!equal) {
                     return true;
@@ -157,7 +168,7 @@ export default function RowDialogContent<
         required: field.required ? `${field.label} is required` : false,
         validate: field.validate
             ? async (value) =>
-                (await field.validate?.(value, row, form.getValues())) ?? true
+                  (await field.validate?.(value, row, form.getValues())) ?? true
             : undefined,
     });
 
@@ -216,7 +227,23 @@ export default function RowDialogContent<
                     open={field.autocompleteOpen}
                     onOpen={field.onAutocompleteOpen}
                     onClose={field.onAutocompleteClose}
-                    onValueChange={(nextValue) => setValue(key, nextValue)}
+                    onValueChange={(nextValue) => {
+                        setValueAndForm(key, nextValue);
+                        if (
+                            nextValue &&
+                            typeof nextValue === "object" &&
+                            "packedValues" in nextValue &&
+                            nextValue.packedValues &&
+                            typeof nextValue.packedValues === "object"
+                        ) {
+                            for (const [
+                                packedKey,
+                                packedValue,
+                            ] of Object.entries(nextValue.packedValues)) {
+                                setValueAndForm(packedKey, packedValue);
+                            }
+                        }
+                    }}
                     control={form.control}
                     error={error}
                     rules={rules}
@@ -273,14 +300,14 @@ export default function RowDialogContent<
             <Grid container spacing={2}>
                 {((row as Record<string, unknown>)[String(idKey)] ?? null) !==
                     null && (
-                        <input
-                            type="hidden"
-                            name={String(idKey)}
-                            value={String(
-                                (row as Record<string, unknown>)[String(idKey)],
-                            )}
-                        />
-                    )}
+                    <input
+                        type="hidden"
+                        name={String(idKey)}
+                        value={String(
+                            (row as Record<string, unknown>)[String(idKey)],
+                        )}
+                    />
+                )}
 
                 {fields.map((field, index) => (
                     <Grid

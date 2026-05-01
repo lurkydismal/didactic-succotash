@@ -83,6 +83,38 @@ export async function getPlayerHwidOptionsAction(): Promise<string[]> {
     ];
 }
 
+export async function getPlayerPackedOptionsAction(): Promise<
+    { playerUsername: string; address: string; hwid: string }[]
+> {
+    const rows = await db
+        .select({
+            playerUsername: player.lastSeenUserName,
+            address: player.lastSeenAddress,
+            hwid: player.lastSeenHwid,
+        })
+        .from(player)
+        .where(ne(player.lastSeenUserName, ""))
+        .orderBy(asc(player.lastSeenUserName))
+        .execute();
+
+    const deduped = new Map<
+        string,
+        { playerUsername: string; address: string; hwid: string }
+    >();
+    for (const row of rows) {
+        const label = row.playerUsername.trim();
+        if (!label || deduped.has(label)) continue;
+
+        deduped.set(label, {
+            playerUsername: label,
+            address: row.address?.trim() ?? "",
+            hwid: row.hwid ? Buffer.from(String(row.hwid)).toString("hex") : "",
+        });
+    }
+
+    return [...deduped.values()];
+}
+
 export async function createRowAction(
     row: ServerBanMutationInput,
 ): Promise<void> {

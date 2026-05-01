@@ -1,4 +1,8 @@
-export type AutocompleteOption = string | number | boolean | { label: string };
+export type AutocompleteOption =
+    | string
+    | number
+    | boolean
+    | { label: string; packedValues?: Record<string, unknown> };
 
 export type DefaultFieldType =
     | "text"
@@ -22,6 +26,8 @@ export type FieldConfig<
     required?: boolean;
     placeholder?: unknown;
     autocompleteOptions?: readonly AutocompleteOption[];
+    autocompletePackedKey?: string;
+    autocompletePackedFields?: readonly string[];
     autocompleteLoading?: boolean;
     autocompleteOpen?: boolean;
     onAutocompleteOpen?: () => void;
