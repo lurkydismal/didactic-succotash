@@ -17,7 +17,7 @@ export default function ExtraToolbarButtons<
     emptyRow,
     createRowAction,
 }: Readonly<{
-    emptyRow: RI;
+    emptyRow?: RI;
     createRowAction: (row: RI) => Promise<void>;
 }>) {
     const { showMessage, showSuccess, showError, showWarning, showInfo } =
@@ -42,6 +42,7 @@ export default function ExtraToolbarButtons<
             <Tooltip title="Add new row">
                 <ToolbarButton
                     onClick={async () => {
+                        if (!emptyRow) return;
                         try {
                             await createRowAction(emptyRow);
                         } catch (err) {

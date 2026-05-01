@@ -3,13 +3,14 @@ import {
     ServerBanRow as TableRow,
     ServerBanRowInsert as TableRowInsert,
 } from "@/db/types";
+import { uuid4 } from "@/utils/uuid";
 
-// TODO: Also derive empty row from this
 const fields: FieldConfig<TableRow, TableRowInsert>[] = [
     {
         key: "playerUserId",
         label: "Player",
         type: "text",
+        placeholder: uuid4(),
     },
     {
         key: "address",
@@ -22,6 +23,7 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         label: "Ban time",
         type: "text",
         required: true,
+        placeholder: new Date(),
     },
     {
         key: "expirationTime",
@@ -33,6 +35,7 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         label: "Reason",
         type: "multiline",
         required: true,
+        placeholder: "123",
     },
     {
         key: "banningAdmin",

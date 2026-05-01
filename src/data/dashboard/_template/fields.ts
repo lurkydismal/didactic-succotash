@@ -10,6 +10,7 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         name: "content", // optional, defaults to key
         size: 12,
         required: true,
+        placeholder: "-",
         // optional transform for putting value into FormData (not needed for plain strings)
         toFormValue: (v) => (v == null ? "" : String(v)),
     },

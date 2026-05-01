@@ -19,14 +19,12 @@ export default function TableDataGrid<
     R extends Record<string, unknown>,
     RI extends Record<string, unknown>,
 >({
-    emptyRow,
     getRowsAction,
     createRowAction,
     updateRowAction,
     extraButtons,
     fields,
 }: Readonly<{
-    emptyRow: RI;
     getRowsAction: () => Promise<Readonly<GridRowsProp>>;
     createRowAction: (row: RI) => Promise<void>;
     updateRowAction: (fd: FormData) => Promise<void>;
@@ -39,6 +37,14 @@ export default function TableDataGrid<
         useState<Readonly<GridRowsProp> | null>(null);
     const [selectedRow, setSelectedRow] = useState<R | null>(null);
     const [dialogOpen, setDialogOpen] = useState(false);
+    const emptyRow = React.useMemo(
+        () =>
+            fields.reduce((row, field) => {
+                row[field.key as keyof RI] = field.placeholder as RI[keyof RI];
+                return row;
+            }, {} as RI),
+        [fields],
+    );
 
     // Getting rows
     const _getRows = useCallback(async () => {

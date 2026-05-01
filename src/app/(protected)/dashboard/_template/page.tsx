@@ -14,25 +14,14 @@ import {
 } from "@/lib/dashboard/bans/function";
 
 export default function Page() {
-    const emptyRow: TableRowInsert = {
-        serverBanId: 1,
-        address: "123",
-        reason: "-",
-        banTime: new Date(),
-    };
-
     return (
         <TableDataGrid<TableRow, TableRowInsert>
             createRowAction={createRowAction}
-            emptyRow={emptyRow}
             fields={fields}
             getRowsAction={getRowsAction}
             updateRowAction={updateRowAction}
             extraButtons={
-                <ExtraToolbarButtons
-                    emptyRow={emptyRow}
-                    createRowAction={createRowAction}
-                />
+                <ExtraToolbarButtons createRowAction={createRowAction} />
             }
         />
     );
