@@ -2,17 +2,8 @@ import { formatDate } from "@/utils/dayjs";
 import { useSnackbar } from "@/providers/snackbar";
 import { isBlob } from "@/utils/stdfunc";
 import { Dayjs } from "dayjs";
-import {
-    Divider,
-    Grid,
-    Typography,
-} from "@mui/material";
-import {
-    useCallback,
-    useEffect,
-    useRef,
-    useState,
-} from "react";
+import { Divider, Grid, Typography } from "@mui/material";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FieldConfig, UpdateRowAction } from "./types";
 import CustomFieldInput from "./CustomFieldInput";
 import MultilineFieldInput from "./MultilineFieldInput";
@@ -71,7 +62,7 @@ export default function RowDialogContent<
                     typeof field.isChanged === "function"
                         ? !field.isChanged(rowVal, newVal)
                         : String((rowVal ?? "").toString()).trim() ===
-                        String((newVal ?? "").toString()).trim();
+                          String((newVal ?? "").toString()).trim();
 
                 if (!equal) {
                     return true;
@@ -186,14 +177,14 @@ export default function RowDialogContent<
             <Grid container spacing={2}>
                 {((row as Record<string, unknown>)[String(idKey)] ?? null) !==
                     null && (
-                        <input
-                            type="hidden"
-                            name={String(idKey)}
-                            value={String(
-                                (row as Record<string, unknown>)[String(idKey)],
-                            )}
-                        />
-                    )}
+                    <input
+                        type="hidden"
+                        name={String(idKey)}
+                        value={String(
+                            (row as Record<string, unknown>)[String(idKey)],
+                        )}
+                    />
+                )}
 
                 {fields.map((field, index) => (
                     <Grid
@@ -214,8 +205,11 @@ export default function RowDialogContent<
                     </Typography>
                     <Typography variant="subtitle2" sx={{ display: "block" }}>
                         {formatDate(
-                            (row as unknown as { created_at: string | Date | Dayjs })
-                                .created_at,
+                            (
+                                row as unknown as {
+                                    created_at: string | Date | Dayjs;
+                                }
+                            ).created_at,
                             true,
                         )}
                     </Typography>
@@ -227,8 +221,11 @@ export default function RowDialogContent<
                     </Typography>
                     <Typography variant="subtitle2" sx={{ display: "block" }}>
                         {formatDate(
-                            (row as unknown as { updated_at: string | Date | Dayjs })
-                                .updated_at,
+                            (
+                                row as unknown as {
+                                    updated_at: string | Date | Dayjs;
+                                }
+                            ).updated_at,
                             true,
                         )}
                     </Typography>

@@ -5,7 +5,7 @@ export default async function Template({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const user = await getSessionDataOrUnauthorized();
+    await getSessionDataOrUnauthorized();
 
     return children;
 }

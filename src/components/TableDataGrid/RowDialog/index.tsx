@@ -1,13 +1,6 @@
 import log from "@/utils/stdlog";
-import {
-    Dialog,
-    DialogContent,
-} from "@mui/material";
-import {
-    Dispatch,
-    SetStateAction,
-    useRef,
-} from "react";
+import { Dialog, DialogContent } from "@mui/material";
+import { Dispatch, SetStateAction, useRef } from "react";
 import { FieldConfig, UpdateRowAction } from "./types";
 import RowDialogContent from "./Content";
 

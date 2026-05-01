@@ -28,11 +28,13 @@ export async function getRows(
 
         log.trace({ id, hasId, rows });
 
+        type Row = (typeof rows)[number];
+
         const result = hasId
             ? rows
-            : rows.map((row: any) => ({
+            : rows.map((row: Row) => ({
                 ...row,
-                id: row[toCamelCase(id.name)], // pull value from provided column
+                id: row[toCamelCase(id.name) as keyof Row], // pull value from provided column
             }));
 
         log.trace({ result });
