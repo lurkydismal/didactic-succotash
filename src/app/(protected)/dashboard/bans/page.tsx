@@ -67,21 +67,25 @@ export default function Page() {
                 prev.map((field) =>
                     field.key === "roundId"
                         ? {
-                            ...field,
-                            validate: async (value) => {
-                                if (value === null || value === undefined || value === "") {
-                                    return true;
-                                }
+                              ...field,
+                              validate: async (value) => {
+                                  if (
+                                      value === null ||
+                                      value === undefined ||
+                                      value === ""
+                                  ) {
+                                      return true;
+                                  }
 
-                                const parsed = Number(value);
-                                if (!Number.isInteger(parsed)) {
-                                    return "No such ID";
-                                }
+                                  const parsed = Number(value);
+                                  if (!Number.isInteger(parsed)) {
+                                      return "No such ID";
+                                  }
 
-                                const exists = await hasRoundIdAction(parsed);
-                                return exists || "No such ID";
-                            },
-                        }
+                                  const exists = await hasRoundIdAction(parsed);
+                                  return exists || "No such ID";
+                              },
+                          }
                         : field,
                 ),
             );

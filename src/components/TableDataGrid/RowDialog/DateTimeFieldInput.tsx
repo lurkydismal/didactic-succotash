@@ -3,7 +3,12 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { Typography } from "@mui/material";
-import { Control, Controller, FieldError, RegisterOptions } from "react-hook-form";
+import {
+    Control,
+    Controller,
+    FieldError,
+    RegisterOptions,
+} from "react-hook-form";
 
 type DateTimeFieldInputProps = {
     fieldKey: string;
@@ -62,23 +67,27 @@ export default function DateTimeFieldInput({
                     defaultValue={value ?? null}
                     rules={rules}
                     render={({ field }) => (
-                <DatePicker
-                    value={field.value ? dayjs(field.value) : null}
-                    onChange={(next) => {
-                        handleChange(next);
-                        field.onChange(next?.isValid() ? next.format("YYYY-MM-DD") : null);
-                    }}
-                    slotProps={{
-                        textField: {
-                            id: `${fieldKey}-date`,
-                            name,
-                            required,
-                            fullWidth: true,
-                            error: !!error,
-                            helperText: error?.message,
-                        },
-                    }}
-                />
+                        <DatePicker
+                            value={field.value ? dayjs(field.value) : null}
+                            onChange={(next) => {
+                                handleChange(next);
+                                field.onChange(
+                                    next?.isValid()
+                                        ? next.format("YYYY-MM-DD")
+                                        : null,
+                                );
+                            }}
+                            slotProps={{
+                                textField: {
+                                    id: `${fieldKey}-date`,
+                                    name,
+                                    required,
+                                    fullWidth: true,
+                                    error: !!error,
+                                    helperText: error?.message,
+                                },
+                            }}
+                        />
                     )}
                 />
             )}
@@ -90,23 +99,31 @@ export default function DateTimeFieldInput({
                     defaultValue={value ?? null}
                     rules={rules}
                     render={({ field }) => (
-                <TimePicker
-                    value={field.value ? dayjs(field.value, "HH:mm:ss") : null}
-                    onChange={(next) => {
-                        handleChange(next);
-                        field.onChange(next?.isValid() ? next.format("HH:mm:ss") : null);
-                    }}
-                    slotProps={{
-                        textField: {
-                            id: `${fieldKey}-time`,
-                            name,
-                            required,
-                            fullWidth: true,
-                            error: !!error,
-                            helperText: error?.message,
-                        },
-                    }}
-                />
+                        <TimePicker
+                            value={
+                                field.value
+                                    ? dayjs(field.value, "HH:mm:ss")
+                                    : null
+                            }
+                            onChange={(next) => {
+                                handleChange(next);
+                                field.onChange(
+                                    next?.isValid()
+                                        ? next.format("HH:mm:ss")
+                                        : null,
+                                );
+                            }}
+                            slotProps={{
+                                textField: {
+                                    id: `${fieldKey}-time`,
+                                    name,
+                                    required,
+                                    fullWidth: true,
+                                    error: !!error,
+                                    helperText: error?.message,
+                                },
+                            }}
+                        />
                     )}
                 />
             )}
@@ -118,23 +135,25 @@ export default function DateTimeFieldInput({
                     defaultValue={value ?? null}
                     rules={rules}
                     render={({ field }) => (
-                <DateTimePicker
-                    value={field.value ? dayjs(field.value) : null}
-                    onChange={(next) => {
-                        handleChange(next);
-                        field.onChange(next?.isValid() ? next.toISOString() : null);
-                    }}
-                    slotProps={{
-                        textField: {
-                            id: `${fieldKey}-datetime`,
-                            name,
-                            required,
-                            fullWidth: true,
-                            error: !!error,
-                            helperText: error?.message,
-                        },
-                    }}
-                />
+                        <DateTimePicker
+                            value={field.value ? dayjs(field.value) : null}
+                            onChange={(next) => {
+                                handleChange(next);
+                                field.onChange(
+                                    next?.isValid() ? next.toISOString() : null,
+                                );
+                            }}
+                            slotProps={{
+                                textField: {
+                                    id: `${fieldKey}-datetime`,
+                                    name,
+                                    required,
+                                    fullWidth: true,
+                                    error: !!error,
+                                    helperText: error?.message,
+                                },
+                            }}
+                        />
                     )}
                 />
             )}

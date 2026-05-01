@@ -128,15 +128,13 @@ export default function RowDialogContent<
         return await updateRow(fd);
     }, [defaultIsChanged, fields, form, row, updateRow]);
 
-    const getRules = (field: FieldConfig<R, RI>): RegisterOptions<Record<string, unknown>, string> => ({
+    const getRules = (
+        field: FieldConfig<R, RI>,
+    ): RegisterOptions<Record<string, unknown>, string> => ({
         required: field.required ? `${field.label} is required` : false,
         validate: field.validate
             ? async (value) =>
-                  (await field.validate?.(
-                      value,
-                      row,
-                      form.getValues(),
-                  )) ?? true
+                  (await field.validate?.(value, row, form.getValues())) ?? true
             : undefined,
     });
 
