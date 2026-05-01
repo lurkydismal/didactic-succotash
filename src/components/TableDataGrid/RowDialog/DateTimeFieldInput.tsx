@@ -24,7 +24,9 @@ export default function DateTimeFieldInput({
     onValueChange,
 }: DateTimeFieldInputProps) {
     const pickerValue: Dayjs | null =
-        typeof value === "string" || value instanceof Date || dayjs.isDayjs(value)
+        typeof value === "string" ||
+        value instanceof Date ||
+        dayjs.isDayjs(value)
             ? dayjs(value)
             : null;
 
