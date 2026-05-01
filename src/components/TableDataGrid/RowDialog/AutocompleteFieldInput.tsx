@@ -52,6 +52,7 @@ export default function AutocompleteFieldInput({
                         required={required}
                         placeholder={label}
                         slotProps={{
+                            ...params.slotProps,
                             input: {
                                 ...params.slotProps.input,
                                 endAdornment: (
