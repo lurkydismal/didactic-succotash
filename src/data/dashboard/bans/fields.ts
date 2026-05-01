@@ -35,7 +35,6 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         label: "Reason",
         type: "multiline",
         required: true,
-        placeholder: "123",
     },
     {
         key: "banningAdmin",
