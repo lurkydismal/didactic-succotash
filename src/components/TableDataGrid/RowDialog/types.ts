@@ -36,6 +36,11 @@ export type FieldConfig<
     toFormValue?: (v: unknown) => string | Blob | undefined;
     // optional comparator for this field
     isChanged?: (rowValue: unknown, currentValue: unknown) => boolean;
+    validate?: (
+        value: unknown,
+        row: R,
+        values: Record<string, unknown>,
+    ) => true | string | Promise<true | string>;
 };
 
 export type UpdateRowAction = (fd: FormData) => Promise<void>;

@@ -1,7 +1,7 @@
 "use server";
 
 import db from "@/db";
-import { player, serverBan } from "@/db/schema";
+import { player, round, serverBan } from "@/db/schema";
 import { ServerBanRowInsert as TableRowInsert } from "@/db/types";
 import { create } from "@/lib/dashboard/common/create";
 import { updateAction } from "@/lib/dashboard/common/update";
@@ -138,4 +138,17 @@ export async function updateRowAction(fd: FormData): Promise<void> {
     const result = await updateAction(target, idColumn, fd);
     if (!result.ok)
         throw new Error(`Failed to update row in action: ${result.error}`);
+}
+
+export async function hasRoundIdAction(roundId: number): Promise<boolean> {
+    if (!Number.isInteger(roundId)) return false;
+
+    const [existingRound] = await db
+        .select({ roundId: round.roundId })
+        .from(round)
+        .where(eq(round.roundId, roundId))
+        .limit(1)
+        .execute();
+
+    return !!existingRound;
 }
