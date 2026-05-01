@@ -40,7 +40,8 @@ export default function TableDataGrid<
     const emptyRow = React.useMemo(
         () =>
             fields.reduce((row, field) => {
-                row[field.key as keyof RI] = field.placeholder as RI[keyof RI];
+                row[field.key as keyof RI] = (field.placeholder ??
+                    null) as RI[keyof RI];
                 return row;
             }, {} as RI),
         [fields],

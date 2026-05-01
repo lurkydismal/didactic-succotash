@@ -91,6 +91,12 @@ export async function save(
 export function parseForm(formData: FormData): MutationRow {
     const entries = Object.fromEntries(formData.entries()) as MutationRow;
 
+    for (const [key, value] of Object.entries(entries)) {
+        if (value === "") {
+            entries[key] = null;
+        }
+    }
+
     if (entries.id !== undefined) {
         const parsedId = Number(entries.id);
         if (!Number.isNaN(parsedId)) {

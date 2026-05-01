@@ -99,9 +99,7 @@ export async function getPlayerHwidOptionsAction(): Promise<string[]> {
         ...new Set(
             rows
                 .map((row) =>
-                    row.hwid
-                        ? Buffer.from(row.hwid).toString("hex")
-                        : "",
+                    row.hwid ? Buffer.from(row.hwid).toString("hex") : "",
                 )
                 .filter(Boolean),
         ),
@@ -185,9 +183,8 @@ export async function updateRowAction(fd: FormData): Promise<void> {
     fd.set("playerUserId", playerUserId ?? "");
 
     const banningAdminInput = `${fd.get("banningAdmin") ?? ""}`.trim();
-    const banningAdminUserId = await resolvePlayerUserIdByUsername(
-        banningAdminInput,
-    );
+    const banningAdminUserId =
+        await resolvePlayerUserIdByUsername(banningAdminInput);
     if (banningAdminInput && !banningAdminUserId) {
         throw new Error("No matching player found for banning admin username");
     }

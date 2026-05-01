@@ -12,7 +12,6 @@ import MultilineFieldInput from "./MultilineFieldInput";
 import TextFieldInput from "./TextFieldInput";
 import AutocompleteFieldInput from "./AutocompleteFieldInput";
 
-
 const toFieldValue = (
     field: FieldConfig<Record<string, unknown>, Record<string, unknown>>,
     value: unknown,
@@ -177,7 +176,10 @@ export default function RowDialogContent<
             const name = field.name ?? String(field.key);
             const key = String(field.key);
             const value = toFieldValue(
-                field as FieldConfig<Record<string, unknown>, Record<string, unknown>>,
+                field as FieldConfig<
+                    Record<string, unknown>,
+                    Record<string, unknown>
+                >,
                 currentValues[key],
             );
 
