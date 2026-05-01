@@ -14,6 +14,22 @@ const idColumn = serverBan.serverBanId;
 
 type ServerBanMutationInput = TableRowInsert & { playerUsername?: string };
 
+async function resolvePlayerUserIdByUsername(
+    rawValue: string | null | undefined,
+): Promise<string | null> {
+    const username = rawValue?.trim();
+    if (!username) return null;
+
+    const [targetPlayer] = await db
+        .select({ userId: player.userId })
+        .from(player)
+        .where(eq(player.lastSeenUserName, username))
+        .limit(1)
+        .execute();
+
+    return targetPlayer?.userId ?? null;
+}
+
 export async function getRowsAction() {
     const serverBanColumns = getColumns(serverBan);
     const rows = await db
@@ -118,17 +134,8 @@ export async function getPlayerPackedOptionsAction(): Promise<
 export async function createRowAction(
     row: ServerBanMutationInput,
 ): Promise<void> {
-    const username = row.playerUsername?.trim();
-
-    if (username) {
-        const [targetPlayer] = await db
-            .select({ userId: player.userId })
-            .from(player)
-            .where(eq(player.lastSeenUserName, username))
-            .limit(1)
-            .execute();
-        row.playerUserId = targetPlayer?.userId ?? null;
-    } else {
+    row.playerUserId = await resolvePlayerUserIdByUsername(row.playerUsername);
+    if (!row.playerUserId) {
         const [randomPlayer] = await db
             .select({
                 userId: player.userId,
@@ -148,6 +155,14 @@ export async function createRowAction(
         row.playerUserId = randomPlayer.userId;
     }
 
+    const banningAdminUserId = await resolvePlayerUserIdByUsername(
+        row.banningAdmin,
+    );
+    if ((row.banningAdmin ?? "").trim() && !banningAdminUserId) {
+        throw new Error("No matching player found for banning admin username");
+    }
+    row.banningAdmin = banningAdminUserId;
+
     delete row.playerUsername;
     const result = await create(target, row);
     if (!result.ok)
@@ -155,18 +170,20 @@ export async function createRowAction(
 }
 
 export async function updateRowAction(fd: FormData): Promise<void> {
-    const username = `${fd.get("playerUsername") ?? ""}`.trim();
-    if (username) {
-        const [targetPlayer] = await db
-            .select({ userId: player.userId })
-            .from(player)
-            .where(eq(player.lastSeenUserName, username))
-            .limit(1)
-            .execute();
-        fd.set("playerUserId", targetPlayer?.userId ?? "");
-    } else {
-        fd.set("playerUserId", "");
+    const playerUserId = await resolvePlayerUserIdByUsername(
+        `${fd.get("playerUsername") ?? ""}`,
+    );
+    fd.set("playerUserId", playerUserId ?? "");
+
+    const banningAdminInput = `${fd.get("banningAdmin") ?? ""}`.trim();
+    const banningAdminUserId = await resolvePlayerUserIdByUsername(
+        banningAdminInput,
+    );
+    if (banningAdminInput && !banningAdminUserId) {
+        throw new Error("No matching player found for banning admin username");
     }
+    fd.set("banningAdmin", banningAdminUserId ?? "");
+
     fd.delete("playerUsername");
 
     const result = await updateAction(target, idColumn, fd);
