@@ -75,7 +75,10 @@ export async function mockAction<T>(
     milliseconds: number,
     data?: T,
 ): Promise<ActionResult<T>> {
-    log.trace("mockAction called", { milliseconds, hasData: data !== undefined });
+    log.trace("mockAction called", {
+        milliseconds,
+        hasData: data !== undefined,
+    });
     log.debug("mockAction validating delay");
     log.info("mockAction execution started");
     log.warn("mockAction verbose warning-level probe");

@@ -41,7 +41,9 @@ export default function AutocompleteFieldInput({
                 onOpen={onOpen}
                 onClose={onClose}
                 loading={loading}
-                onChange={(_, nextValue) => onValueChange(nextValue as AutocompleteOption | null)}
+                onChange={(_, nextValue) =>
+                    onValueChange(nextValue as AutocompleteOption | null)
+                }
                 renderInput={(params) => (
                     <TextField
                         {...params}
@@ -51,13 +53,16 @@ export default function AutocompleteFieldInput({
                         placeholder={label}
                         slotProps={{
                             input: {
-                                ...params.InputProps,
+                                ...params.slotProps.input,
                                 endAdornment: (
                                     <>
                                         {loading ? (
-                                            <CircularProgress color="inherit" size={20} />
+                                            <CircularProgress
+                                                color="inherit"
+                                                size={20}
+                                            />
                                         ) : null}
-                                        {params.InputProps.endAdornment}
+                                        {params.slotProps.input.endAdornment}
                                     </>
                                 ),
                             },
