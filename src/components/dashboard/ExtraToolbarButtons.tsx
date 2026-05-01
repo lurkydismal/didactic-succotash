@@ -18,7 +18,7 @@ export default function ExtraToolbarButtons<
     createRowAction,
 }: Readonly<{
     emptyRow?: RI;
-    createRowAction: (row: RI) => Promise<void>;
+    createRowAction: () => void;
 }>) {
     const { showMessage, showSuccess, showError, showWarning, showInfo } =
         useSnackbar();
@@ -41,13 +41,9 @@ export default function ExtraToolbarButtons<
 
             <Tooltip title="Add new row">
                 <ToolbarButton
-                    onClick={async () => {
+                    onClick={() => {
                         if (!emptyRow) return;
-                        try {
-                            await createRowAction(emptyRow);
-                        } catch (err) {
-                            showError(err);
-                        }
+                        createRowAction();
                     }}
                 >
                     <AddIcon fontSize="small" />

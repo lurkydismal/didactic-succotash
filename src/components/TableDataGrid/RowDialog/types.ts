@@ -44,3 +44,4 @@ export type FieldConfig<
 };
 
 export type UpdateRowAction = (fd: FormData) => Promise<void>;
+export type CreateRowAction<RI> = (row: RI) => Promise<void>;

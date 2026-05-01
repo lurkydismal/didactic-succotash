@@ -5,7 +5,7 @@ import { Dayjs } from "dayjs";
 import { Divider, Grid, Typography } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { RegisterOptions, useForm } from "react-hook-form";
-import { FieldConfig, UpdateRowAction } from "./types";
+import { CreateRowAction, FieldConfig, UpdateRowAction } from "./types";
 import CustomFieldInput from "./CustomFieldInput";
 import DateTimeFieldInput from "./DateTimeFieldInput";
 import MultilineFieldInput from "./MultilineFieldInput";
@@ -16,6 +16,7 @@ type RowDialogContentProps<R, RI> = {
     row: R;
     fields: FieldConfig<R, RI>[];
     registerSubmit: (fn: (() => Promise<boolean>) | null) => void;
+    createRowAction: CreateRowAction<RI>;
     updateRowAction: UpdateRowAction;
     onUpdated?: () => Promise<void> | void;
     idKey?: keyof R; // defaults to "id"
@@ -28,6 +29,7 @@ export default function RowDialogContent<
     row,
     fields,
     registerSubmit,
+    createRowAction,
     updateRowAction,
     onUpdated,
     idKey = "id" as keyof R,
@@ -96,14 +98,35 @@ export default function RowDialogContent<
         [onUpdated, showError, updateRowAction],
     );
 
+    const createRow = useCallback(
+        async (valuesToCreate: Partial<RI>): Promise<boolean> => {
+            try {
+                await createRowAction(valuesToCreate as RI);
+                await onUpdated?.();
+                return true;
+            } catch (error) {
+                showError(error);
+                return false;
+            }
+        },
+        [createRowAction, onUpdated, showError],
+    );
+
     const submit = useCallback(async (): Promise<boolean> => {
         const valid = await form.trigger();
         if (!valid) return false;
 
         const currentValues = form.getValues() as Partial<RI>;
 
-        if (!defaultIsChanged(row, currentValues)) {
+        const hasId =
+            ((row as Record<string, unknown>)[String(idKey)] ?? null) !== null;
+
+        if (hasId && !defaultIsChanged(row, currentValues)) {
             return true;
+        }
+
+        if (!hasId) {
+            return await createRow(currentValues);
         }
 
         const fd = new FormData(formRef.current ?? undefined);
@@ -126,7 +149,7 @@ export default function RowDialogContent<
         }
 
         return await updateRow(fd);
-    }, [defaultIsChanged, fields, form, row, updateRow]);
+    }, [createRow, defaultIsChanged, fields, form, idKey, row, updateRow]);
 
     const getRules = (
         field: FieldConfig<R, RI>,

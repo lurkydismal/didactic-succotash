@@ -1,7 +1,7 @@
 import log from "@/utils/stdlog";
 import { Dialog, DialogContent } from "@mui/material";
 import { Dispatch, SetStateAction, useRef } from "react";
-import { FieldConfig, UpdateRowAction } from "./types";
+import { CreateRowAction, FieldConfig, UpdateRowAction } from "./types";
 import RowDialogContent from "./Content";
 
 export type { FieldConfig } from "./types";
@@ -14,6 +14,7 @@ export default function RowDialog<
     handleClose,
     selectedRow,
     setSelectedRow,
+    createRowAction,
     updateRowAction,
     onUpdated,
     fields,
@@ -23,6 +24,7 @@ export default function RowDialog<
     handleClose: () => void;
     selectedRow: R | null;
     setSelectedRow: Dispatch<SetStateAction<R | null>>;
+    createRowAction: CreateRowAction<RI>;
     updateRowAction: UpdateRowAction;
     onUpdated?: () => Promise<void> | void;
     fields: FieldConfig<R, RI>[];
@@ -69,6 +71,7 @@ export default function RowDialog<
                         row={selectedRow}
                         fields={fields}
                         registerSubmit={registerSubmit}
+                        createRowAction={createRowAction}
                         updateRowAction={updateRowAction}
                         onUpdated={onUpdated}
                         idKey={idKey}
