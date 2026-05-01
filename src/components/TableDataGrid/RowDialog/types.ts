@@ -5,18 +5,21 @@ export type FieldConfig<
     RI = unknown,
     K extends PropertyKey = keyof R | keyof RI | string,
 > = {
-    key: K;
+    key: K; // property key in row/insert (string allowed for synthetic fields)
     label: string;
     type?: DefaultFieldType;
-    name?: string;
-    size?: number;
+    name?: string; // form field name (defaults to key)
+    size?: number; // value passed to Grid xs/sm/etc (use 12, 6, 4)
     required?: boolean;
+    // optional custom render: (value, setValue, row) => ReactNode
     render?: (
         value: unknown,
         setValue: (v: unknown) => void,
         row: R,
     ) => React.ReactNode;
+    // convert local value to form payload value
     toFormValue?: (v: unknown) => string | Blob | undefined;
+    // optional comparator for this field
     isChanged?: (rowValue: unknown, currentValue: unknown) => boolean;
 };
 
