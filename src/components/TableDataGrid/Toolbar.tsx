@@ -212,7 +212,9 @@ export default function CustomToolbar({ extraButtons }: CustomToolbarProps) {
                             <ToolbarButton
                                 {...triggerProps}
                                 color={
-                                    state.filterCount > 0 ? "primary" : "default"
+                                    state.filterCount > 0
+                                        ? "primary"
+                                        : "default"
                                 }
                             >
                                 <FilterListIcon fontSize="small" />

@@ -1,8 +1,6 @@
 "use server";
 
-import {
-    ServerBanRowInsert as TableRowInsert,
-} from "@/db/types";
+import { ServerBanRowInsert as TableRowInsert } from "@/db/types";
 import {
     getRowsAction as _getRowsAction,
     createRowAction as _createRowAction,

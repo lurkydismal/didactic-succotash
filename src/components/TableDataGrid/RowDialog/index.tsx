@@ -3,8 +3,21 @@ import { useSnackbar } from "@/providers/snackbar";
 import { isBlob } from "@/utils/stdfunc";
 import log from "@/utils/stdlog";
 import { Dayjs } from "dayjs";
-import { Dialog, DialogContent, Divider, Grid, Typography } from "@mui/material";
-import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
+import {
+    Dialog,
+    DialogContent,
+    Divider,
+    Grid,
+    Typography,
+} from "@mui/material";
+import {
+    Dispatch,
+    SetStateAction,
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 import CustomFieldInput from "./CustomFieldInput";
 import MultilineFieldInput from "./MultilineFieldInput";
 import TextFieldInput from "./TextFieldInput";
@@ -44,7 +57,8 @@ function RowDialogContent<
         return out;
     };
 
-    const [values, setValues] = useState<Record<string, unknown>>(buildInitial());
+    const [values, setValues] =
+        useState<Record<string, unknown>>(buildInitial());
 
     useEffect(() => {
         setValues(buildInitial());
@@ -177,11 +191,14 @@ function RowDialogContent<
             }}
         >
             <Grid container spacing={2}>
-                {((row as Record<string, unknown>)[String(idKey)] ?? null) !== null && (
+                {((row as Record<string, unknown>)[String(idKey)] ?? null) !==
+                    null && (
                     <input
                         type="hidden"
                         name={String(idKey)}
-                        value={String((row as Record<string, unknown>)[String(idKey)])}
+                        value={String(
+                            (row as Record<string, unknown>)[String(idKey)],
+                        )}
                     />
                 )}
 
@@ -203,7 +220,11 @@ function RowDialogContent<
                         Created
                     </Typography>
                     <Typography variant="subtitle2" sx={{ display: "block" }}>
-                        {formatDate((row as { created_at: string | Date | Dayjs }).created_at, true)}
+                        {formatDate(
+                            (row as { created_at: string | Date | Dayjs })
+                                .created_at,
+                            true,
+                        )}
                     </Typography>
                 </Grid>
 
@@ -212,7 +233,11 @@ function RowDialogContent<
                         Updated
                     </Typography>
                     <Typography variant="subtitle2" sx={{ display: "block" }}>
-                        {formatDate((row as { updated_at: string | Date | Dayjs }).updated_at, true)}
+                        {formatDate(
+                            (row as { updated_at: string | Date | Dayjs })
+                                .updated_at,
+                            true,
+                        )}
                     </Typography>
                 </Grid>
 

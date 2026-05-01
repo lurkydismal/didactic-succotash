@@ -476,7 +476,9 @@ export async function getSessionData(): Promise<null | UsersRowPublic> {
 }
 
 // TODO: Comment
-export async function getSessionDataOrUnauthorized(): ReturnType<typeof getSessionData> {
+export async function getSessionDataOrUnauthorized(): ReturnType<
+    typeof getSessionData
+> {
     const user = await getSessionData();
 
     if (!user) {

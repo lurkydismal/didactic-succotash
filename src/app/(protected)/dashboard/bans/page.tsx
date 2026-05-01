@@ -7,7 +7,11 @@ import {
 } from "@/db/types";
 import ExtraToolbarButtons from "@/components/dashboard/ExtraToolbarButtons";
 import fields from "@/data/dashboard/bans/fields";
-import { createRowAction, getRowsAction, updateRowAction } from "@/lib/dashboard/bans/function";
+import {
+    createRowAction,
+    getRowsAction,
+    updateRowAction,
+} from "@/lib/dashboard/bans/function";
 import { uuid4 } from "@/utils/uuid";
 
 export default function Page() {

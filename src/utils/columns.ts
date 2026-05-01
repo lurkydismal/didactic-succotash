@@ -69,8 +69,7 @@ export function normalizeColumns(
 export function columnsFromFields<
     R extends Record<string, unknown>,
     RI extends Record<string, unknown>,
->(fields: FieldConfig<R, RI>[]
-): readonly GridColDef[] {
+>(fields: FieldConfig<R, RI>[]): readonly GridColDef[] {
     return normalizeColumns(
         fields.map((field) => ({
             field: String(field.key),

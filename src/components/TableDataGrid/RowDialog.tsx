@@ -110,7 +110,7 @@ function RowDialogContent<
                     typeof f.isChanged === "function"
                         ? !f.isChanged(rowVal, newVal)
                         : String((rowVal ?? "").toString()).trim() ===
-                        String((newVal ?? "").toString()).trim();
+                          String((newVal ?? "").toString()).trim();
                 if (!eq) return true;
             }
             return false;
@@ -248,14 +248,14 @@ function RowDialogContent<
                 {/* Hidden id if present */}
                 {((row as Record<string, unknown>)[String(idKey)] ?? null) !==
                     null && (
-                        <input
-                            type="hidden"
-                            name={String(idKey)}
-                            value={String(
-                                (row as Record<string, unknown>)[String(idKey)],
-                            )}
-                        />
-                    )}
+                    <input
+                        type="hidden"
+                        name={String(idKey)}
+                        value={String(
+                            (row as Record<string, unknown>)[String(idKey)],
+                        )}
+                    />
+                )}
 
                 {fields.map((field, index) => (
                     <Grid
