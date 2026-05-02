@@ -1,46 +1,13 @@
 import { formatDate } from "@/utils/dayjs";
 import { useSnackbar } from "@/providers/snackbar";
 import { isBlob } from "@/utils/stdfunc";
-import dayjs, { Dayjs } from "dayjs";
 import { Divider, Grid, Typography } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { RegisterOptions, useForm } from "react-hook-form";
-import { CreateRowAction, FieldConfig, UpdateRowAction } from "./types";
-import CustomFieldInput from "./CustomFieldInput";
-import DateTimeFieldInput from "./DateTimeFieldInput";
-import MultilineFieldInput from "./MultilineFieldInput";
-import TextFieldInput from "./TextFieldInput";
-import AutocompleteFieldInput from "./AutocompleteFieldInput";
-
-const toFieldValue = (
-    field: FieldConfig<Record<string, unknown>, Record<string, unknown>>,
-    value: unknown,
-): unknown => {
-    if (value === null || value === undefined) return value;
-
-    if (field.type === "datetime") {
-        if (dayjs.isDayjs(value)) return value.toISOString();
-        if (value instanceof Date) return value.toISOString();
-        return value;
-    }
-
-    if (field.type === "date") {
-        if (dayjs.isDayjs(value)) return value.format("YYYY-MM-DD");
-        if (value instanceof Date) return dayjs(value).format("YYYY-MM-DD");
-        return value;
-    }
-
-    if (field.type === "time") {
-        if (dayjs.isDayjs(value)) return value.format("HH:mm:ss");
-        if (value instanceof Date) return dayjs(value).format("HH:mm:ss");
-        return value;
-    }
-
-    if (dayjs.isDayjs(value)) return value.toISOString();
-    if (value instanceof Date) return value.toISOString();
-
-    return value;
-};
+import { Dayjs } from "dayjs";
+import { CreateRowAction, FieldConfig, UpdateRowAction } from "../types";
+import { buildInitialValues, toFieldValue } from "./helpers";
+import { renderField } from "./renderField";
 
 type RowDialogContentProps<R, RI> = {
     row: R;
@@ -49,7 +16,7 @@ type RowDialogContentProps<R, RI> = {
     createRowAction: CreateRowAction<RI>;
     updateRowAction: UpdateRowAction;
     onUpdated?: () => Promise<void> | void;
-    idKey?: keyof R; // defaults to "id"
+    idKey?: keyof R;
 };
 
 export default function RowDialogContent<
@@ -64,28 +31,20 @@ export default function RowDialogContent<
     onUpdated,
     idKey = "id" as keyof R,
 }: RowDialogContentProps<R, RI>) {
-    const buildInitial = () => {
-        const out: Record<string, unknown> = {};
-        for (const field of fields) {
-            const key = String(field.key);
-            out[key] = (row as Record<string, unknown>)[key] ?? null;
-        }
-        return out;
-    };
-
     const { showError } = useSnackbar();
     const formRef = useRef<HTMLFormElement | null>(null);
     const form = useForm<Record<string, unknown>>({
-        defaultValues: buildInitial(),
+        defaultValues: buildInitialValues(row, fields),
         mode: "onSubmit",
     });
 
     const [values, setValues] =
-        useState<Record<string, unknown>>(buildInitial());
+        useState<Record<string, unknown>>(buildInitialValues(row, fields));
 
     useEffect(() => {
-        setValues(buildInitial());
-        form.reset(buildInitial());
+        const initialValues = buildInitialValues(row, fields);
+        setValues(initialValues);
+        form.reset(initialValues);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [row]);
 
@@ -158,7 +117,6 @@ export default function RowDialogContent<
         if (!valid) return false;
 
         const currentValues = form.getValues() as Partial<RI>;
-
         const hasId =
             ((row as Record<string, unknown>)[String(idKey)] ?? null) !== null;
 
@@ -213,118 +171,6 @@ export default function RowDialogContent<
         return () => registerSubmit(null);
     }, [registerSubmit, submit]);
 
-    const renderField = (field: FieldConfig<R, RI>, idx: number) => {
-        const key = String(field.key);
-        const name = field.name ?? key;
-        const value = values[key];
-        const error = form.formState.errors[name];
-        const rules = getRules(field);
-
-        if (typeof field.render === "function") {
-            return (
-                <CustomFieldInput
-                    key={`${key}-${idx}`}
-                    field={field}
-                    value={value}
-                    row={row}
-                    onValueChange={(nextValue) => setValue(key, nextValue)}
-                />
-            );
-        }
-
-        if (field.type === "multiline") {
-            return (
-                <MultilineFieldInput
-                    key={`${key}-${idx}`}
-                    fieldKey={key}
-                    label={field.label}
-                    name={name}
-                    required={!!field.required}
-                    value={value}
-                    onValueChange={(nextValue) => setValue(key, nextValue)}
-                    control={form.control}
-                    error={error}
-                    rules={rules}
-                />
-            );
-        }
-
-        if (field.type === "autocomplete") {
-            return (
-                <AutocompleteFieldInput
-                    key={`${key}-${idx}`}
-                    fieldKey={key}
-                    label={field.label}
-                    name={name}
-                    required={!!field.required}
-                    value={value}
-                    options={field.autocompleteOptions ?? []}
-                    loading={field.autocompleteLoading}
-                    open={field.autocompleteOpen}
-                    onOpen={field.onAutocompleteOpen}
-                    onClose={field.onAutocompleteClose}
-                    onValueChange={(nextValue) => {
-                        setValueAndForm(key, nextValue);
-                        if (
-                            nextValue &&
-                            typeof nextValue === "object" &&
-                            "packedValues" in nextValue &&
-                            nextValue.packedValues &&
-                            typeof nextValue.packedValues === "object"
-                        ) {
-                            for (const [
-                                packedKey,
-                                packedValue,
-                            ] of Object.entries(nextValue.packedValues)) {
-                                setValueAndForm(packedKey, packedValue);
-                            }
-                        }
-                    }}
-                    control={form.control}
-                    error={error}
-                    rules={rules}
-                />
-            );
-        }
-
-        if (
-            field.type === "date" ||
-            field.type === "time" ||
-            field.type === "datetime"
-        ) {
-            return (
-                <DateTimeFieldInput
-                    key={`${key}-${idx}`}
-                    fieldKey={key}
-                    label={field.label}
-                    name={name}
-                    required={!!field.required}
-                    type={field.type}
-                    value={value}
-                    onValueChange={(nextValue) => setValue(key, nextValue)}
-                    control={form.control}
-                    error={error}
-                    rules={rules}
-                />
-            );
-        }
-
-        return (
-            <TextFieldInput
-                key={`${key}-${idx}`}
-                fieldKey={key}
-                label={field.label}
-                name={name}
-                required={!!field.required}
-                value={value}
-                onValueChange={(nextValue) => setValue(key, nextValue)}
-                control={form.control}
-                error={error}
-                rules={rules}
-            />
-        );
-    };
-
     return (
         <form
             ref={formRef}
@@ -350,7 +196,16 @@ export default function RowDialogContent<
                         size={{ xs: 12, sm: field.size ?? 6 }}
                         key={`${String(field.key)}-${index}`}
                     >
-                        {renderField(field, index)}
+                        {renderField({
+                            field,
+                            idx: index,
+                            row,
+                            values,
+                            form,
+                            getRules,
+                            setValue,
+                            setValueAndForm,
+                        })}
                     </Grid>
                 ))}
 
@@ -363,14 +218,7 @@ export default function RowDialogContent<
                         Created
                     </Typography>
                     <Typography variant="subtitle2" sx={{ display: "block" }}>
-                        {formatDate(
-                            (
-                                row as unknown as {
-                                    created_at: string | Date | Dayjs;
-                                }
-                            ).created_at,
-                            true,
-                        )}
+                        {formatDate((row as { created_at: string | Date | Dayjs }).created_at, true)}
                     </Typography>
                 </Grid>
 
@@ -379,14 +227,7 @@ export default function RowDialogContent<
                         Updated
                     </Typography>
                     <Typography variant="subtitle2" sx={{ display: "block" }}>
-                        {formatDate(
-                            (
-                                row as unknown as {
-                                    updated_at: string | Date | Dayjs;
-                                }
-                            ).updated_at,
-                            true,
-                        )}
+                        {formatDate((row as { updated_at: string | Date | Dayjs }).updated_at, true)}
                     </Typography>
                 </Grid>
 
