@@ -48,11 +48,30 @@ EXECUTE FUNCTION update_updated_at_column();
 */
 
 // TODO: Rename
+/**
+ * Common authorship metadata columns for mutable records.
+ *
+ * @example
+ * const posts = pgTable("posts", {
+ *   id: serial("id").primaryKey(),
+ *   title: text("title").notNull(),
+ *   ...editInfo,
+ * });
+ */
 export const editInfo = {
     author: varchar({ length: 32 }).default("system").notNull(),
     last_editor: varchar({ length: 32 }).default("system").notNull(),
 };
 
+/**
+ * Full metadata bundle combining author/edit columns with timestamps.
+ *
+ * @example
+ * const auditTable = pgTable("audit", {
+ *   id: serial("id").primaryKey(),
+ *   ...metadata,
+ * });
+ */
 export const metadata = {
     ...editInfo,
     ...timestamps,

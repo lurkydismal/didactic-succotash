@@ -98,6 +98,14 @@ function recordFailedLoginAttempt(normalizedUsername: string) {
     LOGIN_ATTEMPTS.set(normalizedUsername, record);
 }
 
+/**
+ * Returns `true` when the username exceeded allowed failures in the active window.
+ *
+ * @example
+ * if (isLoginBlocked("alice")) {
+ *   throw new Error("Too many attempts");
+ * }
+ */
 function isLoginBlocked(normalizedUsername: string) {
     log.trace("isLoginBlocked called", { normalizedUsername });
     log.debug("isLoginBlocked evaluating threshold");
@@ -116,6 +124,12 @@ function isLoginBlocked(normalizedUsername: string) {
     return blocked;
 }
 
+/**
+ * Clears the in-memory failed-attempt counter for a username.
+ *
+ * @example
+ * resetLoginAttempts("alice");
+ */
 function resetLoginAttempts(normalizedUsername: string) {
     LOGIN_ATTEMPTS.delete(normalizedUsername);
 }
@@ -254,6 +268,10 @@ async function cookieForToken(
 /**
  * Clear the auth cookie by setting an expired cookie value.
  * - Setting `expires: new Date(0)` causes the browser to remove the cookie.
+ *
+ * @example
+ * const store = await cookies();
+ * await clearAuthCookie(store);
  */
 export async function clearAuthCookie(cookieStore: CookieStore) {
     return cookieStore.delete({
@@ -278,6 +296,10 @@ export async function clearAuthCookie(cookieStore: CookieStore) {
  * - The JWT contains the public fields you selected — keep that minimal to avoid stale data and large token size.
  *
  * This implementation normalizes username and logs errors (without secrets) for auditing.
+ *
+ * @example
+ * const created = await register({ username: "alice", password: "secret" });
+ * console.log(created.username);
  */
 export async function register(user: { username: string; password: string }) {
     log.trace("register called");
@@ -353,6 +375,10 @@ export async function register(user: { username: string; password: string }) {
  * - Returns boolean success/failure.
  *
  * Note: timing and error messages are intentionally generic to avoid leaking info.
+ *
+ * @example
+ * const ok = await verifyPassword({ username: "alice", password: "secret" });
+ * // true when credentials match
  */
 async function verifyPassword(user: { username: string; password: string }) {
     const parsed = userSelectPublicSchema
@@ -395,6 +421,10 @@ async function verifyPassword(user: { username: string; password: string }) {
  * Potential improvements:
  * - Replace in-memory rate limiter with Redis or other central store for production.
  * - Rate-limit by IP as well as by username.
+ *
+ * @example
+ * const user = await login({ username: "alice", password: "secret", remember: true });
+ * console.log(user.username_normalized);
  */
 export async function login(credentials: {
     username: string;
@@ -502,6 +532,10 @@ export async function login(credentials: {
  *   Use `.passthrough()` or explicitly pick the fields you expect from the verified payload.
  * - This function returns only what is present in the token; for authoritative profile data, query the DB
  *   (token can be stale).
+ *
+ * @example
+ * const session = await getSessionData();
+ * if (!session) return null;
  */
 export async function getSessionData(): Promise<null | UsersRowPublic> {
     const cookieStore = await cookies();
@@ -516,7 +550,16 @@ export async function getSessionData(): Promise<null | UsersRowPublic> {
     return parsed;
 }
 
-// TODO: Comment
+/**
+ * Returns session data or triggers Next.js `unauthorized()`.
+ *
+ * Use this helper in protected server components/actions when unauthenticated
+ * access should immediately resolve to the framework unauthorized boundary.
+ *
+ * @example
+ * const user = await getSessionDataOrUnauthorized();
+ * // user is guaranteed non-null past this point.
+ */
 export async function getSessionDataOrUnauthorized(): ReturnType<
     typeof getSessionData
 > {
