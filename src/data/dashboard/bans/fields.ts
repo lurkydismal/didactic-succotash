@@ -12,7 +12,7 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         autocompleteOptions: [],
         autocompletePackedKey: "playerUsername",
         autocompletePackedFields: ["playerUsername", "address", "hwid"],
-        required: true,
+        requiredGroup: "banTarget",
     },
     {
         key: "address",
@@ -21,7 +21,7 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         autocompleteOptions: [],
         autocompletePackedKey: "address",
         autocompletePackedFields: ["playerUsername", "address", "hwid"],
-        required: true,
+        requiredGroup: "banTarget",
     },
     {
         key: "banTime",
@@ -56,7 +56,7 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         autocompleteOptions: [],
         autocompletePackedKey: "hwid",
         autocompletePackedFields: ["playerUsername", "address", "hwid"],
-        required: true,
+        requiredGroup: "banTarget",
     },
     {
         key: "roundId",

@@ -161,10 +161,41 @@ export default function RowDialogContent<
         field: FieldConfig<R, RI>,
     ): RegisterOptions<Record<string, unknown>, string> => ({
         required: field.required ? `${field.label} is required` : false,
-        validate: field.validate
-            ? async (value) =>
-                  (await field.validate?.(value, row, form.getValues())) ?? true
-            : undefined,
+        validate: async (value) => {
+            const allValues = form.getValues();
+
+            if (field.requiredGroup) {
+                const minCount = field.requiredGroupMin ?? 1;
+                const groupFields = fields.filter(
+                    (candidate) => candidate.requiredGroup === field.requiredGroup,
+                );
+                const providedCount = groupFields.reduce((count, candidate) => {
+                    const candidateValue =
+                        allValues[String(candidate.key)] ??
+                        values[String(candidate.key)];
+                    const isProvided =
+                        candidateValue !== null &&
+                        candidateValue !== undefined &&
+                        String(candidateValue).trim() !== "";
+
+                    return count + (isProvided ? 1 : 0);
+                }, 0);
+
+                if (providedCount < minCount) {
+                    return `Enter at least ${minCount} of: ${groupFields
+                        .map((candidate) => candidate.label)
+                        .join(", ")}`;
+                }
+            }
+
+            if (field.validate) {
+                return (
+                    (await field.validate(value, row, allValues)) ?? true
+                );
+            }
+
+            return true;
+        },
     });
 
     useEffect(() => {

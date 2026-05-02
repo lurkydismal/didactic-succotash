@@ -24,6 +24,8 @@ export type FieldConfig<
     name?: string; // form field name (defaults to key)
     size?: number; // value passed to Grid xs/sm/etc (use 12, 6, 4)
     required?: boolean;
+    requiredGroup?: string;
+    requiredGroupMin?: number;
     placeholder?: unknown;
     autocompleteOptions?: readonly AutocompleteOption[];
     autocompletePackedKey?: string;
