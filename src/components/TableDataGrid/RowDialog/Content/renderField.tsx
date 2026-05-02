@@ -32,9 +32,9 @@ export const renderField = <R, RI>({
     const key = String(field.key);
     const name = field.name ?? key;
     const value = values[key];
-    const error = (form.formState.errors as FieldErrors<Record<string, unknown>>)[
-        name
-    ];
+    const error = (
+        form.formState.errors as FieldErrors<Record<string, unknown>>
+    )[name];
     const rules = getRules(field);
 
     if (typeof field.render === "function") {

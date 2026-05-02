@@ -4,7 +4,11 @@ import { ActionResult, DbTarget, parseRawTarget } from "@/lib/types";
 import { mutationInputSchema } from "@/utils/validate/schemas";
 import log from "@/utils/stdlog";
 import { AnyColumn, eq } from "drizzle-orm";
-import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
+import {
+    createInsertSchema,
+    createSelectSchema,
+    createUpdateSchema,
+} from "drizzle-zod";
 import { z } from "zod";
 
 type MutationRow = Record<string, unknown>;

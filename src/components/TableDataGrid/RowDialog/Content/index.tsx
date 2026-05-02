@@ -38,8 +38,9 @@ export default function RowDialogContent<
         mode: "onSubmit",
     });
 
-    const [values, setValues] =
-        useState<Record<string, unknown>>(buildInitialValues(row, fields));
+    const [values, setValues] = useState<Record<string, unknown>>(
+        buildInitialValues(row, fields),
+    );
 
     useEffect(() => {
         const initialValues = buildInitialValues(row, fields);
@@ -218,7 +219,11 @@ export default function RowDialogContent<
                         Created
                     </Typography>
                     <Typography variant="subtitle2" sx={{ display: "block" }}>
-                        {formatDate((row as { created_at: string | Date | Dayjs }).created_at, true)}
+                        {formatDate(
+                            (row as { created_at: string | Date | Dayjs })
+                                .created_at,
+                            true,
+                        )}
                     </Typography>
                 </Grid>
 
@@ -227,7 +232,11 @@ export default function RowDialogContent<
                         Updated
                     </Typography>
                     <Typography variant="subtitle2" sx={{ display: "block" }}>
-                        {formatDate((row as { updated_at: string | Date | Dayjs }).updated_at, true)}
+                        {formatDate(
+                            (row as { updated_at: string | Date | Dayjs })
+                                .updated_at,
+                            true,
+                        )}
                     </Typography>
                 </Grid>
 
