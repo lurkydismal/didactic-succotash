@@ -4,7 +4,8 @@ import { ActionResult, DbTarget, parseRawTarget } from "@/lib/types";
 import { mutationInputSchema } from "@/utils/validate/schemas";
 import log from "@/utils/stdlog";
 import { AnyColumn, eq } from "drizzle-orm";
-import { createInsertSchema, createUpdateSchema } from "drizzle-zod";
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
+import { z } from "zod";
 
 type MutationRow = Record<string, unknown>;
 
@@ -48,6 +49,7 @@ export async function save(
         const schema = opts.isUpdate
             ? createUpdateSchema(table)
             : createInsertSchema(table);
+        const selectSchema = createSelectSchema(table);
 
         const sessionUser = await getSessionData();
         const actor = sessionUser?.username;
@@ -69,6 +71,15 @@ export async function save(
                 throw new Error("Missing id column for update");
             }
 
+            const existingRows = await db
+                .select()
+                .from(table)
+                .where(eq(opts.idColumn, parsedInput.id))
+                .limit(1)
+                .execute();
+
+            await selectSchema.array().length(1).parseAsync(existingRows);
+
             await db
                 .update(table)
                 .set(row)
@@ -89,7 +100,9 @@ export async function save(
 }
 
 export function parseForm(formData: FormData): MutationRow {
-    const entries = Object.fromEntries(formData.entries()) as MutationRow;
+    const entries = z
+        .record(z.string(), z.unknown())
+        .parse(Object.fromEntries(formData.entries())) as MutationRow;
 
     for (const [key, value] of Object.entries(entries)) {
         if (value === "") {
@@ -98,10 +111,7 @@ export function parseForm(formData: FormData): MutationRow {
     }
 
     if (entries.id !== undefined) {
-        const parsedId = Number(entries.id);
-        if (!Number.isNaN(parsedId)) {
-            entries.id = parsedId;
-        }
+        entries.id = z.coerce.number().int().positive().parse(entries.id);
     }
 
     return entries;
