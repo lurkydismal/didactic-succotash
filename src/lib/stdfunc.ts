@@ -25,6 +25,10 @@ import log from "@/utils/stdlog";
  *
  * @param milliseconds - How long to delay before resolving.
  * @returns An object indicating successful completion.
+ *
+ * @example
+ * const result = await mockAction(200);
+ * // { ok: true }
  */
 export async function mockAction(milliseconds: number): Promise<{ ok: true }>;
 
@@ -36,6 +40,10 @@ export async function mockAction(milliseconds: number): Promise<{ ok: true }>;
  * @param milliseconds - How long to delay before resolving.
  * @param data - Value to include in the response under `data`.
  * @returns An object with `{ ok: true, data }`.
+ *
+ * @example
+ * const result = await mockAction(100, { id: 7 });
+ * // { ok: true, data: { id: 7 } }
  */
 export async function mockAction<T>(
     milliseconds: number,
