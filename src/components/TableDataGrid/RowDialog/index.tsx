@@ -37,17 +37,16 @@ export default function RowDialog<
     };
 
     const onClose = async () => {
-        if (submitFnRef.current) {
-            try {
+        try {
+            if (submitFnRef.current) {
                 const ok = await submitFnRef.current();
                 if (!ok) return;
-            } catch (error) {
-                log.error("Failed to submit dialog form on close", error);
-                return;
             }
-        }
 
-        handleClose();
+            handleClose();
+        } catch (error) {
+            log.error("Failed to close row dialog", error);
+        }
     };
 
     return (
