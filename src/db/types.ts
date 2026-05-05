@@ -41,15 +41,11 @@ import {
     serverRoleBan,
     serverRoleUnban,
     serverUnban,
-    table,
     trait,
     uploadedResourceLog,
     users,
     whitelist,
 } from "./schema";
-
-export type TableRow = typeof table.$inferSelect;
-export type TableRowInsert = typeof table.$inferInsert;
 
 export type UsersRow = typeof users.$inferSelect;
 export type UsersRowInsert = typeof users.$inferInsert;

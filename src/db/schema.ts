@@ -25,16 +25,6 @@ import {
 import { timestamps } from "./helpers";
 import { metadata } from "./helpers";
 import { sql } from "drizzle-orm";
-import { template_table } from "./templates";
-
-export const table = pgTable("table", template_table, (t) => [
-    check("content_not_blank", sql`length(trim(${t.content})) > 0`),
-    check("author_not_blank", sql`length(trim(${t.author})) > 0`),
-    check("last_editor_not_blank", sql`length(trim(${t.last_editor})) > 0`),
-
-    uniqueIndex().on(t.created_at),
-    uniqueIndex().on(t.updated_at),
-]);
 
 export const users = pgTable(
     "users",
@@ -79,7 +69,7 @@ export const admin = pgTable(
         title: text(),
         adminRankId: integer("admin_rank_id").references(
             () => adminRank.adminRankId,
-            { onDelete: "set null" },
+            { onDelete: "set null", name: "FK_admin_admin_rank_admin_rank_id" },
         ),
         deadminned: boolean().default(false).notNull(),
         suspended: boolean().default(false).notNull(),
@@ -104,7 +94,7 @@ export const adminFlag = pgTable(
         negative: boolean().notNull(),
         adminId: uuid("admin_id")
             .notNull()
-            .references(() => admin.userId, { onDelete: "cascade" }),
+            .references(() => admin.userId, { onDelete: "cascade", name: "FK_admin_flag_admin_admin_id" }),
     },
     (table) => [
         primaryKey({
@@ -129,7 +119,7 @@ export const adminLog = pgTable(
         adminLogId: integer("admin_log_id").notNull(),
         roundId: integer("round_id")
             .notNull()
-            .references(() => round.roundId, { onDelete: "cascade" }),
+            .references(() => round.roundId, { onDelete: "cascade", name: "FK_admin_log_round_round_id" }),
         type: integer().notNull(),
         date: timestamp({ withTimezone: true }).notNull(),
         message: text().notNull(),
@@ -155,7 +145,7 @@ export const adminLogPlayer = pgTable(
     {
         playerUserId: uuid("player_user_id")
             .notNull()
-            .references(() => player.userId, { onDelete: "cascade" }),
+            .references(() => player.userId, { onDelete: "cascade", name: "FK_admin_log_player_player_player_user_id" }),
         logId: integer("log_id").notNull(),
         roundId: integer("round_id").notNull(),
     },
@@ -181,25 +171,27 @@ export const adminMessages = pgTable(
     {
         adminMessagesId:
             integer("admin_messages_id").generatedByDefaultAsIdentity(),
-        roundId: integer("round_id").references(() => round.roundId),
+        roundId: integer("round_id").references(() => round.roundId, { name: "FK_admin_messages_round_round_id" }),
         playerUserId: uuid("player_user_id").references(() => player.userId, {
             onDelete: "cascade",
+            name: "FK_admin_messages_player_player_user_id"
         }),
         playtimeAtNote: interval("playtime_at_note").notNull(),
         message: varchar({ length: 4096 }).notNull(),
         createdById: uuid("created_by_id").references(() => player.userId, {
-            onDelete: "set null",
+            onDelete: "set null", name: "FK_admin_messages_player_created_by_id"
         }),
         createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
         lastEditedById: uuid("last_edited_by_id").references(
             () => player.userId,
-            { onDelete: "set null" },
+            { onDelete: "set null", name: "FK_admin_messages_player_last_edited_by_id" },
         ),
         lastEditedAt: timestamp("last_edited_at", { withTimezone: true }),
         expirationTime: timestamp("expiration_time", { withTimezone: true }),
         deleted: boolean().notNull(),
         deletedById: uuid("deleted_by_id").references(() => player.userId, {
             onDelete: "set null",
+            name: "FK_admin_messages_player_deleted_by_id"
         }),
         deletedAt: timestamp("deleted_at", { withTimezone: true }),
         seen: boolean().notNull(),
@@ -238,25 +230,25 @@ export const adminNotes = pgTable(
     "admin_notes",
     {
         adminNotesId: integer("admin_notes_id").generatedByDefaultAsIdentity(),
-        roundId: integer("round_id").references(() => round.roundId),
+        roundId: integer("round_id").references(() => round.roundId, { name: "FK_admin_notes_round_round_id" }),
         playerUserId: uuid("player_user_id").references(() => player.userId, {
-            onDelete: "cascade",
+            onDelete: "cascade", name: "FK_admin_notes_player_player_user_id"
         }),
         message: varchar({ length: 4096 }).notNull(),
         createdById: uuid("created_by_id").references(() => player.userId, {
-            onDelete: "set null",
+            onDelete: "set null", name: "FK_admin_notes_player_created_by_id"
         }),
         createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
         lastEditedById: uuid("last_edited_by_id").references(
             () => player.userId,
-            { onDelete: "set null" },
+            { onDelete: "set null", name: "FK_admin_notes_player_last_edited_by_id" },
         ),
         lastEditedAt: timestamp("last_edited_at", {
             withTimezone: true,
         }).notNull(),
         deleted: boolean().notNull(),
         deletedById: uuid("deleted_by_id").references(() => player.userId, {
-            onDelete: "set null",
+            onDelete: "set null", name: "FK_admin_notes_player_deleted_by_id"
         }),
         deletedAt: timestamp("deleted_at", { withTimezone: true }),
         secret: boolean().notNull(),
@@ -316,7 +308,7 @@ export const adminRankFlag = pgTable(
         flag: text().notNull(),
         adminRankId: integer("admin_rank_id")
             .notNull()
-            .references(() => adminRank.adminRankId, { onDelete: "cascade" }),
+            .references(() => adminRank.adminRankId, { onDelete: "cascade", name: "FK_admin_rank_flag_admin_rank_admin_rank_id" }),
     },
     (table) => [
         primaryKey({
@@ -341,19 +333,19 @@ export const adminWatchlists = pgTable(
         adminWatchlistsId: integer(
             "admin_watchlists_id",
         ).generatedByDefaultAsIdentity(),
-        roundId: integer("round_id").references(() => round.roundId),
+        roundId: integer("round_id").references(() => round.roundId, { name: "FK_admin_watchlists_round_round_id" }),
         playerUserId: uuid("player_user_id").references(() => player.userId, {
-            onDelete: "cascade",
+            onDelete: "cascade", name: "FK_admin_watchlists_player_player_user_id"
         }),
         playtimeAtNote: interval("playtime_at_note").notNull(),
         message: varchar({ length: 4096 }).notNull(),
         createdById: uuid("created_by_id").references(() => player.userId, {
-            onDelete: "set null",
+            onDelete: "set null", name: "FK_admin_watchlists_player_created_by_id"
         }),
         createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
         lastEditedById: uuid("last_edited_by_id").references(
             () => player.userId,
-            { onDelete: "set null" },
+            { onDelete: "set null", name: "FK_admin_watchlists_player_last_edited_by_id" },
         ),
         lastEditedAt: timestamp("last_edited_at", {
             withTimezone: true,
@@ -361,7 +353,7 @@ export const adminWatchlists = pgTable(
         expirationTime: timestamp("expiration_time", { withTimezone: true }),
         deleted: boolean().notNull(),
         deletedById: uuid("deleted_by_id").references(() => player.userId, {
-            onDelete: "set null",
+            onDelete: "set null", name: "FK_admin_watchlists_player_deleted_by_id"
         }),
         deletedAt: timestamp("deleted_at", { withTimezone: true }),
     },
@@ -399,7 +391,7 @@ export const antag = pgTable(
         antagId: integer("antag_id").generatedByDefaultAsIdentity(),
         profileId: integer("profile_id")
             .notNull()
-            .references(() => profile.profileId, { onDelete: "cascade" }),
+            .references(() => profile.profileId, { onDelete: "cascade", name: "FK_antag_profile_profile_id" }),
         antagName: text("antag_name").notNull(),
     },
     (table) => [
@@ -488,7 +480,7 @@ export const connectionLog = pgTable(
         serverId: integer("server_id")
             .default(0)
             .notNull()
-            .references(() => server.serverId, { onDelete: "set null" }),
+            .references(() => server.serverId, { onDelete: "set null", name: "FK_connection_log_server_server_id" }),
         hwidType: integer("hwid_type").default(0),
         trust: real().default(0).notNull(),
     },
@@ -539,7 +531,7 @@ export const job = pgTable(
         jobId: integer("job_id").generatedByDefaultAsIdentity(),
         profileId: integer("profile_id")
             .notNull()
-            .references(() => profile.profileId, { onDelete: "cascade" }),
+            .references(() => profile.profileId, { onDelete: "cascade", name: "FK_job_profile_profile_id" }),
         jobName: text("job_name").notNull(),
         priority: integer().notNull(),
     },
@@ -628,10 +620,10 @@ export const playerRound = pgTable(
     {
         playersId: integer("players_id")
             .notNull()
-            .references(() => player.playerId, { onDelete: "cascade" }),
+            .references(() => player.playerId, { onDelete: "cascade", name: "FK_player_round_player_players_id" }),
         roundsId: integer("rounds_id")
             .notNull()
-            .references(() => round.roundId, { onDelete: "cascade" }),
+            .references(() => round.roundId, { onDelete: "cascade", name: "FK_player_round_round_rounds_id" }),
     },
     (table) => [
         primaryKey({
@@ -692,7 +684,7 @@ export const profile = pgTable(
         preferenceId: integer("preference_id")
             .notNull()
             .references((): AnyPgColumn => preference.preferenceId, {
-                onDelete: "cascade",
+                onDelete: "cascade", name: "FK_profile_preference_preference_id"
             }),
         gender: text().default("").notNull(),
         species: text().default("").notNull(),
@@ -730,7 +722,7 @@ export const profileLoadout = pgTable(
         profileLoadoutGroupId: integer("profile_loadout_group_id")
             .notNull()
             .references(() => profileLoadoutGroup.profileLoadoutGroupId, {
-                onDelete: "cascade",
+                onDelete: "cascade", name: "FK_profile_loadout_profile_loadout_group_profile_loadout_group~"
             }),
         loadoutName: text("loadout_name").notNull(),
     },
@@ -755,7 +747,7 @@ export const profileLoadoutGroup = pgTable(
         profileRoleLoadoutId: integer("profile_role_loadout_id")
             .notNull()
             .references(() => profileRoleLoadout.profileRoleLoadoutId, {
-                onDelete: "cascade",
+                onDelete: "cascade", name: "FK_profile_loadout_group_profile_role_loadout_profile_role_loa~"
             }),
         groupName: text("group_name").notNull(),
     },
@@ -779,7 +771,7 @@ export const profileRoleLoadout = pgTable(
         ).generatedByDefaultAsIdentity(),
         profileId: integer("profile_id")
             .notNull()
-            .references(() => profile.profileId, { onDelete: "cascade" }),
+            .references(() => profile.profileId, { onDelete: "cascade", name: "FK_profile_role_loadout_profile_profile_id" }),
         roleName: text("role_name").notNull(),
         entityName: varchar("entity_name", { length: 256 }),
     },
@@ -815,12 +807,12 @@ export const rmcLinkedAccounts = pgTable(
     "rmc_linked_accounts",
     {
         playerId: uuid("player_id").references(() => player.userId, {
-            onDelete: "cascade",
+            onDelete: "cascade", name: "FK_rmc_linked_accounts_player_player_id"
         }),
         discordId: numeric("discord_id", { precision: 20, scale: 0 })
             .notNull()
             .references(() => rmcDiscordAccounts.rmcDiscordAccountsId, {
-                onDelete: "cascade",
+                onDelete: "cascade", name: "FK_rmc_linked_accounts_rmc_discord_accounts_discord_id"
             }),
     },
     (table) => [
@@ -843,11 +835,11 @@ export const rmcLinkedAccountsLogs = pgTable(
         ).generatedByDefaultAsIdentity(),
         playerId: uuid("player_id")
             .notNull()
-            .references(() => player.userId, { onDelete: "cascade" }),
+            .references(() => player.userId, { onDelete: "cascade", name: "FK_rmc_linked_accounts_logs_player_player_id1" }),
         discordId: numeric("discord_id", { precision: 20, scale: 0 })
             .notNull()
             .references(() => rmcDiscordAccounts.rmcDiscordAccountsId, {
-                onDelete: "cascade",
+                onDelete: "cascade", name: "FK_rmc_linked_accounts_logs_rmc_discord_accounts_discord_id"
             }),
         at: timestamp({ withTimezone: true }).notNull(),
     },
@@ -875,7 +867,7 @@ export const rmcLinkingCodes = pgTable(
     "rmc_linking_codes",
     {
         playerId: uuid("player_id").references(() => player.userId, {
-            onDelete: "cascade",
+            onDelete: "cascade", name: "FK_rmc_linking_codes_player_player_id"
         }),
         code: uuid().notNull(),
         creationTime: timestamp("creation_time", {
@@ -898,7 +890,7 @@ export const rmcPatronLobbyMessages = pgTable(
     "rmc_patron_lobby_messages",
     {
         patronId: uuid("patron_id").references(() => rmcPatrons.playerId, {
-            onDelete: "cascade",
+            onDelete: "cascade", name: "FK_rmc_patron_lobby_messages_rmc_patrons_patron_id"
         }),
         message: varchar({ length: 500 }).notNull(),
     },
@@ -914,7 +906,7 @@ export const rmcPatronRoundEndNtShoutouts = pgTable(
     "rmc_patron_round_end_nt_shoutouts",
     {
         patronId: uuid("patron_id").references(() => rmcPatrons.playerId, {
-            onDelete: "cascade",
+            onDelete: "cascade", name: "FK_rmc_patron_round_end_nt_shoutouts_rmc_patrons_patron_id"
         }),
         name: varchar({ length: 100 }).notNull(),
     },
@@ -970,12 +962,12 @@ export const rmcPatrons = pgTable(
     "rmc_patrons",
     {
         playerId: uuid("player_id").references(() => player.userId, {
-            onDelete: "cascade",
+            onDelete: "cascade", name: "FK_rmc_patrons_player_player_id"
         }),
         tierId: integer("tier_id")
             .notNull()
             .references(() => rmcPatronTiers.rmcPatronTiersId, {
-                onDelete: "cascade",
+                onDelete: "cascade", name: "FK_rmc_patrons_rmc_patron_tiers_tier_id"
             }),
         ghostColor: integer("ghost_color"),
     },
@@ -996,7 +988,7 @@ export const roleWhitelists = pgTable(
     {
         playerUserId: uuid("player_user_id")
             .notNull()
-            .references(() => player.userId, { onDelete: "cascade" }),
+            .references(() => player.userId, { onDelete: "cascade", name: "FK_role_whitelists_player_player_user_id" }),
         roleId: text("role_id").notNull(),
     },
     (table) => [
@@ -1014,7 +1006,7 @@ export const round = pgTable(
         serverId: integer("server_id")
             .default(0)
             .notNull()
-            .references(() => server.serverId, { onDelete: "cascade" }),
+            .references(() => server.serverId, { onDelete: "cascade", name: "FK_round_server_server_id" }),
         startDate: timestamp("start_date", { withTimezone: true }),
     },
     (table) => [
@@ -1059,7 +1051,7 @@ export const serverBan = pgTable(
         expirationTime: timestamp("expiration_time", { withTimezone: true }),
         reason: text().notNull(),
         banningAdmin: uuid("banning_admin").references(() => player.userId, {
-            onDelete: "set null",
+            onDelete: "set null", name: "FK_server_ban_player_banning_admin"
         }),
         hwid: customType({ dataType: () => "bytea" })(),
         exemptFlags: integer("exempt_flags").default(0).notNull(),
@@ -1068,12 +1060,12 @@ export const serverBan = pgTable(
         lastEditedAt: timestamp("last_edited_at", { withTimezone: true }),
         lastEditedById: uuid("last_edited_by_id").references(
             () => player.userId,
-            { onDelete: "set null" },
+            { onDelete: "set null", name: "FK_server_ban_player_last_edited_by_id" },
         ),
         playtimeAtNote: interval("playtime_at_note")
             .default("00:00:00")
             .notNull(),
-        roundId: integer("round_id").references(() => round.roundId),
+        roundId: integer("round_id").references(() => round.roundId, { name: "FK_server_ban_round_round_id" }),
         severity: integer().default(3).notNull(),
         hwidType: integer("hwid_type").default(0),
         ...metadata,
@@ -1136,11 +1128,11 @@ export const serverBanHit = pgTable(
             integer("server_ban_hit_id").generatedByDefaultAsIdentity(),
         banId: integer("ban_id")
             .notNull()
-            .references(() => serverBan.serverBanId, { onDelete: "cascade" }),
+            .references(() => serverBan.serverBanId, { onDelete: "cascade", name: "FK_server_ban_hit_server_ban_ban_id" }),
         connectionId: integer("connection_id")
             .notNull()
             .references(() => connectionLog.connectionLogId, {
-                onDelete: "cascade",
+                onDelete: "cascade", name: "FK_server_ban_hit_connection_log_connection_id"
             }),
     },
     (table) => [
@@ -1171,19 +1163,19 @@ export const serverRoleBan = pgTable(
         expirationTime: timestamp("expiration_time", { withTimezone: true }),
         reason: text().notNull(),
         banningAdmin: uuid("banning_admin").references(() => player.userId, {
-            onDelete: "set null",
+            onDelete: "set null", name: "FK_server_role_ban_player_banning_admin"
         }),
         roleId: text("role_id").notNull(),
         hidden: boolean().default(true).notNull(),
         lastEditedAt: timestamp("last_edited_at", { withTimezone: true }),
         lastEditedById: uuid("last_edited_by_id").references(
             () => player.userId,
-            { onDelete: "set null" },
+            { onDelete: "set null", name: "FK_server_role_ban_player_last_edited_by_id" },
         ),
         playtimeAtNote: interval("playtime_at_note")
             .default("00:00:00")
             .notNull(),
-        roundId: integer("round_id").references(() => round.roundId),
+        roundId: integer("round_id").references(() => round.roundId, { name: "FK_server_role_ban_round_round_id" }),
         severity: integer().default(2).notNull(),
         hwidType: integer("hwid_type").default(0),
     },
@@ -1234,7 +1226,7 @@ export const serverRoleUnban = pgTable(
         banId: integer("ban_id")
             .notNull()
             .references(() => serverRoleBan.serverRoleBanId, {
-                onDelete: "cascade",
+                onDelete: "cascade", name: "FK_server_role_unban_server_role_ban_ban_id"
             }),
         unbanningAdmin: uuid("unbanning_admin"),
         unbanTime: timestamp("unban_time", { withTimezone: true }).notNull(),
@@ -1257,7 +1249,7 @@ export const serverUnban = pgTable(
         unbanId: integer("unban_id").generatedByDefaultAsIdentity(),
         banId: integer("ban_id")
             .notNull()
-            .references(() => serverBan.serverBanId, { onDelete: "cascade" }),
+            .references(() => serverBan.serverBanId, { onDelete: "cascade", name: "FK_server_unban_server_ban_ban_id" }),
         unbanningAdmin: uuid("unbanning_admin"),
         unbanTime: timestamp("unban_time", { withTimezone: true }).notNull(),
     },
@@ -1279,7 +1271,7 @@ export const trait = pgTable(
         traitId: integer("trait_id").generatedByDefaultAsIdentity(),
         profileId: integer("profile_id")
             .notNull()
-            .references(() => profile.profileId, { onDelete: "cascade" }),
+            .references(() => profile.profileId, { onDelete: "cascade", name: "FK_trait_profile_profile_id" }),
         traitName: text("trait_name").notNull(),
     },
     (table) => [
