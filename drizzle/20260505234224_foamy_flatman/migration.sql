@@ -1,0 +1,3 @@
+ALTER TABLE "profile_loadout" RENAME CONSTRAINT "FK_profile_loadout_profile_loadout_group_profile_loadout_group" TO "FK_profile_loadout_profile_loadout_group_profile_loadout_group~";--> statement-breakpoint
+ALTER TABLE "profile_loadout_group" RENAME CONSTRAINT "FK_profile_loadout_group_profile_role_loadout_profile_role_loa" TO "FK_profile_loadout_group_profile_role_loadout_profile_role_loa~";--> statement-breakpoint
+ALTER TABLE "rmc_linked_accounts_logs" RENAME CONSTRAINT "FK_rmc_linked_accounts_logs_player_player_id" TO "FK_rmc_linked_accounts_logs_player_player_id1";
