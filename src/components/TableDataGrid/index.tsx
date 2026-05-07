@@ -8,6 +8,7 @@ import React, {
     isValidElement,
 } from "react";
 import CustomDataGrid from "./CustomDataGrid";
+import MainFallback from "@/components/MainFallback";
 import RowDialog, { FieldConfig } from "./RowDialog";
 import { useSnackbar } from "@/providers/snackbar";
 import CustomToolbar from "./Toolbar";
@@ -201,18 +202,26 @@ export default function TableDataGrid<
 
     const columns = columnsFromFields(resolvedFields);
 
-    return currentRows === null || fieldsResolving ? (
-        <Box
-            sx={{
-                flexGrow: 1,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-            }}
-        >
-            <CircularProgress />
-        </Box>
-    ) : (
+    if (currentRows === null || fieldsResolving) {
+        return (
+            <Box
+                sx={{
+                    flexGrow: 1,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                }}
+            >
+                <CircularProgress />
+            </Box>
+        );
+    }
+
+    if (currentRows.length === 0) {
+        return <MainFallback message="No rows found" />;
+    }
+
+    return (
         <>
             <CustomDataGrid
                 apiRef={apiRef}
