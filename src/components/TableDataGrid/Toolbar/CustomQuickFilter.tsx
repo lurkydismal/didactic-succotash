@@ -45,6 +45,7 @@ export default function CustomQuickFilter() {
                         size="small"
                         slotProps={{
                             input: {
+                                ...controlProps.slotProps?.input,
                                 startAdornment: (
                                     <InputAdornment position="start">
                                         <SearchIcon fontSize="small" />
@@ -64,7 +65,6 @@ export default function CustomQuickFilter() {
                                         </QuickFilterClear>
                                     </InputAdornment>
                                 ) : null,
-                                ...controlProps.slotProps?.input,
                             },
                             ...controlProps.slotProps,
                         }}
