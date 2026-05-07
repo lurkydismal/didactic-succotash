@@ -24,6 +24,7 @@ describe("formatHwidHex", () => {
         expect(formatHwidByteaHex("abcdef")).toBe("\\xabcdef");
         expect(formatHwidByteaHex("ABCDEF")).toBe("abcdef");
         expect(formatHwidByteaHex("\\xABCDEF")).toBe("\\xabcdef");
+        expect(formatHwidByteaHex(" \\xABCDEF ")).toBe("\\xabcdef");
         expect(formatHwidByteaHex(new Uint8Array([0, 15, 16, 255]))).toBe(
             "\\x000f10ff",
         );
