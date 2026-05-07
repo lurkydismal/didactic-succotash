@@ -61,7 +61,10 @@ export async function requestUser(uid: string | number) {
     const field =
         typeof uid === "string" ? users.username_normalized : users.id;
 
-    return db.select().from(users).where(eq(field, uid)).limit(1).execute();
+    return db.select({
+            username: users.username,
+            username_normalized: users.username_normalized,
+        }).from(users).where(eq(field, uid)).limit(1).execute();
 }
 
 /**
