@@ -1,12 +1,14 @@
 import { FileDownload as FileDownloadIcon } from "@mui/icons-material";
 import { Menu, MenuItem, Tooltip } from "@mui/material";
 import { ExportCsv, ExportPrint, ToolbarButton } from "@mui/x-data-grid";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useId, useState } from "react";
 
 /**
  * Renders the export menu component.
  */
 export default function ExportMenu() {
+    const exportMenuId = useId();
+    const exportMenuTriggerId = `${exportMenuId}-trigger`;
     const [exportMenuAnchorEl, setExportMenuAnchorEl] =
         useState<HTMLElement | null>(null);
     const exportMenuOpen = Boolean(exportMenuAnchorEl);
@@ -29,8 +31,8 @@ export default function ExportMenu() {
         <>
             <Tooltip title="Export">
                 <ToolbarButton
-                    id="export-menu-trigger"
-                    aria-controls="export-menu"
+                    id={exportMenuTriggerId}
+                    aria-controls={exportMenuOpen ? exportMenuId : undefined}
                     aria-haspopup="true"
                     aria-expanded={exportMenuOpen ? "true" : undefined}
                     onClick={handleExportMenuOpen}
@@ -40,7 +42,7 @@ export default function ExportMenu() {
             </Tooltip>
 
             <Menu
-                id="export-menu"
+                id={exportMenuId}
                 anchorEl={exportMenuAnchorEl}
                 open={exportMenuOpen}
                 onClose={handleExportMenuClose}
@@ -48,7 +50,7 @@ export default function ExportMenu() {
                 transformOrigin={{ vertical: "top", horizontal: "right" }}
                 slotProps={{
                     list: {
-                        "aria-labelledby": "export-menu-trigger",
+                        "aria-labelledby": exportMenuTriggerId,
                     },
                 }}
             >
