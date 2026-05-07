@@ -9,8 +9,8 @@ import { AnyColumn } from "drizzle-orm";
 /**
  * Gets rows action.
  */
-export async function getRowsAction(target: DbTarget, id: AnyColumn) {
-    const result = await getRows(target, id);
+export async function getRowsAction(target: DbTarget, idColumnName: string) {
+    const result = await getRows(target, idColumnName);
 
     if (result.ok) {
         return result.data!;

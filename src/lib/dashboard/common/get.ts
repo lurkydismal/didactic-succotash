@@ -1,7 +1,7 @@
 "use server";
 
 import { GridValidRowModel } from "@mui/x-data-grid";
-import { AnyColumn, desc } from "drizzle-orm";
+import { AnyColumn, desc, getColumns } from "drizzle-orm";
 import { createSelectSchema } from "drizzle-zod";
 
 import db from "@/db";
