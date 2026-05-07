@@ -24,7 +24,11 @@ export function formatHwidHex(value: unknown): string {
     if (value === null || value === undefined) return "";
 
     if (typeof value === "string") {
-        return value.startsWith("\\x") ? value.slice(2).toLowerCase() : value;
+        const normalized =
+            value.startsWith("\\x") || value.startsWith("\\X")
+                ? value.slice(2)
+                : value;
+        return normalized.toLowerCase();
     }
 
     if (value instanceof ArrayBuffer) {
