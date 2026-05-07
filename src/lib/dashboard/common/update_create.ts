@@ -47,7 +47,6 @@ export async function save(
 ): Promise<ActionResult> {
     try {
         const table = parseRawTarget(rawTarget);
-        log.debug({ input });
         const parsedInput = await mutationInputSchema.parseAsync(input);
 
         const schema = opts.isUpdate
