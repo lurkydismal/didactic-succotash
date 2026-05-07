@@ -167,7 +167,8 @@ export default function RowDialogContent<
             if (field.requiredGroup) {
                 const minCount = field.requiredGroupMin ?? 1;
                 const groupFields = fields.filter(
-                    (candidate) => candidate.requiredGroup === field.requiredGroup,
+                    (candidate) =>
+                        candidate.requiredGroup === field.requiredGroup,
                 );
                 const providedCount = groupFields.reduce((count, candidate) => {
                     const candidateValue =
@@ -189,9 +190,7 @@ export default function RowDialogContent<
             }
 
             if (field.validate) {
-                return (
-                    (await field.validate(value, row, allValues)) ?? true
-                );
+                return (await field.validate(value, row, allValues)) ?? true;
             }
 
             return true;
