@@ -10,6 +10,8 @@ import {
     RegisterOptions,
 } from "react-hook-form";
 
+type PickerInputValue = string | number | Date | Dayjs | null | undefined;
+
 type DateTimeFieldInputProps = {
     fieldKey: string;
     label: string;
@@ -74,7 +76,11 @@ export default function DateTimeFieldInput({
                     rules={rules}
                     render={({ field }) => (
                         <DatePicker
-                            value={field.value ? dayjs(field.value) : null}
+                            value={
+                                field.value
+                                    ? dayjs(field.value as PickerInputValue)
+                                    : null
+                            }
                             onChange={(next) => {
                                 handleChange(next);
                                 field.onChange(
@@ -108,7 +114,10 @@ export default function DateTimeFieldInput({
                         <TimePicker
                             value={
                                 field.value
-                                    ? dayjs(field.value, "HH:mm:ss")
+                                    ? dayjs(
+                                          field.value as PickerInputValue,
+                                          "HH:mm:ss",
+                                      )
                                     : null
                             }
                             onChange={(next) => {
@@ -142,7 +151,11 @@ export default function DateTimeFieldInput({
                     rules={rules}
                     render={({ field }) => (
                         <DateTimePicker
-                            value={field.value ? dayjs(field.value) : null}
+                            value={
+                                field.value
+                                    ? dayjs(field.value as PickerInputValue)
+                                    : null
+                            }
                             onChange={(next) => {
                                 handleChange(next);
                                 field.onChange(
