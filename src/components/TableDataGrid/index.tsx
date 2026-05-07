@@ -15,6 +15,9 @@ import { useGridApiRef, GridRowsProp, GridRowParams } from "@mui/x-data-grid";
 import { Box, CircularProgress } from "@mui/material";
 import { columnsFromFields } from "@/utils/columns";
 
+/**
+ * Renders the table data grid component.
+ */
 export default function TableDataGrid<
     R extends Record<string, unknown>,
     RI extends Record<string, unknown>,
@@ -87,6 +90,9 @@ export default function TableDataGrid<
 
     // Keyboard shortcut opens create dialog with empty defaults
     useEffect(() => {
+        /**
+         * Submits the current form or dialog state.
+         */
         const submit = () => {
             if (!currentRows) return;
             openCreateDialog();
@@ -97,6 +103,9 @@ export default function TableDataGrid<
             );
         };
 
+        /**
+         * Handles keyboard shortcuts for the editable data grid.
+         */
         const onKeyDown = (e: KeyboardEvent) => {
             if (!((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "m"))
                 return;
@@ -119,11 +128,17 @@ export default function TableDataGrid<
         return () => window.removeEventListener("keydown", onKeyDown);
     }, [currentRows, openCreateDialog, apiRef]);
 
+    /**
+     * Handles row click.
+     */
     const handleRowClick = (params: GridRowParams) => {
         setSelectedRow(params.row as R);
         setDialogOpen(true);
     };
 
+    /**
+     * Handles close.
+     */
     const handleClose = () => setDialogOpen(false);
 
     // If extraButtons is a React element, clone it and inject createRowAction + emptyRow

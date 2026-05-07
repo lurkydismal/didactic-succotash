@@ -8,6 +8,9 @@ type CustomFieldInputProps<R, RI> = {
     onValueChange: (value: unknown) => void;
 };
 
+/**
+ * Renders the custom field input component.
+ */
 export default function CustomFieldInput<R, RI>({
     field,
     value,

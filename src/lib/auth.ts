@@ -70,6 +70,9 @@ const LOGIN_ATTEMPTS = new Map<
 const MAX_LOGIN_ATTEMPTS = 5;
 const LOGIN_WINDOW_MS = 15 * 60 * 1000; // 15 minutes
 
+/**
+ * Handles record failed login attempt behavior.
+ */
 function recordFailedLoginAttempt(normalizedUsername: string) {
     log.trace("recordFailedLoginAttempt called", { normalizedUsername });
     log.debug("recordFailedLoginAttempt updating in-memory counter");

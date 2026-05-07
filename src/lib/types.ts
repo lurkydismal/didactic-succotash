@@ -9,6 +9,9 @@ export const DbTargetSchema = z.enum(
     Object.keys(TABLES) as [DbTarget, ...DbTarget[]],
 );
 
+/**
+ * Parses raw target.
+ */
 export function parseRawTarget(rawTarget: DbTarget) {
     const target = DbTargetSchema.parse(rawTarget);
     const table = TABLES[target];

@@ -6,6 +6,9 @@ import { updateAction } from "@/lib/dashboard/common/update";
 import { DbTarget } from "@/lib/types";
 import { AnyColumn } from "drizzle-orm";
 
+/**
+ * Gets rows action.
+ */
 export async function getRowsAction(target: DbTarget, id: AnyColumn) {
     const result = await getRows(target, id);
 
@@ -17,6 +20,9 @@ export async function getRowsAction(target: DbTarget, id: AnyColumn) {
     }
 }
 
+/**
+ * Creates row action.
+ */
 export async function createRowAction<RI extends Record<string, unknown>>(
     target: DbTarget,
     row: RI,
@@ -29,6 +35,9 @@ export async function createRowAction<RI extends Record<string, unknown>>(
     }
 }
 
+/**
+ * Updates row action.
+ */
 export async function updateRowAction(
     target: DbTarget,
     id: AnyColumn,

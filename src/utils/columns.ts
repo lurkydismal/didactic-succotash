@@ -66,6 +66,9 @@ export function normalizeColumns(
     }) as readonly GridColDef[];
 }
 
+/**
+ * Handles columns from fields behavior.
+ */
 export function columnsFromFields<
     R extends Record<string, unknown>,
     RI extends Record<string, unknown>,
@@ -77,6 +80,9 @@ export function columnsFromFields<
             headerName: field.label,
             ...(field.formatValue
                 ? {
+                      /**
+                       * Renders a data grid cell value from a normalized field definition.
+                       */
                       renderCell: (params: GridRenderCellParams) =>
                           String(field.formatValue?.(params.value) ?? ""),
                   }

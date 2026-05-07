@@ -23,6 +23,9 @@ type DateTimeFieldInputProps = {
     onValueChange: (value: string | null) => void;
 };
 
+/**
+ * Renders the date time field input component.
+ */
 export default function DateTimeFieldInput({
     fieldKey,
     label,
@@ -35,6 +38,9 @@ export default function DateTimeFieldInput({
     rules,
     onValueChange,
 }: DateTimeFieldInputProps) {
+    /**
+     * Handles change.
+     */
     const handleChange = (nextValue: Dayjs | null) => {
         if (!nextValue || !nextValue.isValid()) {
             onValueChange(null);

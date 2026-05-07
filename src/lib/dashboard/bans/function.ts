@@ -16,11 +16,17 @@ const idColumn = serverBan.serverBanId;
 
 type ServerBanMutationInput = TableRowInsert & { playerUsername?: string };
 
+/**
+ * Normalizes hwid mutation value.
+ */
 function normalizeHwidMutationValue(value: unknown): string | null {
     const normalized = formatHwidByteaHex(value);
     return normalized || null;
 }
 
+/**
+ * Resolves player user id by username.
+ */
 async function resolvePlayerUserIdByUsername(
     rawValue: string | null | undefined,
 ): Promise<string | null> {
@@ -37,6 +43,9 @@ async function resolvePlayerUserIdByUsername(
     return targetPlayer?.userId ?? null;
 }
 
+/**
+ * Gets rows action.
+ */
 export async function getRowsAction() {
     const serverBanColumns = getColumns(serverBan);
     const banningAdminPlayer = alias(player, "banning_admin_player");
@@ -61,6 +70,9 @@ export async function getRowsAction() {
     return rows;
 }
 
+/**
+ * Gets player username options action.
+ */
 export async function getPlayerUsernameOptionsAction(): Promise<string[]> {
     const rows = await db
         .select({ playerUsername: player.lastSeenUserName })
@@ -76,6 +88,9 @@ export async function getPlayerUsernameOptionsAction(): Promise<string[]> {
     ];
 }
 
+/**
+ * Gets player address options action.
+ */
 export async function getPlayerAddressOptionsAction(): Promise<string[]> {
     const rows = await db
         .select({ address: player.lastSeenAddress })
@@ -93,6 +108,9 @@ export async function getPlayerAddressOptionsAction(): Promise<string[]> {
     ];
 }
 
+/**
+ * Gets player hwid options action.
+ */
 export async function getPlayerHwidOptionsAction(): Promise<string[]> {
     const rows = await db
         .select({ hwid: player.lastSeenHwid })
@@ -106,6 +124,9 @@ export async function getPlayerHwidOptionsAction(): Promise<string[]> {
     ];
 }
 
+/**
+ * Gets player packed options action.
+ */
 export async function getPlayerPackedOptionsAction(): Promise<
     { playerUsername: string; address: string; hwid: string }[]
 > {
@@ -138,6 +159,9 @@ export async function getPlayerPackedOptionsAction(): Promise<
     return [...deduped.values()];
 }
 
+/**
+ * Creates row action.
+ */
 export async function createRowAction(
     row: ServerBanMutationInput,
 ): Promise<void> {
@@ -177,6 +201,9 @@ export async function createRowAction(
         throw new Error(`Failed to create row in action: ${result.error}`);
 }
 
+/**
+ * Updates row action.
+ */
 export async function updateRowAction(fd: FormData): Promise<void> {
     const playerUserId = await resolvePlayerUserIdByUsername(
         `${fd.get("playerUsername") ?? ""}`,
@@ -200,6 +227,9 @@ export async function updateRowAction(fd: FormData): Promise<void> {
         throw new Error(`Failed to update row in action: ${result.error}`);
 }
 
+/**
+ * Handles has round id action behavior.
+ */
 export async function hasRoundIdAction(roundId: number): Promise<boolean> {
     if (!Number.isInteger(roundId)) return false;
 

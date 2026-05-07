@@ -1,6 +1,9 @@
 import dayjs from "dayjs";
 import { FieldConfig } from "../types";
 
+/**
+ * Converts input into field value.
+ */
 export const toFieldValue = (
     field: FieldConfig<Record<string, unknown>, Record<string, unknown>>,
     value: unknown,
@@ -31,6 +34,9 @@ export const toFieldValue = (
     return value;
 };
 
+/**
+ * Builds initial values.
+ */
 export const buildInitialValues = <R extends Record<string, unknown>, RI>(
     row: R,
     fields: FieldConfig<R, RI>[],

@@ -22,6 +22,9 @@ import { useEffect, useState } from "react";
 import MainFallback from "@/components/MainFallback";
 import { AutocompleteOption } from "@/components/TableDataGrid/RowDialog/types";
 
+/**
+ * Renders the protected bans dashboard page.
+ */
 export default function Page() {
     const [resolvedFields, setResolvedFields] =
         useState<FieldConfig<TableRow, TableRowInsert>[]>(fields);
@@ -30,6 +33,9 @@ export default function Page() {
     );
 
     useEffect(() => {
+        /**
+         * Loads player options.
+         */
         const loadPlayerOptions = async () => {
             const [
                 usernameOptions,
@@ -114,6 +120,9 @@ export default function Page() {
                     field.key === "roundId"
                         ? {
                               ...field,
+                              /**
+                               * Validates a field value for the current form rule.
+                               */
                               validate: async (value) => {
                                   if (
                                       value === null ||

@@ -19,6 +19,9 @@ type RenderFieldParams<R, RI> = {
     setValueAndForm: (key: string, value: unknown) => void;
 };
 
+/**
+ * Renders field.
+ */
 export const renderField = <R, RI>({
     field,
     idx,

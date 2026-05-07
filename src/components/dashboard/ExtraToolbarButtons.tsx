@@ -10,6 +10,9 @@ import {
 import { Tooltip } from "@mui/material";
 import { ToolbarButton } from "@mui/x-data-grid";
 
+/**
+ * Renders the extra toolbar buttons component.
+ */
 export default function ExtraToolbarButtons<
     // R extends Record<string, unknown>,
     RI extends Record<string, unknown>,

@@ -13,6 +13,9 @@ import {
     Button,
 } from "@mui/material";
 
+/**
+ * Renders the mobile nav component.
+ */
 export default function MobileNav({ items }: { items: NavItem[] }) {
     const [open, setOpen] = useState(false);
 

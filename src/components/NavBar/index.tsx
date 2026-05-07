@@ -12,6 +12,9 @@ import {
     MenuList,
 } from "@mui/material";
 
+/**
+ * Provides the styled toolbar layout for the responsive navigation bar.
+ */
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
     alignItems: "center",
     backdropFilter: "blur(24px)",
@@ -28,6 +31,9 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
     padding: "8px 12px",
 }));
 
+/**
+ * Renders the nav bar component.
+ */
 export default function NavBar() {
     return (
         <AppBar

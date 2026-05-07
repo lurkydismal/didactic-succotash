@@ -10,6 +10,9 @@ import { toCamelCase } from "@/utils/stdfunc";
 import { createSelectSchema } from "drizzle-zod";
 
 // TODO: Validate what returns
+/**
+ * Gets rows.
+ */
 export async function getRows(
     rawTarget: DbTarget,
     id: AnyColumn,
