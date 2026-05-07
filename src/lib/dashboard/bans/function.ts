@@ -7,6 +7,7 @@ import { create } from "@/lib/dashboard/common/create";
 import { updateAction } from "@/lib/dashboard/common/update";
 import { DbTarget } from "@/lib/types";
 import log from "@/utils/stdlog";
+import { formatHwidByteaHex } from "@/utils/hwid";
 import { asc, desc, eq, getColumns, ne, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 
@@ -14,6 +15,11 @@ const target: DbTarget = "serverBan";
 const idColumn = serverBan.serverBanId;
 
 type ServerBanMutationInput = TableRowInsert & { playerUsername?: string };
+
+function normalizeHwidMutationValue(value: unknown): string | null {
+    const normalized = formatHwidByteaHex(value);
+    return normalized || null;
+}
 
 async function resolvePlayerUserIdByUsername(
     rawValue: string | null | undefined,
@@ -169,6 +175,7 @@ export async function createRowAction(
         throw new Error("No matching player found for banning admin username");
     }
     row.banningAdmin = banningAdminUserId;
+    row.hwid = normalizeHwidMutationValue(row.hwid);
 
     delete row.playerUsername;
     const result = await create(target, row);
@@ -189,6 +196,8 @@ export async function updateRowAction(fd: FormData): Promise<void> {
         throw new Error("No matching player found for banning admin username");
     }
     fd.set("banningAdmin", banningAdminUserId ?? "");
+
+    fd.set("hwid", normalizeHwidMutationValue(fd.get("hwid")) ?? "");
 
     fd.delete("playerUsername");
 

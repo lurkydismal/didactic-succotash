@@ -1,5 +1,5 @@
 import { FieldConfig } from "@/components/TableDataGrid/RowDialog";
-import { formatHwidHex } from "@/utils/hwid";
+import { formatHwidByteaHex, formatHwidHex } from "@/utils/hwid";
 import {
     ServerBanRow as TableRow,
     ServerBanRowInsert as TableRowInsert,
@@ -59,6 +59,7 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         autocompletePackedFields: ["playerUsername", "address", "hwid"],
         formatValue: formatHwidHex,
         requiredGroup: "banTarget",
+        toFormValue: formatHwidByteaHex,
     },
     {
         key: "roundId",

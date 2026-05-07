@@ -51,3 +51,8 @@ export function formatHwidHex(value: unknown): string {
 
     return String(value);
 }
+
+export function formatHwidByteaHex(value: unknown): string {
+    const hex = formatHwidHex(value).trim();
+    return hex ? `\\x${hex}` : "";
+}
