@@ -1,4 +1,9 @@
-import { FieldErrors, RegisterOptions, UseFormReturn } from "react-hook-form";
+import {
+    FieldError,
+    FieldErrors,
+    RegisterOptions,
+    UseFormReturn,
+} from "react-hook-form";
 import { FieldConfig } from "../types";
 import CustomFieldInput from "../CustomFieldInput";
 import MultilineFieldInput from "../MultilineFieldInput";
@@ -6,7 +11,10 @@ import AutocompleteFieldInput from "../AutocompleteFieldInput";
 import DateTimeFieldInput from "../DateTimeFieldInput";
 import TextFieldInput from "../TextFieldInput";
 
-type RenderFieldParams<R, RI> = {
+type RenderFieldParams<
+    R extends Record<string, unknown>,
+    RI extends Record<string, unknown>,
+> = {
     field: FieldConfig<R, RI>;
     idx: number;
     row: R;
@@ -22,7 +30,10 @@ type RenderFieldParams<R, RI> = {
 /**
  * Renders field.
  */
-export const renderField = <R, RI>({
+export const renderField = <
+    R extends Record<string, unknown>,
+    RI extends Record<string, unknown>,
+>({
     field,
     idx,
     row,
@@ -37,7 +48,7 @@ export const renderField = <R, RI>({
     const value = values[key];
     const error = (
         form.formState.errors as FieldErrors<Record<string, unknown>>
-    )[name];
+    )[name] as FieldError | undefined;
     const rules = getRules(field);
 
     if (typeof field.render === "function") {

@@ -1,13 +1,14 @@
-import { formatDate } from "@/utils/dayjs";
 import { useSnackbar } from "@/providers/snackbar";
-import { isBlob } from "@/utils/stdfunc";
-import { Divider, Grid, Typography } from "@mui/material";
+import { Divider, Grid } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { RegisterOptions, useForm } from "react-hook-form";
-import { Dayjs } from "dayjs";
 import { CreateRowAction, FieldConfig, UpdateRowAction } from "../types";
-import { buildInitialValues, toFieldValue } from "./helpers";
+import { rowHasChanges, rowHasId } from "./changeDetection";
+import { buildUpdateFormData } from "./formData";
+import { buildInitialValues } from "./helpers";
+import MetadataFields from "./MetadataFields";
 import { renderField } from "./renderField";
+import { getFieldRules } from "./validation";
 
 type RowDialogContentProps<R, RI> = {
     row: R;
@@ -69,28 +70,6 @@ export default function RowDialogContent<
         [form],
     );
 
-    const defaultIsChanged = useCallback(
-        (rowObj: R, newValues: Partial<RI>) => {
-            for (const field of fields) {
-                const key = String(field.key);
-                const rowVal = (rowObj as Record<string, unknown>)[key];
-                const newVal = (newValues as Record<string, unknown>)[key];
-                const equal =
-                    typeof field.isChanged === "function"
-                        ? !field.isChanged(rowVal, newVal)
-                        : String((rowVal ?? "").toString()).trim() ===
-                          String((newVal ?? "").toString()).trim();
-
-                if (!equal) {
-                    return true;
-                }
-            }
-
-            return false;
-        },
-        [fields],
-    );
-
     const updateRow = useCallback(
         async (fd: FormData): Promise<boolean> => {
             try {
@@ -124,10 +103,9 @@ export default function RowDialogContent<
         if (!valid) return false;
 
         const currentValues = form.getValues() as Partial<RI>;
-        const hasId =
-            ((row as Record<string, unknown>)[String(idKey)] ?? null) !== null;
+        const hasId = rowHasId(row, idKey);
 
-        if (hasId && !defaultIsChanged(row, currentValues)) {
+        if (hasId && !rowHasChanges(row, currentValues, fields)) {
             return true;
         }
 
@@ -135,79 +113,17 @@ export default function RowDialogContent<
             return await createRow(currentValues);
         }
 
-        const fd = new FormData(formRef.current ?? undefined);
-
-        for (const field of fields) {
-            const name = field.name ?? String(field.key);
-            const key = String(field.key);
-            const value = toFieldValue(
-                field as FieldConfig<
-                    Record<string, unknown>,
-                    Record<string, unknown>
-                >,
-                currentValues[key],
-            );
-
-            if (field.toFormValue) {
-                const mappedValue = field.toFormValue(value);
-                if (mappedValue !== undefined) fd.set(name, mappedValue);
-            } else if (value === null || value === undefined) {
-                if (!fd.has(name)) fd.set(name, "");
-            } else if (isBlob(value)) {
-                fd.set(name, value);
-            } else {
-                fd.set(name, String(value));
-            }
-        }
+        const fd = buildUpdateFormData(formRef.current, fields, currentValues);
 
         return await updateRow(fd);
-    }, [createRow, defaultIsChanged, fields, form, idKey, row, updateRow]);
+    }, [createRow, fields, form, idKey, row, updateRow]);
 
-    /**
-     * Gets rules.
-     */
-    const getRules = (
+    const getRules: (
         field: FieldConfig<R, RI>,
-    ): RegisterOptions<Record<string, unknown>, string> => ({
-        required: field.required ? `${field.label} is required` : false,
-        /**
-         * Validates a field value for the current form rule.
-         */
-        validate: async (value) => {
-            const allValues = form.getValues();
-
-            if (field.requiredGroup) {
-                const minCount = field.requiredGroupMin ?? 1;
-                const groupFields = fields.filter(
-                    (candidate) =>
-                        candidate.requiredGroup === field.requiredGroup,
-                );
-                const providedCount = groupFields.reduce((count, candidate) => {
-                    const candidateValue =
-                        allValues[String(candidate.key)] ??
-                        values[String(candidate.key)];
-                    const isProvided =
-                        candidateValue !== null &&
-                        candidateValue !== undefined &&
-                        String(candidateValue).trim() !== "";
-
-                    return count + (isProvided ? 1 : 0);
-                }, 0);
-
-                if (providedCount < minCount) {
-                    return `Enter at least ${minCount} of: ${groupFields
-                        .map((candidate) => candidate.label)
-                        .join(", ")}`;
-                }
-            }
-
-            if (field.validate) {
-                return (await field.validate(value, row, allValues)) ?? true;
-            }
-
-            return true;
-        },
-    });
+    ) => RegisterOptions<Record<string, unknown>, string> = useCallback(
+        (field) => getFieldRules(field, fields, form, row, values),
+        [fields, form, row, values],
+    );
 
     useEffect(() => {
         registerSubmit(submit);
@@ -223,8 +139,7 @@ export default function RowDialogContent<
             }}
         >
             <Grid container spacing={2}>
-                {((row as Record<string, unknown>)[String(idKey)] ?? null) !==
-                    null && (
+                {rowHasId(row, idKey) && (
                     <input
                         type="hidden"
                         name={String(idKey)}
@@ -239,7 +154,7 @@ export default function RowDialogContent<
                         size={{ xs: 12, sm: field.size ?? 6 }}
                         key={`${String(field.key)}-${index}`}
                     >
-                        {renderField({
+                        {renderField<R, RI>({
                             field,
                             idx: index,
                             row,
@@ -256,49 +171,7 @@ export default function RowDialogContent<
                     <Divider />
                 </Grid>
 
-                <Grid size={{ xs: 12, sm: 6 }}>
-                    <Typography variant="subtitle2" color="text.secondary">
-                        Created
-                    </Typography>
-                    <Typography variant="subtitle2" sx={{ display: "block" }}>
-                        {formatDate(
-                            (row as { created_at: string | Date | Dayjs })
-                                .created_at,
-                            true,
-                        )}
-                    </Typography>
-                </Grid>
-
-                <Grid size={{ xs: 12, sm: 6 }}>
-                    <Typography variant="subtitle2" color="text.secondary">
-                        Updated
-                    </Typography>
-                    <Typography variant="subtitle2" sx={{ display: "block" }}>
-                        {formatDate(
-                            (row as { updated_at: string | Date | Dayjs })
-                                .updated_at,
-                            true,
-                        )}
-                    </Typography>
-                </Grid>
-
-                <Grid size={{ xs: 12, sm: 6 }}>
-                    <Typography variant="subtitle2" color="text.secondary">
-                        Author
-                    </Typography>
-                    <Typography variant="subtitle2" sx={{ display: "block" }}>
-                        {(row as { author?: string }).author ?? "—"}
-                    </Typography>
-                </Grid>
-
-                <Grid size={{ xs: 12, sm: 6 }}>
-                    <Typography variant="subtitle2" color="text.secondary">
-                        Last editor
-                    </Typography>
-                    <Typography variant="subtitle2" sx={{ display: "block" }}>
-                        {(row as { last_editor?: string }).last_editor ?? "—"}
-                    </Typography>
-                </Grid>
+                <MetadataFields row={row} />
             </Grid>
         </form>
     );
