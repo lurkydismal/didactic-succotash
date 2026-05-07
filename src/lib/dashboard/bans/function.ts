@@ -7,7 +7,7 @@ import { create } from "@/lib/dashboard/common/create";
 import { updateAction } from "@/lib/dashboard/common/update";
 import { DbTarget } from "@/lib/types";
 import log from "@/utils/stdlog";
-import { formatHwidByteaHex } from "@/utils/hwid";
+import { formatHwidByteaHex, formatHwidHex } from "@/utils/hwid";
 import { asc, desc, eq, getColumns, ne, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 
@@ -102,13 +102,7 @@ export async function getPlayerHwidOptionsAction(): Promise<string[]> {
         .execute();
 
     return [
-        ...new Set(
-            rows
-                .map((row) =>
-                    row.hwid ? Buffer.from(row.hwid).toString("hex") : "",
-                )
-                .filter(Boolean),
-        ),
+        ...new Set(rows.map((row) => formatHwidHex(row.hwid)).filter(Boolean)),
     ];
 }
 
@@ -137,7 +131,7 @@ export async function getPlayerPackedOptionsAction(): Promise<
         deduped.set(label, {
             playerUsername: label,
             address: row.address?.trim() ?? "",
-            hwid: row.hwid ? Buffer.from(row.hwid).toString("hex") : "",
+            hwid: formatHwidHex(row.hwid),
         });
     }
 
