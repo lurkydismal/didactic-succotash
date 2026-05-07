@@ -1,5 +1,8 @@
 import { getSessionDataOrUnauthorized } from "@/lib/auth";
 
+/**
+ * Renders the protected route template wrapper.
+ */
 export default async function Template({
     children,
 }: Readonly<{

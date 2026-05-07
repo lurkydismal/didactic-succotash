@@ -19,6 +19,9 @@ type TextFieldInputProps = {
     onValueChange: (value: string) => void;
 };
 
+/**
+ * Renders the text field input component.
+ */
 export default function TextFieldInput({
     fieldKey,
     label,

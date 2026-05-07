@@ -19,6 +19,9 @@ type RowDialogContentProps<R, RI> = {
     idKey?: keyof R;
 };
 
+/**
+ * Renders the row dialog content component.
+ */
 export default function RowDialogContent<
     R extends Record<string, unknown>,
     RI extends Record<string, unknown>,
@@ -49,6 +52,9 @@ export default function RowDialogContent<
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [row]);
 
+    /**
+     * Stores an edited field value in local row dialog state.
+     */
     const setValue = (key: string, value: unknown) =>
         setValues((state) => ({ ...state, [key]: value }));
 
@@ -157,10 +163,16 @@ export default function RowDialogContent<
         return await updateRow(fd);
     }, [createRow, defaultIsChanged, fields, form, idKey, row, updateRow]);
 
+    /**
+     * Gets rules.
+     */
     const getRules = (
         field: FieldConfig<R, RI>,
     ): RegisterOptions<Record<string, unknown>, string> => ({
         required: field.required ? `${field.label} is required` : false,
+        /**
+         * Validates a field value for the current form rule.
+         */
         validate: async (value) => {
             const allValues = form.getValues();
 

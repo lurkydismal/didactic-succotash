@@ -8,6 +8,9 @@ import { users } from "@/db/schema";
 import dayjs from "@/utils/dayjs";
 import { Dayjs } from "dayjs";
 
+/**
+ * Handles empty to null behavior.
+ */
 export const emptyToNull = <T extends z.ZodTypeAny>(schema: T) =>
     z.preprocess((val) => (val === "" ? null : val), schema.nullable());
 

@@ -35,11 +35,17 @@ type OwnerState = {
     expanded: boolean;
 };
 
+/**
+ * Provides the styled quick filter container for the data grid toolbar.
+ */
 const StyledQuickFilter = styled(QuickFilter)({
     display: "grid",
     alignItems: "center",
 });
 
+/**
+ * Provides the styled toolbar button used by custom data grid controls.
+ */
 const StyledToolbarButton = styled(ToolbarButton)<{ ownerState: OwnerState }>(
     ({ theme, ownerState }) => ({
         gridArea: "1 / 1",
@@ -52,6 +58,9 @@ const StyledToolbarButton = styled(ToolbarButton)<{ ownerState: OwnerState }>(
     }),
 );
 
+/**
+ * Provides the styled text field used by the custom quick filter.
+ */
 const StyledTextField = styled(TextField)<{
     ownerState: OwnerState;
 }>(({ theme, ownerState }) => ({
@@ -62,15 +71,24 @@ const StyledTextField = styled(TextField)<{
     transition: theme.transitions.create(["width", "opacity"]),
 }));
 
+/**
+ * Renders the export menu component.
+ */
 function ExportMenu() {
     const [exportMenuAnchorEl, setExportMenuAnchorEl] =
         useState<HTMLElement | null>(null);
     const exportMenuOpen = Boolean(exportMenuAnchorEl);
 
+    /**
+     * Handles export menu open.
+     */
     const handleExportMenuOpen = (event: MouseEvent<HTMLElement>) => {
         setExportMenuAnchorEl(event.currentTarget);
     };
 
+    /**
+     * Handles export menu close.
+     */
     const handleExportMenuClose = () => {
         setExportMenuAnchorEl(null);
     };
@@ -119,6 +137,9 @@ function ExportMenu() {
     );
 }
 
+/**
+ * Renders the custom quick filter component.
+ */
 function CustomQuickFilter() {
     return (
         <StyledQuickFilter>
@@ -182,6 +203,9 @@ type CustomToolbarProps = GridToolbarProps &
         extraButtons?: React.ReactNode;
     };
 
+/**
+ * Renders the custom toolbar component.
+ */
 export default function CustomToolbar({ extraButtons }: CustomToolbarProps) {
     return (
         <Toolbar>

@@ -29,6 +29,9 @@ export function useHtmlDataDark(): boolean {
         const html = document.documentElement;
 
         // Function to read current state of `data-dark` attribute
+        /**
+         * Reads the current dark-mode flag from the document element.
+         */
         const read = () => setIsDark(html.hasAttribute("data-dark"));
         read();
 

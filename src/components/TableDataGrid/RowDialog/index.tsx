@@ -6,6 +6,9 @@ import RowDialogContent from "./Content";
 
 export type { FieldConfig } from "./types";
 
+/**
+ * Renders the row dialog component.
+ */
 export default function RowDialog<
     R extends Record<string, unknown>,
     RI extends Record<string, unknown>,
@@ -32,10 +35,16 @@ export default function RowDialog<
 }) {
     const submitFnRef = useRef<(() => Promise<boolean>) | null>(null);
 
+    /**
+     * Registers the row dialog submit callback exposed by the content form.
+     */
     const registerSubmit = (fn: (() => Promise<boolean>) | null) => {
         submitFnRef.current = fn;
     };
 
+    /**
+     * Attempts to submit the dialog before closing it.
+     */
     const onClose = async () => {
         try {
             if (submitFnRef.current) {
@@ -58,6 +67,9 @@ export default function RowDialog<
             keepMounted
             slotProps={{
                 transition: {
+                    /**
+                     * Clears dialog state after the row dialog transition exits.
+                     */
                     onExited: () => {
                         setSelectedRow(null);
                     },

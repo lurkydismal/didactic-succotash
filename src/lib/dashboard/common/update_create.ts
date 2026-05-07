@@ -18,6 +18,9 @@ type SaveOptions = {
     idColumn?: AnyColumn;
 };
 
+/**
+ * Converts input into db mutation.
+ */
 function toDbMutation(
     parsedRow: MutationRow,
     actor: string,
@@ -40,6 +43,9 @@ function toDbMutation(
     };
 }
 
+/**
+ * Saves the parsed row mutation to the database.
+ */
 export async function save(
     rawTarget: DbTarget,
     input: MutationRow,
@@ -102,6 +108,9 @@ export async function save(
     }
 }
 
+/**
+ * Parses form.
+ */
 export function parseForm(formData: FormData): MutationRow {
     const entries = z
         .record(z.string(), z.unknown())

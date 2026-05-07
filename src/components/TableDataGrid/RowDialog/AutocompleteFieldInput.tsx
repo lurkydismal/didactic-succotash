@@ -25,6 +25,9 @@ type AutocompleteFieldInputProps = {
     onValueChange: (value: AutocompleteOption | null) => void;
 };
 
+/**
+ * Renders the autocomplete field input component.
+ */
 export default function AutocompleteFieldInput({
     fieldKey,
     label,

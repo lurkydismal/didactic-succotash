@@ -19,6 +19,9 @@ type MultilineFieldInputProps = {
     onValueChange: (value: string) => void;
 };
 
+/**
+ * Renders the multiline field input component.
+ */
 export default function MultilineFieldInput({
     fieldKey,
     label,

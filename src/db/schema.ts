@@ -512,6 +512,9 @@ export const connectionLog = pgTable(
         userName: text("user_name").notNull(),
         time: timestamp({ withTimezone: true }).notNull(),
         address: inet().notNull(),
+        /**
+         * Returns the custom PostgreSQL column data type.
+         */
         hwid: customType({ dataType: () => "bytea" })(),
         denied: smallint(),
         serverId: integer("server_id")
@@ -632,6 +635,9 @@ export const player = pgTable(
             withTimezone: true,
         }).notNull(),
         lastSeenAddress: inet("last_seen_address").notNull(),
+        /**
+         * Returns the custom PostgreSQL column data type.
+         */
         lastSeenHwid: customType({ dataType: () => "bytea" })("last_seen_hwid"),
         lastReadRules: timestamp("last_read_rules", { withTimezone: true }),
         lastSeenHwidType: integer("last_seen_hwid_type").default(0),
@@ -1126,6 +1132,9 @@ export const serverBan = pgTable(
             onDelete: "set null",
             name: "FK_server_ban_player_banning_admin",
         }),
+        /**
+         * Returns the custom PostgreSQL column data type.
+         */
         hwid: customType({ dataType: () => "bytea" })(),
         exemptFlags: integer("exempt_flags").default(0).notNull(),
         autoDelete: boolean("auto_delete").default(false).notNull(),
@@ -1240,6 +1249,9 @@ export const serverRoleBan = pgTable(
             integer("server_role_ban_id").generatedByDefaultAsIdentity(),
         playerUserId: uuid("player_user_id"),
         address: inet(),
+        /**
+         * Returns the custom PostgreSQL column data type.
+         */
         hwid: customType({ dataType: () => "bytea" })(),
         banTime: timestamp("ban_time", { withTimezone: true }).notNull(),
         expirationTime: timestamp("expiration_time", { withTimezone: true }),
@@ -1391,6 +1403,9 @@ export const uploadedResourceLog = pgTable(
         date: timestamp({ withTimezone: true }).notNull(),
         userId: uuid("user_id").notNull(),
         path: text().notNull(),
+        /**
+         * Returns the custom PostgreSQL column data type.
+         */
         data: customType({ dataType: () => "bytea" })().notNull(),
     },
     (table) => [

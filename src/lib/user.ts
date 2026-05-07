@@ -7,6 +7,9 @@ import { normalizeArrayOrValue } from "@/utils/stdfunc";
 import { userSelectPublicSchema } from "@/utils/validate/schemas";
 import { eq, desc } from "drizzle-orm";
 
+/**
+ * Requests user id from the database.
+ */
 export async function requestUserId(usernameNormalized: string) {
     "use cache";
     log.trace("requestUserId called", { usernameNormalized });
@@ -23,6 +26,9 @@ export async function requestUserId(usernameNormalized: string) {
         .execute();
 }
 
+/**
+ * Gets user id.
+ */
 export async function getUserId(request: ReturnType<typeof requestUserId>) {
     log.trace("getUserId called");
     const userId = normalizeArrayOrValue(await request);
@@ -35,6 +41,9 @@ export async function getUserId(request: ReturnType<typeof requestUserId>) {
     return null;
 }
 
+/**
+ * Requests user from the database.
+ */
 export async function requestUser(uid: string | number) {
     "use cache";
     log.trace("requestUser called", { uid, uidType: typeof uid });
@@ -49,6 +58,9 @@ export async function requestUser(uid: string | number) {
     return db.select().from(users).where(eq(field, uid)).limit(1).execute();
 }
 
+/**
+ * Gets user.
+ */
 export async function getUser(request: ReturnType<typeof requestUser>) {
     log.trace("getUser called");
     log.debug("getUser parsing response");
@@ -58,6 +70,9 @@ export async function getUser(request: ReturnType<typeof requestUser>) {
     return userSelectPublicSchema.parse(normalizeArrayOrValue(await request));
 }
 
+/**
+ * Requests all users from the database.
+ */
 export async function requestAllUsers() {
     "use cache";
     log.trace("requestAllUsers called");
@@ -73,6 +88,9 @@ export async function requestAllUsers() {
         .execute();
 }
 
+/**
+ * Gets all users.
+ */
 export async function getAllUsers(request: ReturnType<typeof requestAllUsers>) {
     log.trace("getAllUsers called");
     log.debug("getAllUsers parsing");
