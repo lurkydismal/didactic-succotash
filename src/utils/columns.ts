@@ -15,7 +15,7 @@
 
 import { FieldConfig } from "@/components/TableDataGrid/RowDialog";
 import { toCamelCase } from "@/utils/stdfunc";
-import { GridColDef } from "@mui/x-data-grid";
+import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 
 type NormalizeOptions = {
     defaultFlex?: number; // fallback flex when column.flex is missing
@@ -73,8 +73,14 @@ export function columnsFromFields<
     return normalizeColumns(
         fields.map((field) => ({
             field: String(field.key),
-            headerName: field.label,
             flex: 1,
+            headerName: field.label,
+            ...(field.formatValue
+                ? {
+                      renderCell: (params: GridRenderCellParams) =>
+                          String(field.formatValue?.(params.value) ?? ""),
+                  }
+                : {}),
         })),
     );
 }

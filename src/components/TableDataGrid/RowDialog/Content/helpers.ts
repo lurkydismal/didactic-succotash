@@ -39,7 +39,8 @@ export const buildInitialValues = <R extends Record<string, unknown>, RI>(
 
     for (const field of fields) {
         const key = String(field.key);
-        out[key] = (row as Record<string, unknown>)[key] ?? null;
+        const value = (row as Record<string, unknown>)[key] ?? null;
+        out[key] = field.formatValue ? field.formatValue(value) : value;
     }
 
     return out;
