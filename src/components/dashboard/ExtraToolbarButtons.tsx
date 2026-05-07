@@ -10,6 +10,16 @@ import {
 import { Tooltip } from "@mui/material";
 import { ToolbarButton } from "@mui/x-data-grid";
 
+type CreateRowAction<RI extends Record<string, unknown>> =
+    | (() => void)
+    | ((row: RI) => Promise<void>);
+
+function isDialogCreateAction<RI extends Record<string, unknown>>(
+    createRowAction: CreateRowAction<RI>,
+): createRowAction is () => void {
+    return createRowAction.length === 0;
+}
+
 /**
  * Renders the extra toolbar buttons component.
  */
@@ -21,7 +31,7 @@ export default function ExtraToolbarButtons<
     createRowAction,
 }: Readonly<{
     emptyRow?: RI;
-    createRowAction: () => void;
+    createRowAction: CreateRowAction<RI>;
 }>) {
     const { showMessage, showSuccess, showError, showWarning, showInfo } =
         useSnackbar();
@@ -45,7 +55,8 @@ export default function ExtraToolbarButtons<
             <Tooltip title="Add new row">
                 <ToolbarButton
                     onClick={() => {
-                        if (!emptyRow) return;
+                        if (!emptyRow || !isDialogCreateAction(createRowAction))
+                            return;
                         createRowAction();
                     }}
                 >
