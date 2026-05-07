@@ -1,13 +1,14 @@
 "use server";
 
-import db from "@/db";
-import log from "@/utils/stdlog";
-import { AnyColumn, desc } from "drizzle-orm";
-import { DbTarget, parseRawTarget } from "@/lib/types";
-import { ActionResult } from "@/lib/types";
 import { GridValidRowModel } from "@mui/x-data-grid";
-import { toCamelCase } from "@/utils/stdfunc";
+import { AnyColumn, desc } from "drizzle-orm";
 import { createSelectSchema } from "drizzle-zod";
+
+import db from "@/db";
+import { cacheDbRequest } from "@/lib/cache";
+import { ActionResult, DbTarget, parseRawTarget } from "@/lib/types";
+import log from "@/utils/stdlog";
+import { toCamelCase } from "@/utils/stdfunc";
 
 // TODO: Validate what returns
 /**
@@ -17,6 +18,9 @@ export async function getRows(
     rawTarget: DbTarget,
     id: AnyColumn,
 ): Promise<ActionResult<readonly GridValidRowModel[]>> {
+    "use cache";
+    cacheDbRequest([rawTarget]);
+
     try {
         const table = parseRawTarget(rawTarget);
 

@@ -1,15 +1,17 @@
 "use server";
 
+import { asc, desc, eq, getColumns, ne, sql } from "drizzle-orm";
+import { alias } from "drizzle-orm/pg-core";
+
 import db from "@/db";
 import { player, round, serverBan } from "@/db/schema";
 import { ServerBanRowInsert as TableRowInsert } from "@/db/types";
+import { cacheDbRequest } from "@/lib/cache";
 import { create } from "@/lib/dashboard/common/create";
 import { updateAction } from "@/lib/dashboard/common/update";
 import { DbTarget } from "@/lib/types";
-import log from "@/utils/stdlog";
 import { formatHwidByteaHex, formatHwidHex } from "@/utils/hwid";
-import { asc, desc, eq, getColumns, ne, sql } from "drizzle-orm";
-import { alias } from "drizzle-orm/pg-core";
+import log from "@/utils/stdlog";
 
 const target: DbTarget = "serverBan";
 const idColumn = serverBan.serverBanId;
@@ -30,6 +32,9 @@ function normalizeHwidMutationValue(value: unknown): string | null {
 async function resolvePlayerUserIdByUsername(
     rawValue: string | null | undefined,
 ): Promise<string | null> {
+    "use cache";
+    cacheDbRequest(["player"]);
+
     const username = rawValue?.trim();
     if (!username) return null;
 
@@ -47,6 +52,9 @@ async function resolvePlayerUserIdByUsername(
  * Gets rows action.
  */
 export async function getRowsAction() {
+    "use cache";
+    cacheDbRequest(["serverBan", "player"]);
+
     const serverBanColumns = getColumns(serverBan);
     const banningAdminPlayer = alias(player, "banning_admin_player");
     const rows = await db
@@ -74,6 +82,9 @@ export async function getRowsAction() {
  * Gets player username options action.
  */
 export async function getPlayerUsernameOptionsAction(): Promise<string[]> {
+    "use cache";
+    cacheDbRequest(["player"]);
+
     const rows = await db
         .select({ playerUsername: player.lastSeenUserName })
         .from(player)
@@ -92,6 +103,9 @@ export async function getPlayerUsernameOptionsAction(): Promise<string[]> {
  * Gets player address options action.
  */
 export async function getPlayerAddressOptionsAction(): Promise<string[]> {
+    "use cache";
+    cacheDbRequest(["player"]);
+
     const rows = await db
         .select({ address: player.lastSeenAddress })
         .from(player)
@@ -112,6 +126,9 @@ export async function getPlayerAddressOptionsAction(): Promise<string[]> {
  * Gets player hwid options action.
  */
 export async function getPlayerHwidOptionsAction(): Promise<string[]> {
+    "use cache";
+    cacheDbRequest(["player"]);
+
     const rows = await db
         .select({ hwid: player.lastSeenHwid })
         .from(player)
@@ -130,6 +147,9 @@ export async function getPlayerHwidOptionsAction(): Promise<string[]> {
 export async function getPlayerPackedOptionsAction(): Promise<
     { playerUsername: string; address: string; hwid: string }[]
 > {
+    "use cache";
+    cacheDbRequest(["player"]);
+
     const rows = await db
         .select({
             playerUsername: player.lastSeenUserName,
@@ -231,6 +251,9 @@ export async function updateRowAction(fd: FormData): Promise<void> {
  * Handles has round id action behavior.
  */
 export async function hasRoundIdAction(roundId: number): Promise<boolean> {
+    "use cache";
+    cacheDbRequest(["round"]);
+
     if (!Number.isInteger(roundId)) return false;
 
     const [existingRound] = await db

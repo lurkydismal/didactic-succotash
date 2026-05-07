@@ -33,9 +33,10 @@ import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 import db from "@/db";
-import { eq } from "drizzle-orm";
 import { users } from "@/db/schema";
 import { UsersRowPublic } from "@/db/types";
+import { updateDbCacheTags } from "@/lib/cache";
+import { eq } from "drizzle-orm";
 import { getEnv, normalizeArrayOrValue } from "@/utils/stdfunc";
 import { userSelectPublicSchema } from "@/utils/validate/schemas";
 import z from "zod";
@@ -339,7 +340,9 @@ export async function register(user: { username: string; password: string }) {
             })
             .execute();
 
-        // Normalize
+        // Invalidate cached user reads before normalizing the returned row.
+        updateDbCacheTags(["users"]);
+
         const created = normalizeArrayOrValue(inserted);
 
         // Create minimal payload for token

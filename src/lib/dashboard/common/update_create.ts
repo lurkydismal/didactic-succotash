@@ -1,9 +1,11 @@
+import { AnyColumn, eq } from "drizzle-orm";
+
 import db from "@/db";
 import { getSessionData } from "@/lib/auth";
+import { updateDbCacheTags } from "@/lib/cache";
 import { ActionResult, DbTarget, parseRawTarget } from "@/lib/types";
-import { mutationInputSchema } from "@/utils/validate/schemas";
 import log from "@/utils/stdlog";
-import { AnyColumn, eq } from "drizzle-orm";
+import { mutationInputSchema } from "@/utils/validate/schemas";
 import {
     createInsertSchema,
     createSelectSchema,
@@ -97,6 +99,8 @@ export async function save(
         } else {
             await db.insert(table).values(row).execute();
         }
+
+        updateDbCacheTags([rawTarget]);
 
         return { ok: true };
     } catch (err) {
