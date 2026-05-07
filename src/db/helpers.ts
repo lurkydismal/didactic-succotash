@@ -17,10 +17,10 @@ import { timestamp, varchar } from "drizzle-orm/pg-core";
  * const users = pgTable("users", {
  *     id: serial("id").primaryKey(),
  *     name: text("name").notNull(),
- *     ...timestamps,
+ *     ...timestampsColumns,
  * });
  */
-export const timestamps = {
+export const timestampsColumns = {
     updated_at: timestamp({ precision: 0, withTimezone: true })
         .defaultNow()
         .notNull(),
@@ -47,18 +47,16 @@ FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column();
 */
 
-// TODO: Rename
 /**
  * Common authorship metadata columns for mutable records.
  *
- * @example
  * const posts = pgTable("posts", {
  *   id: serial("id").primaryKey(),
  *   title: text("title").notNull(),
- *   ...editInfo,
+ *   ...auditColumns,
  * });
  */
-export const editInfo = {
+export const auditColumns = {
     author: varchar({ length: 32 }).default("system").notNull(),
     last_editor: varchar({ length: 32 }).default("system").notNull(),
 };
@@ -69,10 +67,10 @@ export const editInfo = {
  * @example
  * const auditTable = pgTable("audit", {
  *   id: serial("id").primaryKey(),
- *   ...metadata,
+ *   ...metadataColumns,
  * });
  */
-export const metadata = {
-    ...editInfo,
-    ...timestamps,
+export const metadataColumns = {
+    ...auditColumns,
+    ...timestampsColumns,
 };

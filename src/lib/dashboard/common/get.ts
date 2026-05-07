@@ -10,7 +10,6 @@ import { ActionResult, DbTarget, parseRawTarget } from "@/lib/types";
 import log from "@/utils/stdlog";
 import { toCamelCase } from "@/utils/stdfunc";
 
-// TODO: Validate what returns
 /**
  * Gets rows.
  */
@@ -45,18 +44,14 @@ export async function getRows(
         // Check if "id" already exists
         const hasId = "id" in validRows[0];
 
-        log.trace({ id, hasId, rows });
-
         type Row = (typeof validRows)[number];
 
         const result = hasId
             ? validRows
             : validRows.map((row: Row) => ({
-                  ...row,
-                  id: row[toCamelCase(id.name) as keyof Row], // pull value from provided column
-              }));
-
-        log.trace({ result });
+                ...row,
+                id: row[toCamelCase(id.name) as keyof Row], // pull value from provided column
+            }));
 
         return {
             ok: true,

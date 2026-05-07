@@ -22,8 +22,8 @@ import {
     primaryKey,
     unique,
 } from "drizzle-orm/pg-core";
-import { timestamps } from "./helpers";
-import { metadata } from "./helpers";
+import { timestampsColumns } from "./helpers";
+import { metadataColumns } from "./helpers";
 import { sql } from "drizzle-orm";
 
 export const users = pgTable(
@@ -33,7 +33,7 @@ export const users = pgTable(
         username: varchar({ length: 32 }).unique().notNull(),
         username_normalized: varchar({ length: 32 }).unique().notNull(),
         password_hash: text().notNull(),
-        ...timestamps,
+        ...timestampsColumns,
     },
     (t) => [
         check("username_not_blank", sql`length(trim(${t.username})) > 0`),
@@ -1155,7 +1155,7 @@ export const serverBan = pgTable(
         }),
         severity: integer().default(3).notNull(),
         hwidType: integer("hwid_type").default(0),
-        ...metadata,
+        ...metadataColumns,
     },
     (table) => [
         primaryKey({
