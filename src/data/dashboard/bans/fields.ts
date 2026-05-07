@@ -23,7 +23,10 @@ let playerUsernameOptionsPromise: Promise<string[]> | null = null;
  * Loads packed player rows once so multiple autocomplete fields can share them.
  */
 const loadPackedPlayerRows = () => {
-    packedPlayerRowsPromise ??= getPlayerPackedOptionsAction();
+    packedPlayerRowsPromise ??= getPlayerPackedOptionsAction().catch((err) => {
+        packedPlayerRowsPromise = null; // Reset cache on failure
+        throw err;
+    });
     return packedPlayerRowsPromise;
 };
 
@@ -31,7 +34,10 @@ const loadPackedPlayerRows = () => {
  * Loads player username options once for admin selection.
  */
 const loadPlayerUsernameOptions = () => {
-    playerUsernameOptionsPromise ??= getPlayerUsernameOptionsAction();
+    playerUsernameOptionsPromise ??= getPlayerUsernameOptionsAction().catch((err) => {
+        playerUsernameOptionsPromise = null; // Reset cache on failure
+        throw err;
+    });
     return playerUsernameOptionsPromise;
 };
 
