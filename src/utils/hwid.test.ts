@@ -14,7 +14,9 @@ describe("formatHwidHex", () => {
 
     it("keeps existing hex labels compatible with autocomplete", () => {
         expect(formatHwidHex("abcdef")).toBe("abcdef");
+        expect(formatHwidHex("ABCDEF")).toBe("abcdef");
         expect(formatHwidHex("\\xABCDEF")).toBe("abcdef");
         expect(formatHwidHex(null)).toBe("");
+        expect(formatHwidHex(undefined)).toBe("");
     });
 });
