@@ -17,10 +17,11 @@ type TextFieldInputProps = {
     error?: FieldError;
     rules?: RegisterOptions<Record<string, unknown>, string>;
     onValueChange: (value: string) => void;
+    multiline?: boolean;
 };
 
 /**
- * Renders the text field input component.
+ * Renders a text field input component. Pass `multiline` for a resizable textarea.
  */
 export default function TextFieldInput({
     fieldKey,
@@ -32,6 +33,7 @@ export default function TextFieldInput({
     error,
     rules,
     onValueChange,
+    multiline = false,
 }: TextFieldInputProps) {
     return (
         <div>
@@ -47,12 +49,14 @@ export default function TextFieldInput({
                     <TextField
                         {...field}
                         required={required}
-                        id={`${fieldKey}-text`}
+                        id={`${fieldKey}-${multiline ? "multiline" : "text"}`}
                         value={field.value ?? ""}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => {
                             field.onChange(e.target.value);
                             onValueChange(e.target.value);
                         }}
+                        multiline={multiline}
+                        {...(multiline && { minRows: 4, maxRows: 8 })}
                         error={!!error}
                         helperText={error?.message}
                         fullWidth

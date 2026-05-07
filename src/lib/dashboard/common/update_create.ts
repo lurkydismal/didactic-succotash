@@ -100,6 +100,7 @@ export async function save(
             await db.insert(table).values(row).execute();
         }
 
+        updateDbCacheTags([rawTarget]);
         return { ok: true };
     } catch (err) {
         log.error(opts.isUpdate ? "Update error:" : "Create error:", err);
@@ -108,10 +109,6 @@ export async function save(
             error: opts.isUpdate ? "Update error" : "Create error",
         };
     }
-
-    // Runs only on success path; errors from updateTag propagate to the caller.
-    updateDbCacheTags([rawTarget]);
-    return { ok: true };
 }
 
 /**
