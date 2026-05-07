@@ -24,8 +24,11 @@ export async function getRows(
     try {
         const table = parseRawTarget(rawTarget);
 
-        const columns = getColumns(table);
-        const id = columns[idColumnName] as AnyColumn;
+        const columns = getColumns(table) as Record<
+            string,
+            AnyColumn | undefined
+        >;
+        const id = columns[idColumnName];
         if (!id) {
             return { ok: false, error: "Unknown id column" };
         }
