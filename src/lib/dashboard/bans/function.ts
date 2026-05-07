@@ -32,9 +32,6 @@ function normalizeHwidMutationValue(value: unknown): string | null {
 async function resolvePlayerUserIdByUsername(
     rawValue: string | null | undefined,
 ): Promise<string | null> {
-    "use cache";
-    cacheDbRequest(["player"]);
-
     const username = rawValue?.trim();
     if (!username) return null;
 
