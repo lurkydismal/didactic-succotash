@@ -16,13 +16,19 @@ import { toCamelCase } from "@/utils/stdfunc";
  */
 export async function getRows(
     rawTarget: DbTarget,
-    id: AnyColumn,
+    idColumnName: string,
 ): Promise<ActionResult<readonly GridValidRowModel[]>> {
     "use cache";
     cacheDbRequest([rawTarget]);
 
     try {
         const table = parseRawTarget(rawTarget);
+
+        const columns = getColumns(table);
+        const id = columns[idColumnName] as AnyColumn;
+        if (!id) {
+            return { ok: false, error: "Unknown id column" };
+        }
 
         const rows = await db.select().from(table).orderBy(desc(id)).execute();
         const rowSchema = createSelectSchema(table).array();
