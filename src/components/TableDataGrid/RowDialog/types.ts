@@ -35,6 +35,7 @@ export type FieldConfig<
     onAutocompleteOpen?: () => void;
     onAutocompleteClose?: () => void;
     // optional custom render: (value, setValue, row) => ReactNode
+    formatValue?: (value: unknown) => unknown;
     render?: (
         value: unknown,
         setValue: (v: unknown) => void,
