@@ -53,6 +53,6 @@ export function formatHwidHex(value: unknown): string {
 }
 
 export function formatHwidByteaHex(value: unknown): string {
-    const hex = formatHwidHex(value).trim();
+    const hex = formatHwidHex(value).trim().replace(/^\\x/i, "");
     return hex ? `\\x${hex}` : "";
 }
