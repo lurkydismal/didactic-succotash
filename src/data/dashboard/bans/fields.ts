@@ -1,9 +1,69 @@
-import { FieldConfig } from "@/components/TableDataGrid/RowDialog";
-import { formatHwidByteaHex, formatHwidHex } from "@/utils/hwid";
-import {
+import type { FieldConfig } from "@/components/TableDataGrid/RowDialog";
+import type { AutocompleteOption } from "@/components/TableDataGrid/RowDialog/types";
+import type {
     ServerBanRow as TableRow,
     ServerBanRowInsert as TableRowInsert,
 } from "@/db/types";
+import {
+    getPlayerPackedOptionsAction,
+    getPlayerUsernameOptionsAction,
+    hasRoundIdAction,
+} from "@/lib/dashboard/bans/function";
+import { formatHwidByteaHex, formatHwidHex } from "@/utils/hwid";
+
+const packedFieldNames = ["playerUsername", "address", "hwid"] as const;
+
+type PackedPlayerField = (typeof packedFieldNames)[number];
+type PackedPlayerRow = Record<PackedPlayerField, string>;
+
+let packedPlayerRowsPromise: Promise<PackedPlayerRow[]> | null = null;
+let playerUsernameOptionsPromise: Promise<string[]> | null = null;
+
+/**
+ * Loads packed player rows once so multiple autocomplete fields can share them.
+ */
+const loadPackedPlayerRows = () => {
+    packedPlayerRowsPromise ??= getPlayerPackedOptionsAction().catch((err) => {
+        packedPlayerRowsPromise = null; // Reset cache on failure
+        throw err;
+    });
+    return packedPlayerRowsPromise;
+};
+
+/**
+ * Loads player username options once for admin selection.
+ */
+const loadPlayerUsernameOptions = () => {
+    playerUsernameOptionsPromise ??= getPlayerUsernameOptionsAction().catch((err) => {
+        playerUsernameOptionsPromise = null; // Reset cache on failure
+        throw err;
+    });
+    return playerUsernameOptionsPromise;
+};
+
+/**
+ * Builds packed autocomplete options for the selected player field.
+ */
+const loadPackedPlayerOptions =
+    (labelKey: PackedPlayerField) =>
+    async (): Promise<AutocompleteOption[]> => {
+        const packedRows = await loadPackedPlayerRows();
+
+        return packedRows.reduce<AutocompleteOption[]>((options, packedRow) => {
+            const label = packedRow[labelKey];
+            if (!label) return options;
+
+            const packedValues = packedFieldNames.reduce<
+                Record<string, unknown>
+            >((values, packedField) => {
+                values[packedField] = packedRow[packedField] ?? "";
+                return values;
+            }, {});
+
+            options.push({ label, packedValues });
+            return options;
+        }, []);
+    };
 
 const fields: FieldConfig<TableRow, TableRowInsert>[] = [
     {
@@ -11,8 +71,7 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         label: "Player",
         type: "autocomplete",
         autocompleteOptions: [],
-        autocompletePackedKey: "playerUsername",
-        autocompletePackedFields: ["playerUsername", "address", "hwid"],
+        loadOptions: loadPackedPlayerOptions("playerUsername"),
         requiredGroup: "banTarget",
     },
     {
@@ -20,8 +79,7 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         label: "Address",
         type: "autocomplete",
         autocompleteOptions: [],
-        autocompletePackedKey: "address",
-        autocompletePackedFields: ["playerUsername", "address", "hwid"],
+        loadOptions: loadPackedPlayerOptions("address"),
         requiredGroup: "banTarget",
     },
     {
@@ -48,6 +106,7 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         label: "Banning admin",
         type: "autocomplete",
         autocompleteOptions: [],
+        loadOptions: loadPlayerUsernameOptions,
         required: true,
     },
     {
@@ -55,8 +114,7 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         label: "HWID",
         type: "autocomplete",
         autocompleteOptions: [],
-        autocompletePackedKey: "hwid",
-        autocompletePackedFields: ["playerUsername", "address", "hwid"],
+        loadOptions: loadPackedPlayerOptions("hwid"),
         formatValue: formatHwidHex,
         requiredGroup: "banTarget",
         toFormValue: formatHwidByteaHex,
@@ -66,6 +124,22 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         label: "Round ID",
         type: "text",
         required: true,
+        /**
+         * Validates that the referenced round exists.
+         */
+        validate: async (value) => {
+            if (value === null || value === undefined || value === "") {
+                return true;
+            }
+
+            const parsed = Number(value);
+            if (!Number.isInteger(parsed)) {
+                return "No such ID";
+            }
+
+            const exists = await hasRoundIdAction(parsed);
+            return exists || "No such ID";
+        },
     },
 ];
 

@@ -38,17 +38,65 @@ export default function TableDataGrid<
     const apiRef = useGridApiRef();
     const [currentRows, setCurrentRows] =
         useState<Readonly<GridRowsProp> | null>(null);
+    const [resolvedFields, setResolvedFields] = useState(fields);
+    const [fieldsResolving, setFieldsResolving] = useState(false);
     const [selectedRow, setSelectedRow] = useState<R | null>(null);
     const [dialogOpen, setDialogOpen] = useState(false);
     const emptyRow = React.useMemo(
         () =>
-            fields.reduce((row, field) => {
+            resolvedFields.reduce((row, field) => {
                 row[field.key as keyof RI] = (field.placeholder ??
                     null) as RI[keyof RI];
                 return row;
             }, {} as RI),
-        [fields],
+        [resolvedFields],
     );
+
+    useEffect(() => {
+        let active = true;
+
+        /**
+         * Resolves async field configuration declared by each field.
+         */
+        const resolveFields = async () => {
+            const hasLoaders = fields.some((field) => field.loadOptions);
+            if (!hasLoaders) {
+                setResolvedFields(fields);
+                return;
+            }
+
+            setFieldsResolving(true);
+            try {
+                const nextFields = await Promise.all(
+                    fields.map(async (field) => {
+                        if (!field.loadOptions) return field;
+
+                        try {
+                            return {
+                                ...field,
+                                autocompleteOptions: await field.loadOptions(),
+                            };
+                        } catch {
+                            // Preserve field without resolved options on individual failure
+                            return field;
+                        }
+                    }),
+                );
+
+                if (active) setResolvedFields(nextFields);
+            } catch (error) {
+                if (active) showError(error);
+            } finally {
+                if (active) setFieldsResolving(false);
+            }
+        };
+
+        void resolveFields();
+
+        return () => {
+            active = false;
+        };
+    }, [fields, showError]);
 
     // Getting rows
     const _getRows = useCallback(async () => {
@@ -60,7 +108,6 @@ export default function TableDataGrid<
     }, [getRowsAction, showError]);
 
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         _getRows();
     }, [_getRows]);
 
@@ -152,9 +199,9 @@ export default function TableDataGrid<
           )
         : extraButtons;
 
-    const columns = columnsFromFields(fields);
+    const columns = columnsFromFields(resolvedFields);
 
-    return currentRows === null ? (
+    return currentRows === null || fieldsResolving ? (
         <Box
             sx={{
                 flexGrow: 1,
@@ -187,7 +234,7 @@ export default function TableDataGrid<
 
             <RowDialog<R, RI>
                 dialogOpen={dialogOpen}
-                fields={fields}
+                fields={resolvedFields}
                 handleClose={handleClose}
                 selectedRow={selectedRow}
                 setSelectedRow={setSelectedRow}

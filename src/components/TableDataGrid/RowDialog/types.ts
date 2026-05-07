@@ -28,8 +28,7 @@ export type FieldConfig<
     requiredGroupMin?: number;
     placeholder?: unknown;
     autocompleteOptions?: readonly AutocompleteOption[];
-    autocompletePackedKey?: string;
-    autocompletePackedFields?: readonly string[];
+    loadOptions?: () => Promise<readonly AutocompleteOption[]>;
     autocompleteLoading?: boolean;
     autocompleteOpen?: boolean;
     onAutocompleteOpen?: () => void;
