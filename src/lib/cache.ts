@@ -32,5 +32,11 @@ export function updateDbCacheTags(targets: readonly DbTarget[]) {
     for (const target of targets) {
         updateTag(getDbCacheTag(target));
     }
+}
+
+/**
+ * Flushes every DB-related cache entry (bulk invalidation).
+ */
+export function flushAllDbCaches() {
     updateTag(getDbCacheTag("all"));
 }
