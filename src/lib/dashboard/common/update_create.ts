@@ -1,9 +1,11 @@
+import { AnyColumn, eq } from "drizzle-orm";
+
 import db from "@/db";
 import { getSessionData } from "@/lib/auth";
+import { updateDbCacheTags } from "@/lib/cache";
 import { ActionResult, DbTarget, parseRawTarget } from "@/lib/types";
-import { mutationInputSchema } from "@/utils/validate/schemas";
 import log from "@/utils/stdlog";
-import { AnyColumn, eq } from "drizzle-orm";
+import { mutationInputSchema } from "@/utils/validate/schemas";
 import {
     createInsertSchema,
     createSelectSchema,
@@ -106,6 +108,10 @@ export async function save(
             error: opts.isUpdate ? "Update error" : "Create error",
         };
     }
+
+    // Runs only on success path; errors from updateTag propagate to the caller.
+    updateDbCacheTags([rawTarget]);
+    return { ok: true };
 }
 
 /**

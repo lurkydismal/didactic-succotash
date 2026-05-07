@@ -1,17 +1,21 @@
 "use server";
 
+import { desc, eq } from "drizzle-orm";
+
 import db from "@/db";
 import { users } from "@/db/schema";
+import { cacheDbRequest } from "@/lib/cache";
 import log from "@/utils/stdlog";
 import { normalizeArrayOrValue } from "@/utils/stdfunc";
 import { userSelectPublicSchema } from "@/utils/validate/schemas";
-import { eq, desc } from "drizzle-orm";
 
 /**
  * Requests user id from the database.
  */
 export async function requestUserId(usernameNormalized: string) {
     "use cache";
+    cacheDbRequest(["users"]);
+
     log.trace("requestUserId called", { usernameNormalized });
     log.debug("requestUserId query start");
     log.info("Requesting user id");
@@ -46,6 +50,8 @@ export async function getUserId(request: ReturnType<typeof requestUserId>) {
  */
 export async function requestUser(uid: string | number) {
     "use cache";
+    cacheDbRequest(["users"]);
+
     log.trace("requestUser called", { uid, uidType: typeof uid });
     log.debug("requestUser query setup");
     log.info("Requesting user record");
@@ -55,7 +61,10 @@ export async function requestUser(uid: string | number) {
     const field =
         typeof uid === "string" ? users.username_normalized : users.id;
 
-    return db.select().from(users).where(eq(field, uid)).limit(1).execute();
+    return db.select({
+            username: users.username,
+            username_normalized: users.username_normalized,
+        }).from(users).where(eq(field, uid)).limit(1).execute();
 }
 
 /**
@@ -75,6 +84,8 @@ export async function getUser(request: ReturnType<typeof requestUser>) {
  */
 export async function requestAllUsers() {
     "use cache";
+    cacheDbRequest(["users"]);
+
     log.trace("requestAllUsers called");
     log.debug("requestAllUsers query start");
     log.info("Requesting all users");

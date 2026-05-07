@@ -1,13 +1,14 @@
 "use server";
 
-import db from "@/db";
-import log from "@/utils/stdlog";
-import { AnyColumn, desc } from "drizzle-orm";
-import { DbTarget, parseRawTarget } from "@/lib/types";
-import { ActionResult } from "@/lib/types";
 import { GridValidRowModel } from "@mui/x-data-grid";
-import { toCamelCase } from "@/utils/stdfunc";
+import { AnyColumn, desc } from "drizzle-orm";
 import { createSelectSchema } from "drizzle-zod";
+
+import db from "@/db";
+import { cacheDbRequest } from "@/lib/cache";
+import { ActionResult, DbTarget, parseRawTarget } from "@/lib/types";
+import log from "@/utils/stdlog";
+import { toCamelCase } from "@/utils/stdfunc";
 
 // TODO: Validate what returns
 /**
@@ -15,10 +16,19 @@ import { createSelectSchema } from "drizzle-zod";
  */
 export async function getRows(
     rawTarget: DbTarget,
-    id: AnyColumn,
+    idColumnName: string,
 ): Promise<ActionResult<readonly GridValidRowModel[]>> {
+    "use cache";
+    cacheDbRequest([rawTarget]);
+
     try {
         const table = parseRawTarget(rawTarget);
+
+        const columns = getColumns(table);
+        const id = columns[idColumnName] as AnyColumn;
+        if (!id) {
+            return { ok: false, error: "Unknown id column" };
+        }
 
         const rows = await db.select().from(table).orderBy(desc(id)).execute();
         const rowSchema = createSelectSchema(table).array();
