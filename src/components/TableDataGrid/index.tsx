@@ -71,10 +71,15 @@ export default function TableDataGrid<
                     fields.map(async (field) => {
                         if (!field.loadOptions) return field;
 
-                        return {
-                            ...field,
-                            autocompleteOptions: await field.loadOptions(),
-                        };
+                        try {
+                            return {
+                                ...field,
+                                autocompleteOptions: await field.loadOptions(),
+                            };
+                        } catch {
+                            // Preserve field without resolved options on individual failure
+                            return field;
+                        }
                     }),
                 );
 
