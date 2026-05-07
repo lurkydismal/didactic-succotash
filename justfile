@@ -26,6 +26,10 @@ format:
 lint:
     pnpm lint
 
+# Run better static analysis and lint checks.
+hard-lint:
+    pnpm tsc --noEmit
+
 # Generate a new migration from schema changes.
 generate-migration:
     pnpm generate
