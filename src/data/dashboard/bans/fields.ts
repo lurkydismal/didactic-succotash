@@ -34,10 +34,12 @@ const loadPackedPlayerRows = () => {
  * Loads player username options once for admin selection.
  */
 const loadPlayerUsernameOptions = () => {
-    playerUsernameOptionsPromise ??= getPlayerUsernameOptionsAction().catch((err) => {
-        playerUsernameOptionsPromise = null; // Reset cache on failure
-        throw err;
-    });
+    playerUsernameOptionsPromise ??= getPlayerUsernameOptionsAction().catch(
+        (err) => {
+            playerUsernameOptionsPromise = null; // Reset cache on failure
+            throw err;
+        },
+    );
     return playerUsernameOptionsPromise;
 };
 
