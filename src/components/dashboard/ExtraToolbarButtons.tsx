@@ -55,9 +55,13 @@ export default function ExtraToolbarButtons<
             <Tooltip title="Add new row">
                 <ToolbarButton
                     onClick={() => {
-                        if (!emptyRow || !isDialogCreateAction(createRowAction))
-                            return;
-                        createRowAction();
+                        if (isDialogCreateAction(createRowAction)) {
+                            createRowAction();
+                        } else if (emptyRow) {
+                            createRowAction(emptyRow).catch((err) => {
+                                showError(`Failed to create row: ${err.message}`);
+                            });
+                        }
                     }}
                 >
                     <AddIcon fontSize="small" />
