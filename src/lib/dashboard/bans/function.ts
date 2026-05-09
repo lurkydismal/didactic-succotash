@@ -186,6 +186,9 @@ export async function createRowAction(
     row.playerUserId = await resolvePlayerUserIdByUsername(row.playerUsername);
     if (!row.playerUserId) {
         if (isDev) {
+            log.warn(
+                `Dev mode: Player username "${row.playerUsername}" not found, selecting random player`,
+            );
             const [randomPlayer] = await db
                 .select({
                     userId: player.userId,
@@ -206,7 +209,7 @@ export async function createRowAction(
 
             row.playerUserId = randomPlayer.userId;
         } else {
-            throw new Error("Invalid player username");
+            throw Error("Invalid player username");
         }
     }
 
