@@ -27,6 +27,7 @@ export default function CustomQuickFilter() {
                             {...triggerProps}
                             ownerState={{ expanded: state.expanded }}
                             color="default"
+                            disabled={state.expanded}
                             aria-disabled={state.expanded}
                         >
                             <SearchIcon fontSize="small" />
