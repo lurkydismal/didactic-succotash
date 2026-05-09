@@ -125,8 +125,12 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
                 return "No such ID";
             }
 
-            const exists = await hasRoundIdAction(parsed);
-            return exists || "No such ID";
+            try {
+                const exists = await hasRoundIdAction(parsed);
+                return exists || "No such ID";
+            } catch {
+                return "Unable to verify round ID";
+            }
         },
     },
 ];
