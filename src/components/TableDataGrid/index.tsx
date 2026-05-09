@@ -226,19 +226,6 @@ export default function TableDataGrid<
                 apiRef={apiRef}
                 columns={columns}
                 rows={currentRows}
-                localeText={{
-                    noRowsLabel: "No rows found",
-                }}
-                sx={{
-                    "& .MuiDataGrid-row": {
-                        cursor: "pointer",
-
-    return (
-        <>
-            <CustomDataGrid
-                apiRef={apiRef}
-                columns={columns}
-                rows={currentRows ?? []}
                 sx={{
                     "& .MuiDataGrid-row": {
                         cursor: "pointer",
