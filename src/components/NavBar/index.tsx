@@ -9,7 +9,6 @@ import {
     alpha,
     AppBar,
     Container,
-    MenuList,
 } from "@mui/material";
 
 /**
@@ -53,9 +52,7 @@ export default function NavBar() {
                         containerSx={{ display: "flex", alignItems: "center" }}
                     />
 
-                    <MenuList>
-                        <MobileNav items={items} />
-                    </MenuList>
+                    <MobileNav items={items} />
                 </StyledToolbar>
             </Container>
         </AppBar>

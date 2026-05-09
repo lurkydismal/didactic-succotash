@@ -11,6 +11,7 @@ import {
     MenuItem,
     Divider,
     Button,
+    MenuList,
 } from "@mui/material";
 
 /**
@@ -76,43 +77,45 @@ export default function MobileNav({ items }: { items: NavItem[] }) {
                         </IconButton>
                     </Box>
 
-                    {left.map((value, index) => {
-                        const isLast = index === left.length - 1;
+                    <MenuList>
+                        {left.map((value, index) => {
+                            const isLast = index === left.length - 1;
 
-                        return (
-                            <Fragment key={value.href ?? `left-${index}`}>
-                                <MenuItem
+                            return (
+                                <Fragment key={value.href ?? `left-${index}`}>
+                                    <MenuItem
+                                        href={value.href}
+                                        component={NextLink}
+                                        onClick={onLinkClick}
+                                        data-nav-position="left"
+                                    >
+                                        {value.name}
+                                    </MenuItem>
+
+                                    {!isLast && <Divider />}
+                                </Fragment>
+                            );
+                        })}
+
+                        <Divider sx={{ my: 3 }} />
+
+                        <MenuItem sx={{ gap: 1 }}>
+                            {right.map((value, index) => (
+                                <Button
+                                    key={value.href ?? `right-${index}`}
+                                    color="primary"
+                                    variant="contained"
                                     href={value.href}
                                     component={NextLink}
+                                    fullWidth
                                     onClick={onLinkClick}
-                                    data-nav-position="left"
+                                    data-nav-position="right"
                                 >
                                     {value.name}
-                                </MenuItem>
-
-                                {!isLast && <Divider />}
-                            </Fragment>
-                        );
-                    })}
-
-                    <Divider sx={{ my: 3 }} />
-
-                    <MenuItem sx={{ gap: 1 }}>
-                        {right.map((value, index) => (
-                            <Button
-                                key={value.href ?? `right-${index}`}
-                                color="primary"
-                                variant="contained"
-                                href={value.href}
-                                component={NextLink}
-                                fullWidth
-                                onClick={onLinkClick}
-                                data-nav-position="right"
-                            >
-                                {value.name}
-                            </Button>
-                        ))}
-                    </MenuItem>
+                                </Button>
+                            ))}
+                        </MenuItem>
+                    </MenuList>
                 </Box>
             </Drawer>
         </Box>
