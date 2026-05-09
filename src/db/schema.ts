@@ -1311,10 +1311,6 @@ export const serverRoleBan = pgTable(
             "CK_server_role_ban_HaveEitherAddressOrUserIdOrHWId",
             sql`((address IS NOT NULL) OR (player_user_id IS NOT NULL) OR (hwid IS NOT NULL))`,
         ),
-        check(
-            "HaveEitherAddressOrUserIdOrHWId",
-            sql`((address IS NOT NULL) OR (player_user_id IS NOT NULL) OR (hwid IS NOT NULL))`,
-        ),
     ],
 );
 
