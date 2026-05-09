@@ -3,7 +3,7 @@
 import { CloseRounded, Menu } from "@mui/icons-material";
 import { Fragment, useCallback, useMemo, useState } from "react";
 import NextLink from "@/components/Link";
-import { NavItem } from "@/data/navbat";
+import { NavItem } from "@/data/navbar";
 import {
     Drawer,
     Box,

@@ -1,7 +1,7 @@
 "use client";
 
 import DesktopNav from "./DesktopNav";
-import { items } from "@/data/navbat";
+import { items } from "@/data/navbar";
 import MobileNav from "./MobileNav";
 import {
     styled,

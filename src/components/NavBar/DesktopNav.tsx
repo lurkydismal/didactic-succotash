@@ -1,4 +1,4 @@
-import { NavItem } from "@/data/navbat";
+import { NavItem } from "@/data/navbar";
 import NextLink from "@/components/Link";
 import { Badge, Box, Button, SxProps } from "@mui/material";
 import { usePathname } from "next/navigation";
