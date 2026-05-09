@@ -12,6 +12,7 @@ import { updateAction } from "@/lib/dashboard/common/update";
 import { DbTarget } from "@/lib/types";
 import { formatHwidByteaHex, formatHwidHex } from "@/utils/hwid";
 import log from "@/utils/stdlog";
+import { isDev } from "@/utils/stdvar";
 
 const target: DbTarget = "serverBan";
 const idColumn = serverBan.serverBanId;
@@ -184,23 +185,27 @@ export async function createRowAction(
 ): Promise<void> {
     row.playerUserId = await resolvePlayerUserIdByUsername(row.playerUsername);
     if (!row.playerUserId) {
-        const [randomPlayer] = await db
-            .select({
-                userId: player.userId,
-                lastSeenUserName: player.lastSeenUserName,
-            })
-            .from(player)
-            .where(ne(player.lastSeenUserName, ""))
-            .orderBy(sql`random()`)
-            .limit(1)
-            .execute();
+        if (isDev) {
+            const [randomPlayer] = await db
+                .select({
+                    userId: player.userId,
+                    lastSeenUserName: player.lastSeenUserName,
+                })
+                .from(player)
+                .where(ne(player.lastSeenUserName, ""))
+                .orderBy(sql`random()`)
+                .limit(1)
+                .execute();
 
-        if (!randomPlayer?.userId || !randomPlayer.lastSeenUserName) {
-            log.error("Create server ban aborted: no available username found");
-            throw new Error("No available username found for ban creation");
+            if (!randomPlayer?.userId || !randomPlayer.lastSeenUserName) {
+                log.error("Create server ban aborted: no available username found");
+                throw new Error("No available username found for ban creation");
+            }
+
+            row.playerUserId = randomPlayer.userId;
+        } else {
+            throw Error("Invalid player username");
         }
-
-        row.playerUserId = randomPlayer.userId;
     }
 
     const banningAdminUserId = await resolvePlayerUserIdByUsername(
