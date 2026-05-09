@@ -10,7 +10,6 @@ import {
     IconButton,
     MenuItem,
     Divider,
-    Button,
     MenuList,
 } from "@mui/material";
 
@@ -99,22 +98,17 @@ export default function MobileNav({ items }: { items: NavItem[] }) {
 
                         <Divider sx={{ my: 3 }} />
 
-                        <MenuItem sx={{ gap: 1 }}>
-                            {right.map((value, index) => (
-                                <Button
-                                    key={value.href ?? `right-${index}`}
-                                    color="primary"
-                                    variant="contained"
-                                    href={value.href}
-                                    component={NextLink}
-                                    fullWidth
-                                    onClick={onLinkClick}
-                                    data-nav-position="right"
-                                >
-                                    {value.name}
-                                </Button>
-                            ))}
-                        </MenuItem>
+                        {right.map((value, index) => (
+                            <MenuItem
+                                key={value.href ?? `right-${index}`}
+                                href={value.href}
+                                component={NextLink}
+                                onClick={onLinkClick}
+                                data-nav-position="right"
+                            >
+                                {value.name}
+                            </MenuItem>
+                        ))}
                     </MenuList>
                 </Box>
             </Drawer>
