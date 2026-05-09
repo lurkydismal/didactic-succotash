@@ -1,6 +1,6 @@
 import { afterLoginRoute } from "@/data/routes";
 import { getSessionData } from "@/lib/auth";
-import { permanentRedirect } from "next/navigation";
+import { permanentRedirect, redirect } from "next/navigation";
 
 /**
  * Root page handler that redirects users based on authentication state.
@@ -13,5 +13,5 @@ export default async function Page() {
         permanentRedirect("/auth/register");
     }
 
-    permanentRedirect(afterLoginRoute);
+    redirect(afterLoginRoute);
 }
