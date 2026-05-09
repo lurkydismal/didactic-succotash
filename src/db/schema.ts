@@ -521,7 +521,7 @@ export const connectionLog = pgTable(
             .default(0)
             .notNull()
             .references(() => server.serverId, {
-                onDelete: "set null",
+                onDelete: "set default",
                 name: "FK_connection_log_server_server_id",
             }),
         hwidType: integer("hwid_type").default(0),
