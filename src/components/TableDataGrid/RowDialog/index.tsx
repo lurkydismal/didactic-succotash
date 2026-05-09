@@ -61,7 +61,7 @@ export default function RowDialog<
     return (
         <Dialog
             open={dialogOpen}
-            onClose={() => onClose()}
+            onClose={onClose}
             maxWidth="md"
             fullWidth
             keepMounted
