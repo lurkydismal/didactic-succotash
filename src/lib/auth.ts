@@ -201,7 +201,6 @@ async function verifyJwt(token: string): Promise<null | UsersRowPublic> {
         // parsed is now a UsersRowPublic-like object (only the fields from publicSchema)
         return parsed as UsersRowPublic;
     } catch {
-        log.error("verifyJwt error-level probe log");
         // every verification / validation error => null (treat token as invalid)
         return null;
     }
