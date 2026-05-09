@@ -457,7 +457,7 @@ export const serverRoleBan = pgTable("server_role_ban", {
 	index("IX_server_role_ban_last_edited_by_id").using("btree", table.lastEditedById.asc().nullsLast()),
 	index("IX_server_role_ban_player_user_id").using("btree", table.playerUserId.asc().nullsLast()),
 	index("IX_server_role_ban_round_id").using("btree", table.roundId.asc().nullsLast()),
-	check("CK_server_role_ban_AddressNotIPv6MappedIPv4", sql`(NOT ('::ffff:0.0.0.0/96'::inet >>= address))`), check("CK_server_role_ban_HaveEitherAddressOrUserIdOrHWId", sql`((address IS NOT NULL) OR (player_user_id IS NOT NULL) OR (hwid IS NOT NULL))`), check("HaveEitherAddressOrUserIdOrHWId", sql`((address IS NOT NULL) OR (player_user_id IS NOT NULL) OR (hwid IS NOT NULL))`),]);
+	check("CK_server_role_ban_AddressNotIPv6MappedIPv4", sql`(NOT ('::ffff:0.0.0.0/96'::inet >>= address))`), check("CK_server_role_ban_HaveEitherAddressOrUserIdOrHWId", sql`((address IS NOT NULL) OR (player_user_id IS NOT NULL) OR (hwid IS NOT NULL))`),]);
 
 export const serverRoleUnban = pgTable("server_role_unban", {
 	roleUnbanId: integer("role_unban_id").primaryKey().generatedByDefaultAsIdentity(),
