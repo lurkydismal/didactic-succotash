@@ -14,33 +14,19 @@ import { formatHwidByteaHex, formatHwidHex } from "@/utils/hwid";
 const packedFieldNames = ["playerUsername", "address", "hwid"] as const;
 
 type PackedPlayerField = (typeof packedFieldNames)[number];
-type PackedPlayerRow = Record<PackedPlayerField, string>;
-
-let packedPlayerRowsPromise: Promise<PackedPlayerRow[]> | null = null;
-let playerUsernameOptionsPromise: Promise<string[]> | null = null;
 
 /**
  * Loads packed player rows once so multiple autocomplete fields can share them.
  */
 const loadPackedPlayerRows = () => {
-    packedPlayerRowsPromise ??= getPlayerPackedOptionsAction().catch((err) => {
-        packedPlayerRowsPromise = null; // Reset cache on failure
-        throw err;
-    });
-    return packedPlayerRowsPromise;
+    return getPlayerPackedOptionsAction();
 };
 
 /**
  * Loads player username options once for admin selection.
  */
 const loadPlayerUsernameOptions = () => {
-    playerUsernameOptionsPromise ??= getPlayerUsernameOptionsAction().catch(
-        (err) => {
-            playerUsernameOptionsPromise = null; // Reset cache on failure
-            throw err;
-        },
-    );
-    return playerUsernameOptionsPromise;
+    return getPlayerUsernameOptionsAction();
 };
 
 /**
