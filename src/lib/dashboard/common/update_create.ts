@@ -137,7 +137,11 @@ export async function save(
         }
 
         // Runs only after a successful mutation so cached DB reads do not stay stale.
-        updateDbCacheTags([rawTarget]);
+        try {
+            updateDbCacheTags([rawTarget]);
+        } catch (cacheErr) {
+            log.error("Cache revalidation error:", cacheErr);
+        }
         return { ok: true };
     } catch (err) {
         log.error(opts.isUpdate ? "Update error:" : "Create error:", err);
