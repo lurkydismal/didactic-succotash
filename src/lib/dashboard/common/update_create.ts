@@ -182,7 +182,11 @@ export function parseForm(formData: FormData): MutationRow {
     }
 
     if (entries.id !== undefined) {
-        entries.id = z.coerce.number().int().positive().parse(entries.id);
+        const idResult = z.coerce.number().int().positive().safeParse(entries.id);
+        if (!idResult.success) {
+            throw new Error(`Invalid id value: ${entries.id}`);
+        }
+        entries.id = idResult.data;
     }
 
     return entries;
