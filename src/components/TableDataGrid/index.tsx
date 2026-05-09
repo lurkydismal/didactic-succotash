@@ -217,9 +217,18 @@ export default function TableDataGrid<
         );
     }
 
-    if (currentRows.length === 0) {
-        return <MainFallback message="No rows found" />;
-    }
+    return (
+        <>
+            <CustomDataGrid
+                apiRef={apiRef}
+                columns={columns}
+                rows={currentRows}
+                localeText={{
+                    noRowsLabel: "No rows found",
+                }}
+                sx={{
+                    "& .MuiDataGrid-row": {
+                        cursor: "pointer",
 
     return (
         <>
