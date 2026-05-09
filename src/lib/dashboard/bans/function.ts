@@ -235,7 +235,7 @@ export async function updateRowAction(fd: FormData): Promise<void> {
     const playerUserId = await resolvePlayerUserIdByUsername(
         `${fd.get("playerUsername") ?? ""}`,
     );
-    fd.set("playerUserId", playerUserId ?? "");
+    if (playerUserId != null) fd.set("playerUserId", playerUserId);
 
     const banningAdminInput = `${fd.get("banningAdmin") ?? ""}`.trim();
     const banningAdminUserId =
