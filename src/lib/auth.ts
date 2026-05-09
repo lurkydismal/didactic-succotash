@@ -537,14 +537,12 @@ export async function getSessionData(): Promise<null | UsersRowPublic> {
  * const user = await getSessionDataOrUnauthorized();
  * // user is guaranteed non-null past this point.
  */
-export async function getSessionDataOrUnauthorized(): ReturnType<
-    typeof getSessionData
-> {
+export async function getSessionDataOrUnauthorized(): Promise<UsersRowPublic> {
     const user = await getSessionData();
 
     if (!user) {
         unauthorized();
     }
 
-    return user;
+    return user!;
 }
