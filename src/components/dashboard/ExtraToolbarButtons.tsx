@@ -10,14 +10,27 @@ import {
 import { Tooltip } from "@mui/material";
 import { ToolbarButton } from "@mui/x-data-grid";
 
-type CreateRowAction<RI extends Record<string, unknown>> =
-    | (() => void)
-    | ((row: RI) => Promise<void>);
+type DialogCreateRowAction = {
+    type: "dialog";
+    action: () => void;
+};
 
+type DirectCreateRowAction<RI extends Record<string, unknown>> = {
+    type: "direct";
+    action: (row: RI) => Promise<void>;
+};
+
+type CreateRowAction<RI extends Record<string, unknown>> =
+    | DialogCreateRowAction
+    | DirectCreateRowAction<RI>;
+
+/**
+ * Determines whether the configured create action opens the create dialog.
+ */
 function isDialogCreateAction<RI extends Record<string, unknown>>(
     createRowAction: CreateRowAction<RI>,
-): createRowAction is () => void {
-    return createRowAction.length === 0;
+): createRowAction is DialogCreateRowAction {
+    return createRowAction.type === "dialog";
 }
 
 /**
@@ -56,10 +69,12 @@ export default function ExtraToolbarButtons<
                 <ToolbarButton
                     onClick={() => {
                         if (isDialogCreateAction(createRowAction)) {
-                            createRowAction();
+                            createRowAction.action();
                         } else if (emptyRow) {
-                            createRowAction(emptyRow).catch((err) => {
-                                showError(`Failed to create row: ${err.message}`);
+                            createRowAction.action(emptyRow).catch((err) => {
+                                showError(
+                                    `Failed to create row: ${err.message}`,
+                                );
                             });
                         }
                     }}

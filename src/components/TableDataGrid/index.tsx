@@ -194,7 +194,10 @@ export default function TableDataGrid<
         ? cloneElement(
               extraButtons as React.ReactElement<Record<string, unknown>>,
               {
-                  createRowAction: openCreateDialog,
+                  createRowAction: {
+                      type: "dialog",
+                      action: openCreateDialog,
+                  },
                   emptyRow,
               },
           )

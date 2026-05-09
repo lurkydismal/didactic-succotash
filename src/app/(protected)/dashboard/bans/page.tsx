@@ -24,7 +24,12 @@ export default function Page() {
             getRowsAction={getRowsAction}
             updateRowAction={updateRowAction}
             extraButtons={
-                <ExtraToolbarButtons createRowAction={createRowAction} />
+                <ExtraToolbarButtons
+                    createRowAction={{
+                        type: "direct",
+                        action: createRowAction,
+                    }}
+                />
             }
         />
     );
