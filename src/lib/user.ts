@@ -79,7 +79,10 @@ export async function requestAllUsers() {
     log.trace("requestAllUsers called");
 
     return db
-        .select()
+        .select({
+            username: users.username,
+            username_normalized: users.username_normalized,
+        })
         .from(users)
         .orderBy(desc(users.username_normalized))
         .execute();
