@@ -49,9 +49,9 @@ export async function getRows(
         const result = hasId
             ? validRows
             : validRows.map((row: Row) => ({
-                ...row,
-                id: row[toCamelCase(id.name) as keyof Row], // pull value from provided column
-            }));
+                  ...row,
+                  id: row[toCamelCase(id.name) as keyof Row], // pull value from provided column
+              }));
 
         return {
             ok: true,

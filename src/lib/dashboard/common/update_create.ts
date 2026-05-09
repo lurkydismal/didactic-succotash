@@ -135,7 +135,8 @@ export async function save(
 
             // Ensure mutation actually affected one row.
             const affectedRows =
-                typeof (updateResult as { rowCount?: number }).rowCount === "number"
+                typeof (updateResult as { rowCount?: number }).rowCount ===
+                "number"
                     ? (updateResult as { rowCount: number }).rowCount
                     : Array.isArray(updateResult)
                       ? updateResult.length

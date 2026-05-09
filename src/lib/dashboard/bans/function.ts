@@ -198,7 +198,9 @@ export async function createRowAction(
                 .execute();
 
             if (!randomPlayer?.userId || !randomPlayer.lastSeenUserName) {
-                log.error("Create server ban aborted: no available username found");
+                log.error(
+                    "Create server ban aborted: no available username found",
+                );
                 throw new Error("No available username found for ban creation");
             }
 
