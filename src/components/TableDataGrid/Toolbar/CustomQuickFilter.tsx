@@ -45,6 +45,7 @@ export default function CustomQuickFilter() {
                         placeholder="Search..."
                         size="small"
                         slotProps={{
+                            ...controlProps.slotProps,
                             input: {
                                 ...controlProps.slotProps?.input,
                                 startAdornment: (
@@ -67,7 +68,6 @@ export default function CustomQuickFilter() {
                                     </InputAdornment>
                                 ) : null,
                             },
-                            ...controlProps.slotProps,
                         }}
                     />
                 )}
