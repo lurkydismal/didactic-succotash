@@ -127,11 +127,23 @@ export async function save(
 
             await selectSchema.array().length(1).parseAsync(existingRows);
 
-            await db
+            const updateResult = await db
                 .update(table)
                 .set(row)
                 .where(eq(opts.idColumn, parsedInput.id))
                 .execute();
+
+            // Ensure mutation actually affected one row.
+            const affectedRows =
+                typeof (updateResult as { rowCount?: number }).rowCount === "number"
+                    ? (updateResult as { rowCount: number }).rowCount
+                    : Array.isArray(updateResult)
+                      ? updateResult.length
+                      : undefined;
+
+            if (affectedRows !== undefined && affectedRows !== 1) {
+                throw new Error("Update target no longer exists");
+            }
         } else {
             await db.insert(table).values(row).execute();
         }
