@@ -1,8 +1,8 @@
-import { AnyColumn, eq } from "drizzle-orm";
+import { AnyColumn, eq, getColumns } from "drizzle-orm";
 
 import db from "@/db";
 import { getSessionData } from "@/lib/auth";
-import { updateDbCacheTags } from "@/lib/cache";
+import { cacheDbRequest, updateDbCacheTags } from "@/lib/cache";
 import { ActionResult, DbTarget, parseRawTarget } from "@/lib/types";
 import log from "@/utils/stdlog";
 import { mutationInputSchema } from "@/utils/validate/schemas";
@@ -46,6 +46,43 @@ function toDbMutation(
 }
 
 /**
+ * Finds the target table id column by its database column name.
+ */
+function getIdColumnByName(
+    rawTarget: DbTarget,
+    idColumnName: string,
+): AnyColumn {
+    const table = parseRawTarget(rawTarget);
+    const columns = getColumns(table) as Record<string, AnyColumn | undefined>;
+    const idColumn = Object.values(columns).find(
+        (column) => column?.name === idColumnName,
+    );
+
+    if (!idColumn) {
+        throw new Error("Unknown id column for update");
+    }
+
+    return idColumn;
+}
+
+/**
+ * Fetches the current database row for an update so callers can validate it still exists.
+ */
+async function getExistingRows(
+    rawTarget: DbTarget,
+    idColumnName: string,
+    id: unknown,
+): Promise<MutationRow[]> {
+    "use cache";
+    cacheDbRequest([rawTarget]);
+
+    const table = parseRawTarget(rawTarget);
+    const idColumn = getIdColumnByName(rawTarget, idColumnName);
+
+    return db.select().from(table).where(eq(idColumn, id)).limit(1).execute();
+}
+
+/**
  * Saves the parsed row mutation to the database.
  */
 export async function save(
@@ -82,24 +119,41 @@ export async function save(
                 throw new Error("Missing id column for update");
             }
 
-            const existingRows = await db
-                .select()
-                .from(table)
-                .where(eq(opts.idColumn, parsedInput.id))
-                .limit(1)
-                .execute();
+            const existingRows = await getExistingRows(
+                rawTarget,
+                opts.idColumn.name,
+                parsedInput.id,
+            );
 
             await selectSchema.array().length(1).parseAsync(existingRows);
 
-            await db
+            const updateResult = await db
                 .update(table)
                 .set(row)
                 .where(eq(opts.idColumn, parsedInput.id))
                 .execute();
+
+            // Ensure mutation actually affected one row.
+            const affectedRows =
+                typeof (updateResult as { rowCount?: number }).rowCount === "number"
+                    ? (updateResult as { rowCount: number }).rowCount
+                    : Array.isArray(updateResult)
+                      ? updateResult.length
+                      : undefined;
+
+            if (affectedRows !== undefined && affectedRows !== 1) {
+                throw new Error("Update target no longer exists");
+            }
         } else {
             await db.insert(table).values(row).execute();
         }
 
+        // Runs only after a successful mutation so cached DB reads do not stay stale.
+        try {
+            updateDbCacheTags([rawTarget]);
+        } catch (cacheErr) {
+            log.error("Cache revalidation error:", cacheErr);
+        }
         return { ok: true };
     } catch (err) {
         log.error(opts.isUpdate ? "Update error:" : "Create error:", err);
@@ -108,10 +162,6 @@ export async function save(
             error: opts.isUpdate ? "Update error" : "Create error",
         };
     }
-
-    // Runs only on success path; errors from updateTag propagate to the caller.
-    updateDbCacheTags([rawTarget]);
-    return { ok: true };
 }
 
 /**
