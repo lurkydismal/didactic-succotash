@@ -22,7 +22,7 @@ describe("formatHwidHex", () => {
 
     it("formats HWID values for bytea writes", () => {
         expect(formatHwidByteaHex("abcdef")).toBe("\\xabcdef");
-        expect(formatHwidByteaHex("ABCDEF")).toBe("abcdef");
+        expect(formatHwidByteaHex("ABCDEF")).toBe("\\xabcdef");
         expect(formatHwidByteaHex("\\xABCDEF")).toBe("\\xabcdef");
         expect(formatHwidByteaHex(" \\xABCDEF ")).toBe("\\xabcdef");
         expect(formatHwidByteaHex(new Uint8Array([0, 15, 16, 255]))).toBe(
