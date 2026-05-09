@@ -206,7 +206,7 @@ export async function createRowAction(
 
             row.playerUserId = randomPlayer.userId;
         } else {
-            throw Error("Invalid player username");
+            throw new Error("Invalid player username");
         }
     }
 
