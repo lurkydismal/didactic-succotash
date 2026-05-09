@@ -3,6 +3,10 @@ type BufferJson = {
     type: "Buffer";
 };
 
+const HWID_HEX_RE = /^[0-9a-f]*$/i;
+const isByte = (value: unknown): value is number =>
+    Number.isInteger(value) && value >= 0 && value <= 255;
+
 /**
  * Formats a byte as a two-character hexadecimal string.
  */
@@ -57,11 +61,17 @@ export function formatHwidHex(value: unknown): string {
     }
 
     if (Array.isArray(value)) {
-        return bytesToHex(value.map(Number));
+        if (!value.every(isByte)) {
+            throw new TypeError("HWID arrays must contain bytes");
+        }
+        return bytesToHex(value);
     }
 
     if (isBufferJson(value)) {
-        return bytesToHex(value.data.map(Number));
+        if (!value.data.every(isByte)) {
+            throw new TypeError("Buffer JSON must contain bytes");
+        }
+        return bytesToHex(value.data);
     }
 
     return String(value);
@@ -72,5 +82,8 @@ export function formatHwidHex(value: unknown): string {
  */
 export function formatHwidByteaHex(value: unknown): string {
     const hex = formatHwidHex(value).trim().replace(/^\\x/i, "");
+    if (hex && !HWID_HEX_RE.test(hex)) {
+        throw new TypeError("HWID must be valid hexadecimal");
+    }
     return hex ? `\\x${hex}` : "";
 }
