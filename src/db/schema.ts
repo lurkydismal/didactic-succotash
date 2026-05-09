@@ -1107,7 +1107,6 @@ export const server = pgTable(
     "server",
     {
         serverId: integer("server_id")
-            .primaryKey()
             .generatedByDefaultAsIdentity(),
         name: text().notNull(),
     },
