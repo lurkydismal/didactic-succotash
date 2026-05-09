@@ -88,9 +88,6 @@ export async function mockAction<T>(
         hasData: data !== undefined,
     });
     log.debug("mockAction validating delay");
-    log.info("mockAction execution started");
-    log.warn("mockAction verbose warning-level probe");
-    log.error("mockAction error-level probe log");
     const rawDelayMs = Number(milliseconds);
     if (!Number.isFinite(rawDelayMs) || rawDelayMs < 0) {
         log.error("mockAction invalid delay detected", { milliseconds });
@@ -103,7 +100,6 @@ export async function mockAction<T>(
     // Simulate async work
     await delay(safeDelayMs);
     log.debug("mockAction delay complete", { safeDelayMs });
-    log.info("mockAction returning success payload");
 
     // Default payload case
     return {

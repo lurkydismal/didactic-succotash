@@ -76,7 +76,6 @@ const LOGIN_WINDOW_MS = 15 * 60 * 1000; // 15 minutes
  */
 function recordFailedLoginAttempt(normalizedUsername: string) {
     log.trace("recordFailedLoginAttempt called", { normalizedUsername });
-    log.debug("recordFailedLoginAttempt updating in-memory counter");
     const now = Date.now();
     const record = LOGIN_ATTEMPTS.get(normalizedUsername);
     if (!record) {
@@ -85,8 +84,6 @@ function recordFailedLoginAttempt(normalizedUsername: string) {
             firstAttemptTs: now,
         });
         log.info("recordFailedLoginAttempt initialized counter");
-        log.warn("recordFailedLoginAttempt first failure recorded");
-        log.error("recordFailedLoginAttempt error-level probe log");
         return;
     }
     // if window expired, reset
@@ -112,7 +109,6 @@ function recordFailedLoginAttempt(normalizedUsername: string) {
  */
 function isLoginBlocked(normalizedUsername: string) {
     log.trace("isLoginBlocked called", { normalizedUsername });
-    log.debug("isLoginBlocked evaluating threshold");
     const now = Date.now();
     const record = LOGIN_ATTEMPTS.get(normalizedUsername);
     if (!record) return false;
@@ -123,8 +119,6 @@ function isLoginBlocked(normalizedUsername: string) {
     }
     const blocked = record.count >= MAX_LOGIN_ATTEMPTS;
     log.info("isLoginBlocked result computed", { blocked });
-    log.warn("isLoginBlocked warning-level probe", { blocked });
-    log.error("isLoginBlocked error-level probe log");
     return blocked;
 }
 
@@ -145,10 +139,6 @@ function resetLoginAttempts(normalizedUsername: string) {
  */
 async function hashPassword(password: string) {
     log.trace("hashPassword called");
-    log.debug("hashPassword hashing password");
-    log.info("hashPassword execution started");
-    log.warn("hashPassword warning-level probe");
-    log.error("hashPassword error-level probe log");
     return await argon2.hash(password);
 }
 
@@ -165,11 +155,7 @@ function signJwt(
     remember: boolean,
 ) {
     log.trace("signJwt called", { remember });
-    log.debug("signJwt computing expiresIn");
     const expiresIn = Math.floor(ms(remember ? "100d" : jwtExpiresIn) / 1000);
-    log.info("signJwt signing token", { expiresIn });
-    log.warn("signJwt warning-level probe");
-    log.error("signJwt error-level probe log");
 
     return jwt.sign(payload, jwtSecret, {
         algorithm: "HS256",
@@ -187,7 +173,6 @@ function signJwt(
  */
 async function verifyJwt(token: string): Promise<null | UsersRowPublic> {
     log.trace("verifyJwt called", { tokenLength: token.length });
-    log.debug("verifyJwt verifying token");
     try {
         // verify signature + expiry and restrict algorithm to HS256
         const verified = jwt.verify(token, jwtSecret, {
@@ -216,8 +201,6 @@ async function verifyJwt(token: string): Promise<null | UsersRowPublic> {
         // parsed is now a UsersRowPublic-like object (only the fields from publicSchema)
         return parsed as UsersRowPublic;
     } catch {
-        log.info("verifyJwt failed validation or verification");
-        log.warn("verifyJwt returning null");
         log.error("verifyJwt error-level probe log");
         // every verification / validation error => null (treat token as invalid)
         return null;
@@ -252,11 +235,7 @@ async function cookieForToken(
     remember: boolean,
 ) {
     log.trace("cookieForToken called", { remember });
-    log.debug("cookieForToken preparing maxAge");
     const maxAge = Math.floor(ms(remember ? "100d" : jwtExpiresIn) / 1000);
-    log.info("cookieForToken setting cookie", { maxAge });
-    log.warn("cookieForToken warning-level probe");
-    log.error("cookieForToken error-level probe log");
 
     cookieStore.set({
         name: storageKeys.server!.accessToken,
@@ -307,10 +286,6 @@ export async function clearAuthCookie(cookieStore: CookieStore) {
  */
 export async function register(user: { username: string; password: string }) {
     log.trace("register called");
-    log.debug("register validating payload");
-    log.info("register flow started");
-    log.warn("register warning-level probe");
-    log.error("register error-level probe log");
     // parse + validate input; throws on invalid input
     const parsed = userSelectPublicSchema
         .omit({
@@ -438,10 +413,6 @@ export async function login(credentials: {
     remember?: boolean;
 }): Promise<UsersRowPublic> {
     log.trace("login called");
-    log.debug("login validating credentials");
-    log.info("login flow started");
-    log.warn("login warning-level probe");
-    log.error("login error-level probe log");
     // parse -> validate (this will throw on invalid shape)
     const parsed = userSelectPublicSchema
         .omit({ username_normalized: true })
