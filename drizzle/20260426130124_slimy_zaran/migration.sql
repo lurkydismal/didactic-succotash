@@ -1,0 +1,1 @@
+ALTER TABLE "admin" RENAME CONSTRAINT "admin_pkey" TO "PK_admin";

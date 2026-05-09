@@ -16,7 +16,7 @@ run-release:
 
 # Run the test suite.
 run-tests:
-    pnpm test
+    pnpm test --run
 
 # Format source files using the project's formatter configuration.
 format:
@@ -25,6 +25,10 @@ format:
 # Run static analysis and lint checks.
 lint:
     pnpm lint
+
+# Run better static analysis and lint checks.
+hard-lint:
+    pnpm tsc --noEmit
 
 # Generate a new migration from schema changes.
 generate-migration:
@@ -69,6 +73,10 @@ docker-down:
 # Open an interactive shell inside a running service container.
 docker-interact image='postgres':
     docker compose exec '{{ image }}' bash
+
+# Stream logs from all services and follow output
+docker-logs:
+    docker compose logs -f
 
 # Attach to a running service container without signal proxying.
 docker-attach image='postgres':

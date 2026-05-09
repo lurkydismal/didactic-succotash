@@ -28,6 +28,9 @@ function makeBrowserLogger(): CommonLogger {
      * Map a log level to the appropriate console method.
      * Falls back to console.log when a specific method is not available.
      */
+    /**
+     * Gets console method.
+     */
     const getConsoleMethod = (level: string) => {
         switch (level) {
             case "TRACE":
@@ -48,6 +51,9 @@ function makeBrowserLogger(): CommonLogger {
      * Create a level-specific logging function that:
      * - Prepends a styled level label (`%cLEVEL`) so the label is colored.
      * - Preserves object inspectability in devtools by treating single-object calls specially.
+     */
+    /**
+     * Creates a logger function for a specific log level.
      */
     const makeLevel = (level: string): LogFn => {
         const method = getConsoleMethod(level);
