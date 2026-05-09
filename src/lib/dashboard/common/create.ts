@@ -4,7 +4,7 @@ import { ActionResult, DbTarget } from "@/lib/types";
 import { save } from "@/lib/dashboard/common/update_create";
 
 /**
- * Creates .
+ * Creates a new row in the target table.
  */
 export async function create<RI extends Record<string, unknown>>(
     rawTarget: DbTarget,
