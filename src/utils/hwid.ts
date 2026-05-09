@@ -5,7 +5,7 @@ type BufferJson = {
 
 const HWID_HEX_RE = /^[0-9a-f]*$/i;
 const isByte = (value: unknown): value is number =>
-    Number.isInteger(value) && value >= 0 && value <= 255;
+    Number.isInteger(value) && Number(value) >= 0 && Number(value) <= 255;
 
 /**
  * Formats a byte as a two-character hexadecimal string.
