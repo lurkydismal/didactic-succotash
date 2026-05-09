@@ -84,7 +84,7 @@ export function columnsFromFields<
                        * Renders a data grid cell value from a normalized field definition.
                        */
                       renderCell: (params: GridRenderCellParams) =>
-                          String(field.formatValue?.(params.value) ?? ""),
+                          String(field.formatValue(params.value) ?? ""),
                   }
                 : {}),
         })),
