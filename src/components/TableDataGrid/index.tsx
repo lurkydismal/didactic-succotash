@@ -8,7 +8,6 @@ import React, {
     isValidElement,
 } from "react";
 import CustomDataGrid from "./CustomDataGrid";
-import MainFallback from "@/components/MainFallback";
 import RowDialog, { FieldConfig } from "./RowDialog";
 import { useSnackbar } from "@/providers/snackbar";
 import CustomToolbar from "./Toolbar";
@@ -192,15 +191,15 @@ export default function TableDataGrid<
     // If extraButtons is a React element, clone it and inject createRowAction + emptyRow
     const injectedExtraButtons = isValidElement(extraButtons)
         ? cloneElement(
-              extraButtons as React.ReactElement<Record<string, unknown>>,
-              {
-                  createRowAction: {
-                      type: "dialog",
-                      action: openCreateDialog,
-                  },
-                  emptyRow,
-              },
-          )
+            extraButtons as React.ReactElement<Record<string, unknown>>,
+            {
+                createRowAction: {
+                    type: "dialog",
+                    action: openCreateDialog,
+                },
+                emptyRow,
+            },
+        )
         : extraButtons;
 
     const columns = columnsFromFields(resolvedFields);

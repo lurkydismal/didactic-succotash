@@ -3,13 +3,7 @@
 import DesktopNav from "./DesktopNav";
 import { items } from "@/data/navbar";
 import MobileNav from "./MobileNav";
-import {
-    styled,
-    Toolbar,
-    alpha,
-    AppBar,
-    Container,
-} from "@mui/material";
+import { styled, Toolbar, alpha, AppBar, Container } from "@mui/material";
 
 /**
  * Provides the styled toolbar layout for the responsive navigation bar.

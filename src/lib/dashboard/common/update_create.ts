@@ -143,7 +143,9 @@ export async function save(
                       : undefined;
 
             if (affectedRows === undefined) {
-                throw new Error("Unable to verify update: database driver did not return affected row count");
+                throw new Error(
+                    "Unable to verify update: database driver did not return affected row count",
+                );
             } else if (affectedRows !== 1) {
                 throw new Error("Update target no longer exists");
             }

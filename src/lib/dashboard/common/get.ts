@@ -50,7 +50,9 @@ export async function getRows(
             ? validRows
             : validRows.map((row: Row) => ({
                   ...row,
-                  id: row[toCamelCase(id.name) as keyof Row] ?? row[id.name as keyof Row], // fallback to original name
+                  id:
+                      row[toCamelCase(id.name) as keyof Row] ??
+                      row[id.name as keyof Row], // fallback to original name
               }));
 
         return {

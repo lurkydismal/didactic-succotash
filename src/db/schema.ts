@@ -1106,8 +1106,7 @@ export const round = pgTable(
 export const server = pgTable(
     "server",
     {
-        serverId: integer("server_id")
-            .generatedByDefaultAsIdentity(),
+        serverId: integer("server_id").generatedByDefaultAsIdentity(),
         name: text().notNull(),
     },
     (table) => [
