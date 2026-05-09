@@ -391,8 +391,7 @@ CREATE TABLE "server_role_ban" (
 	"hwid_type" integer DEFAULT 0,
 	CONSTRAINT "PK_server_role_ban" PRIMARY KEY("server_role_ban_id"),
 	CONSTRAINT "CK_server_role_ban_AddressNotIPv6MappedIPv4" CHECK ((NOT ('::ffff:0.0.0.0/96'::inet >>= address))),
-	CONSTRAINT "CK_server_role_ban_HaveEitherAddressOrUserIdOrHWId" CHECK (((address IS NOT NULL) OR (player_user_id IS NOT NULL) OR (hwid IS NOT NULL))),
-	CONSTRAINT "HaveEitherAddressOrUserIdOrHWId" CHECK (((address IS NOT NULL) OR (player_user_id IS NOT NULL) OR (hwid IS NOT NULL)))
+	CONSTRAINT "CK_server_role_ban_HaveEitherAddressOrUserIdOrHWId" CHECK (((address IS NOT NULL) OR (player_user_id IS NOT NULL) OR (hwid IS NOT NULL)))
 );
 --> statement-breakpoint
 CREATE TABLE "server_role_unban" (
