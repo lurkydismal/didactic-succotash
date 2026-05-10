@@ -1,27 +1,28 @@
 "use server";
 
-import { player, connectionLog } from "@/db/schema";
 import { asc, desc, eq, getColumns, ne, sql } from "drizzle-orm";
-import { alias } from "drizzle-orm/pg-core";
+
 import db from "@/db";
+import { connectionLog, player, server } from "@/db/schema";
 import { ConnectionLogRowInsert as TableRowInsert } from "@/db/types";
-import { DbTarget } from "@/lib/types";
-import {
-    createRowAction as _createRowAction,
-    getRowsAction as _getRowsAction,
-    updateRowAction as _updateRowAction,
-} from "@/lib/dashboard/common/function";
-import { formatHwidByteaHex, formatHwidHex } from "@/utils/hwid";
 import { cacheDbRequest } from "@/lib/cache";
-import { updateAction } from "@/lib/dashboard/common/update";
 import { create } from "@/lib/dashboard/common/create";
+import { updateAction } from "@/lib/dashboard/common/update";
+import { DbTarget } from "@/lib/types";
+import { formatHwidByteaHex, formatHwidHex } from "@/utils/hwid";
 import log from "@/utils/stdlog";
 import { isDev } from "@/utils/stdvar";
 
 const target: DbTarget = "connectionLog";
 const idColumn = connectionLog.connectionLogId;
 
-type ServerBanMutationInput = TableRowInsert;
+type ConnectionLogMutationInput = TableRowInsert;
+type PackedPlayerOption = {
+    userName: string;
+    userId: string;
+    address: string;
+    hwid: string;
+};
 
 /**
  * Normalizes hwid mutation value.
@@ -35,10 +36,10 @@ function normalizeHwidMutationValue(value: unknown): string | null {
  * Resolves player user id by username.
  */
 async function resolveUserIdByUsername(
-    rawValue: string | undefined,
-): Promise<string> {
+    rawValue: string | null | undefined,
+): Promise<string | null> {
     const username = rawValue?.trim();
-    if (!username) throw new Error("TODO: WRITE");
+    if (!username) return null;
 
     const [targetPlayer] = await db
         .select({ userId: player.userId })
@@ -47,7 +48,33 @@ async function resolveUserIdByUsername(
         .limit(1)
         .execute();
 
-    return targetPlayer.userId;
+    return targetPlayer?.userId ?? null;
+}
+
+/**
+ * Resolves a connection server id from its display name.
+ */
+async function resolveServerIdByName(
+    rawValue: string | number | null | undefined,
+): Promise<number | null> {
+    if (typeof rawValue === "number") return rawValue;
+
+    const serverName = rawValue?.trim();
+    if (!serverName) return null;
+
+    const [targetServer] = await db
+        .select({ serverId: server.serverId })
+        .from(server)
+        .where(eq(server.name, serverName))
+        .limit(1)
+        .execute();
+
+    if (targetServer?.serverId != null) return targetServer.serverId;
+
+    const numericServerId = Number(serverName);
+    if (Number.isInteger(numericServerId)) return numericServerId;
+
+    return null;
 }
 
 /**
@@ -55,25 +82,22 @@ async function resolveUserIdByUsername(
  */
 export async function getRowsAction() {
     "use cache";
-    cacheDbRequest(["connectionLog", "player"]);
+    cacheDbRequest(["connectionLog", "player", "server"]);
 
-    const serverBanColumns = getColumns(connectionLog);
-    const banningAdminPlayer = alias(player, "banning_admin_player");
+    const connectionLogColumns = getColumns(connectionLog);
     const rows = await db
         .select({
-            ...serverBanColumns,
+            ...connectionLogColumns,
             id: connectionLog.connectionLogId,
-            userName: player.lastSeenUserName,
+            userId: connectionLog.userId,
+            userName: sql<string>`COALESCE(${connectionLog.userName}, ${player.lastSeenUserName}, '')`,
             address: sql<string>`COALESCE(${connectionLog.address}, ${player.lastSeenAddress}, NULL)`,
             hwid: sql<string>`COALESCE(encode(${connectionLog.hwid}, 'hex'), encode(${player.lastSeenHwid}, 'hex'), '')`,
-            banningAdmin: banningAdminPlayer.lastSeenUserName,
+            serverId: server.name,
         })
         .from(connectionLog)
         .leftJoin(player, eq(connectionLog.userId, player.userId))
-        .leftJoin(
-            banningAdminPlayer,
-            eq(connectionLog.banningAdmin, banningAdminPlayer.userId),
-        )
+        .leftJoin(server, eq(connectionLog.serverId, server.serverId))
         .orderBy(desc(idColumn))
         .execute();
 
@@ -95,6 +119,24 @@ export async function getUsernameOptionsAction(): Promise<string[]> {
         .execute();
 
     return [...new Set(rows.map((row) => row.userName.trim()).filter(Boolean))];
+}
+
+/**
+ * Gets server name options action.
+ */
+export async function getServerNameOptionsAction(): Promise<string[]> {
+    "use cache";
+    cacheDbRequest(["server"]);
+
+    const rows = await db
+        .select({ serverName: server.name })
+        .from(server)
+        .orderBy(asc(server.name))
+        .execute();
+
+    return [
+        ...new Set(rows.map((row) => row.serverName.trim()).filter(Boolean)),
+    ];
 }
 
 /**
@@ -143,7 +185,7 @@ export async function getPlayerHwidOptionsAction(): Promise<string[]> {
  * Gets player packed options action.
  */
 export async function getPlayerPackedOptionsAction(): Promise<
-    { userName: string; address: string; hwid: string }[]
+    PackedPlayerOption[]
 > {
     "use cache";
     cacheDbRequest(["player"]);
@@ -151,6 +193,7 @@ export async function getPlayerPackedOptionsAction(): Promise<
     const rows = await db
         .select({
             userName: player.lastSeenUserName,
+            userId: player.userId,
             address: player.lastSeenAddress,
             hwid: player.lastSeenHwid,
         })
@@ -159,16 +202,14 @@ export async function getPlayerPackedOptionsAction(): Promise<
         .orderBy(asc(player.lastSeenUserName))
         .execute();
 
-    const deduped = new Map<
-        string,
-        { userName: string; address: string; hwid: string }
-    >();
+    const deduped = new Map<string, PackedPlayerOption>();
     for (const row of rows) {
-        const label = row.userName.trim();
-        if (!label || deduped.has(label)) continue;
+        const userName = row.userName.trim();
+        if (!userName || deduped.has(userName)) continue;
 
-        deduped.set(label, {
-            userName: label,
+        deduped.set(userName, {
+            userName,
+            userId: row.userId,
             address: row.address?.trim() ?? "",
             hwid: formatHwidHex(row.hwid),
         });
@@ -181,9 +222,13 @@ export async function getPlayerPackedOptionsAction(): Promise<
  * Creates row action.
  */
 export async function createRowAction(
-    row: ServerBanMutationInput,
+    row: ConnectionLogMutationInput,
 ): Promise<void> {
-    row.userId = await resolveUserIdByUsername(row.userName);
+    if (!row.userId) {
+        const resolvedUserId = await resolveUserIdByUsername(row.userName);
+        if (resolvedUserId) row.userId = resolvedUserId;
+    }
+
     if (!row.userId) {
         if (isDev) {
             log.warn(
@@ -202,26 +247,26 @@ export async function createRowAction(
 
             if (!randomPlayer?.userId || !randomPlayer.lastSeenUserName) {
                 log.error(
-                    "Create server ban aborted: no available username found",
+                    "Create connection log aborted: no available username found",
                 );
-                throw new Error("No available username found for ban creation");
+                throw new Error(
+                    "No available username found for connection creation",
+                );
             }
 
             row.userId = randomPlayer.userId;
+            row.userName = randomPlayer.lastSeenUserName;
         } else {
             throw new Error("Invalid player username");
         }
     }
 
-    const banningAdminUserId = await resolveUserIdByUsername(row.serverId);
-    if ((row.serverId ?? 0) && !banningAdminUserId) {
-        throw new Error("No matching player found for banning admin username");
+    const serverId = await resolveServerIdByName(row.serverId);
+    if ((row.serverId ?? "") !== "" && serverId == null) {
+        throw new Error("No matching server found for server name");
     }
-    row.serverId = banningAdminUserId;
+    row.serverId = serverId ?? 0;
     row.hwid = normalizeHwidMutationValue(row.hwid);
-
-    // ! FIX: Maybe remove
-    // delete row.userName;
 
     const result = await create(target, row);
     if (!result.ok)
@@ -232,23 +277,24 @@ export async function createRowAction(
  * Updates row action.
  */
 export async function updateRowAction(fd: FormData): Promise<void> {
-    const userId = await resolveUserIdByUsername(`${fd.get("userName") ?? ""}`);
-    if (userId != null) {
+    const userIdInput = `${fd.get("userId") ?? ""}`.trim();
+    const userNameInput = `${fd.get("userName") ?? ""}`.trim();
+    const userId =
+        userIdInput || (await resolveUserIdByUsername(userNameInput));
+    if (userId) {
         fd.set("userId", userId);
     } else {
         fd.delete("userId");
     }
 
-    const banningAdminInput = `${fd.get("banningAdmin") ?? ""}`.trim();
-    const banningAdminUserId = await resolveUserIdByUsername(banningAdminInput);
-    if (banningAdminInput && !banningAdminUserId) {
-        throw new Error("No matching player found for banning admin username");
+    const serverInput = `${fd.get("serverId") ?? ""}`.trim();
+    const serverId = await resolveServerIdByName(serverInput);
+    if (serverInput && serverId == null) {
+        throw new Error("No matching server found for server name");
     }
-    fd.set("banningAdmin", String(banningAdminUserId ?? 0));
+    fd.set("serverId", String(serverId ?? 0));
 
     fd.set("hwid", normalizeHwidMutationValue(fd.get("hwid")) ?? "");
-
-    fd.delete("userName");
 
     const result = await updateAction(target, idColumn, fd);
     if (!result.ok)
