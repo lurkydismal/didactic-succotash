@@ -27,24 +27,24 @@ const loadPackedPlayerRows = () => {
  */
 const loadPackedPlayerOptions =
     (labelKey: PackedPlayerField) =>
-        async (): Promise<AutocompleteOption[]> => {
-            const packedRows = await loadPackedPlayerRows();
+    async (): Promise<AutocompleteOption[]> => {
+        const packedRows = await loadPackedPlayerRows();
 
-            return packedRows.reduce<AutocompleteOption[]>((options, packedRow) => {
-                const label = packedRow[labelKey];
-                if (!label) return options;
+        return packedRows.reduce<AutocompleteOption[]>((options, packedRow) => {
+            const label = packedRow[labelKey];
+            if (!label) return options;
 
-                const packedValues = packedFieldNames.reduce<
-                    Record<string, unknown>
-                >((values, packedField) => {
-                    values[packedField] = packedRow[packedField] ?? "";
-                    return values;
-                }, {});
+            const packedValues = packedFieldNames.reduce<
+                Record<string, unknown>
+            >((values, packedField) => {
+                values[packedField] = packedRow[packedField] ?? "";
+                return values;
+            }, {});
 
-                options.push({ label, packedValues });
-                return options;
-            }, []);
-        };
+            options.push({ label, packedValues });
+            return options;
+        }, []);
+    };
 
 const fields: FieldConfig<TableRow, TableRowInsert>[] = [
     {
@@ -107,16 +107,16 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
                 return true;
             }
 
-            const parsed = Number(value);
-            if (!Number.isInteger(parsed)) {
-                return "No such ID";
+            const parsed = String(value);
+            if (!parsed) {
+                return "No such server";
             }
 
             try {
                 const exists = await hasServerIdAction(parsed);
-                return exists || "No such ID";
+                return exists || "No such server";
             } catch {
-                return "Unable to verify server ID";
+                return "Unable to verify server";
             }
         },
     },

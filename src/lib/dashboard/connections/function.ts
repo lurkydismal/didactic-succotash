@@ -33,25 +33,6 @@ function normalizeHwidMutationValue(value: unknown): string | null {
 }
 
 /**
- * Resolves player user id by username.
- */
-async function resolveUserIdByUsername(
-    rawValue: string | null | undefined,
-): Promise<string | null> {
-    const username = rawValue?.trim();
-    if (!username) return null;
-
-    const [targetPlayer] = await db
-        .select({ userId: player.userId })
-        .from(player)
-        .where(eq(player.lastSeenUserName, username))
-        .limit(1)
-        .execute();
-
-    return targetPlayer?.userId ?? null;
-}
-
-/**
  * Resolves a connection server id from its display name.
  */
 async function resolveServerIdByName(
@@ -224,11 +205,6 @@ export async function createRowAction(
     row: ConnectionLogMutationInput,
 ): Promise<void> {
     if (!row.userId) {
-        const resolvedUserId = await resolveUserIdByUsername(row.userName);
-        if (resolvedUserId) row.userId = resolvedUserId;
-    }
-
-    if (!row.userId) {
         if (isDev) {
             log.warn(
                 `Dev mode: Player username "${row.userName}" not found, selecting random player`,
@@ -277,10 +253,7 @@ export async function createRowAction(
  * Updates row action.
  */
 export async function updateRowAction(fd: FormData): Promise<void> {
-    const userIdInput = `${fd.get("userId") ?? ""}`.trim();
-    const userNameInput = `${fd.get("userName") ?? ""}`.trim();
-    const userId =
-        userIdInput || (await resolveUserIdByUsername(userNameInput));
+    const userId = `${fd.get("userId") ?? ""}`.trim();
     if (!userId) {
         throw new Error("Invalid player username");
     }
@@ -303,16 +276,16 @@ export async function updateRowAction(fd: FormData): Promise<void> {
 /**
  * Handles has server id action behavior.
  */
-export async function hasServerIdAction(serverId: number): Promise<boolean> {
+export async function hasServerIdAction(serverName: string): Promise<boolean> {
     "use cache";
     cacheDbRequest(["server"]);
 
-    if (!Number.isInteger(serverId)) return false;
+    if (!serverName) return false;
 
     const [existingServer] = await db
         .select({ serverId: server.serverId })
         .from(server)
-        .where(eq(server.serverId, serverId))
+        .where(eq(server.name, serverName))
         .limit(1)
         .execute();
 
