@@ -300,3 +300,22 @@ export async function updateRowAction(fd: FormData): Promise<void> {
     if (!result.ok)
         throw new Error(`Failed to update row in action: ${result.error}`);
 }
+
+/**
+ * Handles has server id action behavior.
+ */
+export async function hasServerIdAction(serverId: number): Promise<boolean> {
+    "use cache";
+    cacheDbRequest(["server"]);
+
+    if (!Number.isInteger(serverId)) return false;
+
+    const [existingServer] = await db
+        .select({ serverId: server.serverId })
+        .from(server)
+        .where(eq(server.serverId, serverId))
+        .limit(1)
+        .execute();
+
+    return !!existingServer;
+}
