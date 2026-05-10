@@ -642,6 +642,7 @@ export const player = pgTable(
         lastReadRules: timestamp("last_read_rules", { withTimezone: true }),
         lastSeenHwidType: integer("last_seen_hwid_type").default(0),
         lastRolledAntag: interval("last_rolled_antag"),
+        ...metadataColumns,
     },
     (table) => [
         primaryKey({

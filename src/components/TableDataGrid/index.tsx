@@ -125,6 +125,7 @@ export default function TableDataGrid<
                 // }
             } catch (err) {
                 showError(err);
+                throw err;
             }
         },
         [createRowAction, _getRows, showError],
@@ -191,15 +192,15 @@ export default function TableDataGrid<
     // If extraButtons is a React element, clone it and inject createRowAction + emptyRow
     const injectedExtraButtons = isValidElement(extraButtons)
         ? cloneElement(
-            extraButtons as React.ReactElement<Record<string, unknown>>,
-            {
-                createRowAction: {
-                    type: "dialog",
-                    action: openCreateDialog,
-                },
-                emptyRow,
-            },
-        )
+              extraButtons as React.ReactElement<Record<string, unknown>>,
+              {
+                  createRowAction: {
+                      type: "dialog",
+                      action: openCreateDialog,
+                  },
+                  emptyRow,
+              },
+          )
         : extraButtons;
 
     const columns = columnsFromFields(resolvedFields);
