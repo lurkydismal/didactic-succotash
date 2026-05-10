@@ -1,2 +1,0 @@
-ALTER TABLE "server_role_ban" DROP CONSTRAINT "HaveEitherAddressOrUserIdOrHWId";--> statement-breakpoint
-ALTER TABLE "connection_log" DROP CONSTRAINT "FK_connection_log_server_server_id", ADD CONSTRAINT "FK_connection_log_server_server_id" FOREIGN KEY ("server_id") REFERENCES "server"("server_id") ON DELETE SET DEFAULT;

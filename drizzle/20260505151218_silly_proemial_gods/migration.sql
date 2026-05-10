@@ -1,1 +1,0 @@
-ALTER TABLE "admin" RENAME CONSTRAINT "admin_admin_rank_id_admin_rank_admin_rank_id_fkey" TO "FK_admin_admin_rank_admin_rank_id";
