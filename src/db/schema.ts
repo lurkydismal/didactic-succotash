@@ -526,6 +526,7 @@ export const connectionLog = pgTable(
             }),
         hwidType: integer("hwid_type").default(0),
         trust: real().default(0).notNull(),
+        ...metadataColumns,
     },
     (table) => [
         primaryKey({
