@@ -281,11 +281,10 @@ export async function updateRowAction(fd: FormData): Promise<void> {
     const userNameInput = `${fd.get("userName") ?? ""}`.trim();
     const userId =
         userIdInput || (await resolveUserIdByUsername(userNameInput));
-    if (userId) {
-        fd.set("userId", userId);
-    } else {
-        fd.delete("userId");
+    if (!userId) {
+        throw new Error("Invalid player username");
     }
+    fd.set("userId", userId);
 
     const serverInput = `${fd.get("serverId") ?? ""}`.trim();
     const serverId = await resolveServerIdByName(serverInput);
