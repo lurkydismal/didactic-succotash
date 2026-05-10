@@ -207,7 +207,7 @@ export async function getPlayerPackedOptionsAction(): Promise<
         if (!row.userId || deduped.has(row.userId)) continue;
 
         deduped.set(row.userId, {
-            userName,
+            userName: row.userName,
             userId: row.userId,
             address: row.address?.trim() ?? "",
             hwid: formatHwidHex(row.hwid),
