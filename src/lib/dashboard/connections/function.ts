@@ -260,11 +260,12 @@ export async function createRowAction(
         }
     }
 
-    const serverId = await resolveServerIdByName(row.serverId);
-    if ((row.serverId ?? "") !== "" && serverId == null) {
+    const serverInput = `${row.serverId ?? ""}`.trim();
+    const serverId = await resolveServerIdByName(serverInput);
+    if (!serverInput || serverId == null) {
         throw new Error("No matching server found for server name");
     }
-    row.serverId = serverId ?? 0;
+    row.serverId = serverId;
     row.hwid = normalizeHwidMutationValue(row.hwid);
 
     const result = await create(target, row);
@@ -288,10 +289,10 @@ export async function updateRowAction(fd: FormData): Promise<void> {
 
     const serverInput = `${fd.get("serverId") ?? ""}`.trim();
     const serverId = await resolveServerIdByName(serverInput);
-    if (serverInput && serverId == null) {
+    if (!serverInput || serverId == null) {
         throw new Error("No matching server found for server name");
     }
-    fd.set("serverId", String(serverId ?? 0));
+    fd.set("serverId", String(serverId));
 
     fd.set("hwid", normalizeHwidMutationValue(fd.get("hwid")) ?? "");
 
