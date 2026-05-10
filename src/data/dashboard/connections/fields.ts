@@ -6,11 +6,11 @@ import type {
 } from "@/db/types";
 import {
     getPlayerPackedOptionsAction,
-    getUsernameOptionsAction,
+    getServerNameOptionsAction,
 } from "@/lib/dashboard/connections/function";
 import { formatHwidByteaHex, formatHwidHex } from "@/utils/hwid";
 
-const packedFieldNames = ["userName", "address", "hwid"] as const;
+const packedFieldNames = ["userName", "userId", "address", "hwid"] as const;
 
 type PackedPlayerField = (typeof packedFieldNames)[number];
 
@@ -19,13 +19,6 @@ type PackedPlayerField = (typeof packedFieldNames)[number];
  */
 const loadPackedPlayerRows = () => {
     return getPlayerPackedOptionsAction();
-};
-
-/**
- * Loads player username options once for admin selection.
- */
-const loadPlayerUsernameOptions = () => {
-    return getUsernameOptionsAction();
 };
 
 /**
@@ -66,7 +59,7 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         label: "User ID",
         type: "autocomplete",
         autocompleteOptions: [],
-        loadOptions: loadPackedPlayerOptions("userName"),
+        loadOptions: loadPackedPlayerOptions("userId"),
         required: true,
     },
     {
@@ -101,7 +94,9 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
     {
         key: "serverId",
         label: "Server",
-        type: "text",
+        type: "autocomplete",
+        autocompleteOptions: [],
+        loadOptions: getServerNameOptionsAction,
         required: true,
     },
     {
