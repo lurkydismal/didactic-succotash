@@ -204,10 +204,9 @@ export async function getPlayerPackedOptionsAction(): Promise<
 
     const deduped = new Map<string, PackedPlayerOption>();
     for (const row of rows) {
-        const userName = row.userName.trim();
-        if (!userName || deduped.has(userName)) continue;
+        if (!row.userId || deduped.has(row.userId)) continue;
 
-        deduped.set(userName, {
+        deduped.set(row.userId, {
             userName,
             userId: row.userId,
             address: row.address?.trim() ?? "",
