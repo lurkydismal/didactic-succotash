@@ -4,8 +4,8 @@ import TableDataGrid from "@/components/TableDataGrid";
 import ExtraToolbarButtons from "@/components/dashboard/ExtraToolbarButtons";
 import fields from "@/data/dashboard/players/fields";
 import type {
-    ServerBanRow as TableRow,
-    ServerBanRowInsert as TableRowInsert,
+    PlayerRow as TableRow,
+    PlayerRowInsert as TableRowInsert,
 } from "@/db/types";
 import {
     createRowAction,

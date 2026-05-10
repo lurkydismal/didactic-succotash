@@ -1,7 +1,7 @@
 import type { FieldConfig } from "@/components/TableDataGrid/RowDialog";
 import type {
-    ServerBanRow as TableRow,
-    ServerBanRowInsert as TableRowInsert,
+    PlayerRow as TableRow,
+    PlayerRowInsert as TableRowInsert,
 } from "@/db/types";
 import { formatHwidByteaHex, formatHwidHex } from "@/utils/hwid";
 

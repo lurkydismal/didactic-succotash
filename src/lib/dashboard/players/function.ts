@@ -1,7 +1,7 @@
 "use server";
 
 import { player } from "@/db/schema";
-import { ServerBanRowInsert as TableRowInsert } from "@/db/types";
+import { PlayerRowInsert as TableRowInsert } from "@/db/types";
 import { DbTarget } from "@/lib/types";
 import {
     createRowAction as _createRowAction,
