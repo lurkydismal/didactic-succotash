@@ -125,6 +125,7 @@ export default function TableDataGrid<
                 // }
             } catch (err) {
                 showError(err);
+                throw err;
             }
         },
         [createRowAction, _getRows, showError],
