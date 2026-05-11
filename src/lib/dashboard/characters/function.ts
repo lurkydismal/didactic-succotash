@@ -34,6 +34,7 @@ type CharacterRow = TableRow & {
 type DbTransaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
 
 const maxProfileInsertAttempts = 3;
+const maxFavoriteJobAttempts = 3;
 
 /**
  * Trims any display value from the row dialog and returns an empty string for nullish input.
@@ -261,6 +262,19 @@ function isProfileSlotConflict(error: unknown): boolean {
 }
 
 /**
+ * Returns true when a database error came from a job uniqueness conflict that a retried transaction can resolve.
+ */
+function isFavoriteJobConflict(error: unknown): boolean {
+    const dbError = error as { code?: string; constraint?: string };
+
+    return (
+        dbError.code === "23505" &&
+        (dbError.constraint === "IX_job_one_high_priority" ||
+            dbError.constraint === "IX_job_profile_id_job_name")
+    );
+}
+
+/**
  * Updates the profile's high-priority job row within an existing transaction so Favorite job maps to job.jobName.
  */
 async function setFavoriteJobWithTx(
@@ -318,55 +332,70 @@ async function updateProfileAndFavoriteJobTransaction(
     profileUpdate: Partial<TableRowInsert> | null,
     rawJobName: unknown,
 ): Promise<void> {
-    await db.transaction(async (tx) => {
-        if (profileUpdate) {
-            const updateResult = await tx
-                .update(profile)
-                .set(profileUpdate)
-                .where(eq(profile.profileId, profileId))
-                .execute();
+    for (let attempt = 1; attempt <= maxFavoriteJobAttempts; attempt += 1) {
+        try {
+            await db.transaction(async (tx) => {
+                if (profileUpdate) {
+                    const updateResult = await tx
+                        .update(profile)
+                        .set(profileUpdate)
+                        .where(eq(profile.profileId, profileId))
+                        .execute();
 
-            const affectedRows =
-                typeof (updateResult as { rowCount?: number }).rowCount ===
-                "number"
-                    ? (updateResult as { rowCount: number }).rowCount
-                    : Array.isArray(updateResult)
-                      ? updateResult.length
-                      : undefined;
+                    const affectedRows =
+                        typeof (updateResult as { rowCount?: number })
+                            .rowCount === "number"
+                            ? (updateResult as { rowCount: number }).rowCount
+                            : Array.isArray(updateResult)
+                              ? updateResult.length
+                              : undefined;
 
-            if (affectedRows === 0) {
-                throw new Error("Update target no longer exists");
-            }
+                    if (affectedRows === 0) {
+                        throw new Error("Update target no longer exists");
+                    }
 
-            if (affectedRows === undefined) {
-                // Driver did not report affected rows; verify existence explicitly
-                const [exists] = await tx
-                    .select({ profileId: profile.profileId })
-                    .from(profile)
-                    .where(eq(profile.profileId, profileId))
-                    .limit(1)
-                    .execute();
+                    if (affectedRows === undefined) {
+                        // Driver did not report affected rows; verify existence explicitly
+                        const [exists] = await tx
+                            .select({ profileId: profile.profileId })
+                            .from(profile)
+                            .where(eq(profile.profileId, profileId))
+                            .limit(1)
+                            .execute();
 
-                if (!exists) {
-                    throw new Error("Update target no longer exists");
+                        if (!exists) {
+                            throw new Error("Update target no longer exists");
+                        }
+                    }
+                } else {
+                    // No profile update; still verify the profile exists before touching jobs
+                    const [exists] = await tx
+                        .select({ profileId: profile.profileId })
+                        .from(profile)
+                        .where(eq(profile.profileId, profileId))
+                        .limit(1)
+                        .execute();
+
+                    if (!exists) {
+                        throw new Error("Update target no longer exists");
+                    }
                 }
-            }
-        } else {
-            // No profile update; still verify the profile exists before touching jobs
-            const [exists] = await tx
-                .select({ profileId: profile.profileId })
-                .from(profile)
-                .where(eq(profile.profileId, profileId))
-                .limit(1)
-                .execute();
 
-            if (!exists) {
-                throw new Error("Update target no longer exists");
+                await setFavoriteJobWithTx(tx, profileId, rawJobName);
+            });
+
+            return;
+        } catch (error) {
+            if (
+                isFavoriteJobConflict(error) &&
+                attempt < maxFavoriteJobAttempts
+            ) {
+                continue;
             }
+
+            throw error;
         }
-
-        await setFavoriteJobWithTx(tx, profileId, rawJobName);
-    });
+    }
 }
 
 /**
