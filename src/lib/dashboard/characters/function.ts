@@ -125,11 +125,19 @@ async function buildProfileInsert(
         height:
             row.height === undefined || row.height === null
                 ? 1
-                : Number(row.height),
+                : (() => {
+                    const parsed = Number(row.height);
+                    if (!Number.isFinite(parsed)) throw new Error("Invalid height");
+                    return parsed;
+                  })(),
         width:
             row.width === undefined || row.width === null
                 ? 1
-                : Number(row.width),
+                : (() => {
+                    const parsed = Number(row.width);
+                    if (!Number.isFinite(parsed)) throw new Error("Invalid width");
+                    return parsed;
+                  })(),
         voice: normalizeDisplayValue(row.voice),
         bodyType: normalizeDisplayValue(row.bodyType),
     };
