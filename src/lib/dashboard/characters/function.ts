@@ -263,25 +263,28 @@ async function setFavoriteJobWithTx(
  */
 async function updateProfileAndFavoriteJobTransaction(
     profileId: number,
-    profileUpdate: Partial<TableRowInsert>,
+    profileUpdate: Partial<TableRowInsert> | null,
     rawJobName: unknown,
 ): Promise<void> {
     await db.transaction(async (tx) => {
-        const updateResult = await tx
-            .update(profile)
-            .set(profileUpdate)
-            .where(eq(profile.profileId, profileId))
-            .execute();
+        if (profileUpdate) {
+            const updateResult = await tx
+                .update(profile)
+                .set(profileUpdate)
+                .where(eq(profile.profileId, profileId))
+                .execute();
 
-        const affectedRows =
-            typeof (updateResult as { rowCount?: number }).rowCount === "number"
-                ? (updateResult as { rowCount: number }).rowCount
-                : Array.isArray(updateResult)
-                  ? updateResult.length
-                  : undefined;
+            const affectedRows =
+                typeof (updateResult as { rowCount?: number }).rowCount ===
+                "number"
+                    ? (updateResult as { rowCount: number }).rowCount
+                    : Array.isArray(updateResult)
+                      ? updateResult.length
+                      : undefined;
 
-        if (affectedRows === 0) {
-            throw new Error("Update target no longer exists");
+            if (affectedRows === 0) {
+                throw new Error("Update target no longer exists");
+            }
         }
 
         await setFavoriteJobWithTx(tx, profileId, rawJobName);
@@ -437,11 +440,13 @@ export async function updateRowAction(fd: FormData): Promise<void> {
     const favoriteJobName = fd.get("jobName");
 
     const profileUpdate = buildProfileUpdate(fd, resolvedPreferenceId);
+    const profileUpdateOrNull =
+        Object.keys(profileUpdate).length > 0 ? profileUpdate : null;
 
     try {
         await updateProfileAndFavoriteJobTransaction(
             profileId,
-            profileUpdate,
+            profileUpdateOrNull,
             favoriteJobName,
         );
         updateDbCacheTags(["profile", "job"]);
