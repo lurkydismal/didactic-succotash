@@ -35,6 +35,7 @@ export type FieldConfig<
     size?: number; // value passed to Grid xs/sm/etc (use 12, 6, 4)
     required?: boolean;
     readOnly?: boolean;
+    hidden?: boolean; // hides this field from dashboard table columns only
     requiredGroup?: string;
     requiredGroupMin?: number;
     placeholder?: unknown;

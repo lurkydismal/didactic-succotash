@@ -74,19 +74,21 @@ export function columnsFromFields<
     RI extends Record<string, unknown>,
 >(fields: FieldConfig<R, RI>[]): readonly GridColDef[] {
     return normalizeColumns(
-        fields.map((field) => ({
-            field: String(field.key),
-            flex: 1,
-            headerName: field.label,
-            ...(field.formatValue
-                ? {
-                      /**
-                       * Renders a data grid cell value from a normalized field definition.
-                       */
-                      renderCell: (params: GridRenderCellParams) =>
-                          String(field.formatValue!(params.value) ?? ""),
-                  }
-                : {}),
-        })),
+        fields
+            .filter((field) => !field.hidden)
+            .map((field) => ({
+                field: String(field.key),
+                flex: 1,
+                headerName: field.label,
+                ...(field.formatValue
+                    ? {
+                          /**
+                           * Renders a data grid cell value from a normalized field definition.
+                           */
+                          renderCell: (params: GridRenderCellParams) =>
+                              String(field.formatValue!(params.value) ?? ""),
+                      }
+                    : {}),
+            })),
     );
 }
