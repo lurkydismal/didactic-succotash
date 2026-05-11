@@ -31,6 +31,10 @@ type CharacterRow = TableRow & {
     jobName: string;
 };
 
+type DbTransaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
+
+const maxProfileInsertAttempts = 3;
+
 /**
  * Trims any display value from the row dialog and returns an empty string for nullish input.
  */
@@ -72,10 +76,20 @@ async function resolvePreferenceIdByUsername(
 }
 
 /**
- * Calculates the next available character slot for a player's preference record.
+ * Calculates the next available character slot for a player's preference record inside an existing transaction.
  */
-async function getNextProfileSlot(preferenceId: number): Promise<number> {
-    const [slotRow] = await db
+async function getNextProfileSlot(
+    tx: DbTransaction,
+    preferenceId: number,
+): Promise<number> {
+    await tx
+        .select({ preferenceId: profile.preferenceId })
+        .from(profile)
+        .where(eq(profile.preferenceId, preferenceId))
+        .for("update")
+        .execute();
+
+    const [slotRow] = await tx
         .select({
             nextSlot: sql<number>`COALESCE(MAX(${profile.slot}), -1) + 1`,
         })
@@ -112,13 +126,14 @@ function normalizeProfileMarkings(
  * Builds a complete profile insert payload with safe character defaults for non-null columns.
  */
 async function buildProfileInsert(
+    tx: DbTransaction,
     row: CharacterMutationInput,
     preferenceId: number,
 ): Promise<TableRowInsert> {
     return {
         slot:
             row.slot === undefined || row.slot === null
-                ? await getNextProfileSlot(preferenceId)
+                ? await getNextProfileSlot(tx, preferenceId)
                 : coerceIntegerField(row.slot, "slot"),
         charName: normalizeDisplayValue(row.charName),
         age: coerceIntegerField(row.age, "age"),
@@ -233,7 +248,17 @@ function buildProfileUpdate(
     return update;
 }
 
-type DbTransaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
+/**
+ * Returns true when a database error came from the unique profile preference/slot constraint.
+ */
+function isProfileSlotConflict(error: unknown): boolean {
+    const dbError = error as { code?: string; constraint?: string };
+
+    return (
+        dbError.code === "23505" &&
+        dbError.constraint === "IX_profile_slot_preference_id"
+    );
+}
 
 /**
  * Updates the profile's high-priority job row within an existing transaction so Favorite job maps to job.jobName.
@@ -451,26 +476,49 @@ export async function createRowAction(
     }
 
     try {
-        await db.transaction(async (tx) => {
-            const profileInsert = await buildProfileInsert(row, preferenceId);
-            const [createdProfile] = await tx
-                .insert(profile)
-                .values(profileInsert)
-                .returning({ profileId: profile.profileId })
-                .execute();
+        for (
+            let attempt = 1;
+            attempt <= maxProfileInsertAttempts;
+            attempt += 1
+        ) {
+            try {
+                await db.transaction(async (tx) => {
+                    const profileInsert = await buildProfileInsert(
+                        tx,
+                        row,
+                        preferenceId,
+                    );
+                    const [createdProfile] = await tx
+                        .insert(profile)
+                        .values(profileInsert)
+                        .returning({ profileId: profile.profileId })
+                        .execute();
 
-            if (!createdProfile) {
-                throw new Error("Profile insert did not return an id");
+                    if (!createdProfile) {
+                        throw new Error("Profile insert did not return an id");
+                    }
+
+                    await setFavoriteJobWithTx(
+                        tx,
+                        createdProfile.profileId,
+                        row.jobName,
+                    );
+                });
+
+                updateDbCacheTags(["profile", "job"]);
+                return;
+            } catch (error) {
+                if (
+                    (row.slot === undefined || row.slot === null) &&
+                    isProfileSlotConflict(error) &&
+                    attempt < maxProfileInsertAttempts
+                ) {
+                    continue;
+                }
+
+                throw error;
             }
-
-            await setFavoriteJobWithTx(
-                tx,
-                createdProfile.profileId,
-                row.jobName,
-            );
-        });
-
-        updateDbCacheTags(["profile", "job"]);
+        }
     } catch (error) {
         log.error("Create character error:", error);
         throw error;
