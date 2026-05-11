@@ -146,7 +146,10 @@ async function buildProfileInsert(
 /**
  * Builds a profile update payload from submitted dialog fields while preserving omitted columns.
  */
-function buildProfileUpdate(fd: FormData): Partial<TableRowInsert> {
+function buildProfileUpdate(
+    fd: FormData,
+    resolvedPreferenceId: number | null,
+): Partial<TableRowInsert> {
     const update: Partial<TableRowInsert> = {};
 
     for (const fieldName of [
@@ -194,9 +197,8 @@ function buildProfileUpdate(fd: FormData): Partial<TableRowInsert> {
         }
     }
 
-    const preferenceId = fd.get("preferenceId");
-    if (preferenceId !== null && preferenceId !== "") {
-        update.preferenceId = coerceIntegerField(preferenceId, "preferenceId");
+    if (resolvedPreferenceId !== null) {
+        update.preferenceId = resolvedPreferenceId;
     }
 
     return update;
@@ -376,19 +378,16 @@ export async function createRowAction(
 export async function updateRowAction(fd: FormData): Promise<void> {
     const profileId = coerceIntegerField(fd.get("id"), "id");
     const playerUsername = normalizeDisplayValue(fd.get("playerUsername"));
-    const preferenceId = await resolvePreferenceIdByUsername(playerUsername);
+    const resolvedPreferenceId =
+        await resolvePreferenceIdByUsername(playerUsername);
 
-    if (playerUsername && !preferenceId) {
+    if (playerUsername && !resolvedPreferenceId) {
         throw new Error("Invalid player username");
-    }
-
-    if (preferenceId !== null) {
-        fd.set("preferenceId", String(preferenceId));
     }
 
     const favoriteJobName = fd.get("jobName");
 
-    const profileUpdate = buildProfileUpdate(fd);
+    const profileUpdate = buildProfileUpdate(fd, resolvedPreferenceId);
 
     try {
         const updateResult = await db
