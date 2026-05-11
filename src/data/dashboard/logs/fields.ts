@@ -42,6 +42,10 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         label: "Severity",
         type: "text",
         required: true,
+        validate: async (value) => {
+            const parsed = Number(value);
+            return Number.isInteger(parsed) || "Severity must be an integer";
+        },
     },
     {
         key: "date",
@@ -55,6 +59,10 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         label: "Type",
         type: "text",
         required: true,
+        validate: async (value) => {
+            const parsed = Number(value);
+            return Number.isInteger(parsed) || "Type must be an integer";
+        },
     },
     {
         key: "message",
