@@ -45,6 +45,7 @@ export default function MultilineFieldInput({
                 control={control}
                 defaultValue={value ?? ""}
                 rules={rules}
+                disabled={readOnly}
                 render={({ field }) => (
                     <TextField
                         {...field}
