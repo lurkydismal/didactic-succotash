@@ -285,6 +285,20 @@ async function updateProfileAndFavoriteJobTransaction(
             if (affectedRows === 0) {
                 throw new Error("Update target no longer exists");
             }
+
+            if (affectedRows === undefined) {
+                // Driver did not report affected rows; verify existence explicitly
+                const [exists] = await tx
+                    .select({ profileId: profile.profileId })
+                    .from(profile)
+                    .where(eq(profile.profileId, profileId))
+                    .limit(1)
+                    .execute();
+    
+                if (!exists) {
+                    throw new Error("Update target no longer exists");
+                }
+            }
         }
 
         await setFavoriteJobWithTx(tx, profileId, rawJobName);
