@@ -33,17 +33,19 @@ async function resolveRoundDependentFields(value: unknown) {
  * Formats a JSON database value as stable, readable text for grid cells and dialog fields.
  */
 function formatJsonText(value: unknown): string {
-    if (value === null || value === undefined || value === "") return "";
+    if (value === undefined || value === "") return "";
 
     if (typeof value === "string") {
         try {
             return JSON.stringify(JSON.parse(value), null, 2);
         } catch {
-            return value;
+            // Preserve valid JSON text semantics for scalar strings.
+            return JSON.stringify(value, null, 2);
         }
     }
 
-    return JSON.stringify(value, null, 2);
+    const serialized = JSON.stringify(value, null, 2);
+    return serialized ?? String(value);
 }
 
 /**
