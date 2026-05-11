@@ -1,10 +1,9 @@
 "use server";
 
 import { adminLog, round, server } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { desc, eq, getColumns } from "drizzle-orm";
 import { AdminLogRowInsert as TableRowInsert } from "@/db/types";
 import { DbTarget } from "@/lib/types";
-import { getRowsAction as _getRowsAction } from "@/lib/dashboard/common/function";
 import { cacheDbRequest } from "@/lib/cache";
 import db from "@/db";
 import { parseForm, save } from "@/lib/dashboard/common/update_create";
@@ -42,8 +41,29 @@ function normalizeLogJsonRow<TRow extends Record<string, unknown>>(
     };
 }
 
-export async function getRowsAction(): ReturnType<typeof _getRowsAction> {
-    return _getRowsAction(target, "adminLogId");
+/**
+ * Gets log rows with the related server name needed by the dashboard table.
+ */
+export async function getRowsAction() {
+    "use cache";
+    cacheDbRequest(["adminLog", "round", "server"]);
+
+    const adminLogColumns = getColumns(adminLog);
+    const rows = await db
+        .select({
+            ...adminLogColumns,
+            serverName: server.name,
+        })
+        .from(adminLog)
+        .innerJoin(round, eq(adminLog.roundId, round.roundId))
+        .innerJoin(server, eq(round.serverId, server.serverId))
+        .orderBy(desc(adminLog.adminLogId))
+        .execute();
+
+    return rows.map((row) => ({
+        ...row,
+        id: row.adminLogId,
+    }));
 }
 
 export async function createRowAction(row: TableRowInsert): Promise<void> {
