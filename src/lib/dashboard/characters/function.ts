@@ -299,6 +299,18 @@ async function updateProfileAndFavoriteJobTransaction(
                     throw new Error("Update target no longer exists");
                 }
             }
+        } else {
+            // No profile update; still verify the profile exists before touching jobs
+            const [exists] = await tx
+                .select({ profileId: profile.profileId })
+                .from(profile)
+                .where(eq(profile.profileId, profileId))
+                .limit(1)
+                .execute();
+
+            if (!exists) {
+                throw new Error("Update target no longer exists");
+            }
         }
 
         await setFavoriteJobWithTx(tx, profileId, rawJobName);
