@@ -4,16 +4,14 @@ import type {
     WhitelistRow as TableRow,
     WhitelistRowInsert as TableRowInsert,
 } from "@/db/types";
-import {
-    getPlayerPackedOptionsAction,
-} from "@/lib/dashboard/whitelist/function";
+import { getPlayerPackedOptionsAction } from "@/lib/dashboard/whitelist/function";
 
 const packedFieldNames = ["userName", "userId"] as const;
 
 type PackedPlayerField = (typeof packedFieldNames)[number];
 
 /**
- * Loads packed player rows once so multiple autocomplete fields can share them.
+ * Loads packed player rows once so all whitelist autocomplete fields share one request.
  */
 const loadPackedPlayerRows = () => {
     return getPlayerPackedOptionsAction();
@@ -24,24 +22,24 @@ const loadPackedPlayerRows = () => {
  */
 const loadPackedPlayerOptions =
     (labelKey: PackedPlayerField) =>
-        async (): Promise<AutocompleteOption[]> => {
-            const packedRows = await loadPackedPlayerRows();
+    async (): Promise<AutocompleteOption[]> => {
+        const packedRows = await loadPackedPlayerRows();
 
-            return packedRows.reduce<AutocompleteOption[]>((options, packedRow) => {
-                const label = packedRow[labelKey];
-                if (!label) return options;
+        return packedRows.reduce<AutocompleteOption[]>((options, packedRow) => {
+            const label = packedRow[labelKey];
+            if (!label) return options;
 
-                const packedValues = packedFieldNames.reduce<
-                    Record<string, unknown>
-                >((values, packedField) => {
-                    values[packedField] = packedRow[packedField] ?? "";
-                    return values;
-                }, {});
+            const packedValues = packedFieldNames.reduce<
+                Record<string, unknown>
+            >((values, packedField) => {
+                values[packedField] = packedRow[packedField] ?? "";
+                return values;
+            }, {});
 
-                options.push({ label, packedValues });
-                return options;
-            }, []);
-        };
+            options.push({ label, packedValues });
+            return options;
+        }, []);
+    };
 
 const fields: FieldConfig<TableRow, TableRowInsert>[] = [
     {
