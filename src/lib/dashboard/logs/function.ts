@@ -4,13 +4,10 @@ import { adminLog, round, server } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { AdminLogRowInsert as TableRowInsert } from "@/db/types";
 import { DbTarget } from "@/lib/types";
-import {
-    createRowAction as _createRowAction,
-    getRowsAction as _getRowsAction,
-    updateRowAction as _updateRowAction,
-} from "@/lib/dashboard/common/function";
+import { getRowsAction as _getRowsAction } from "@/lib/dashboard/common/function";
 import { cacheDbRequest } from "@/lib/cache";
 import db from "@/db";
+import { parseForm, save } from "@/lib/dashboard/common/update_create";
 
 const target: DbTarget = "adminLog";
 const id = [
@@ -18,20 +15,59 @@ const id = [
     { column: adminLog.adminLogId, valueKey: "id" },
 ];
 
+/**
+ * Parses the logs JSON field from editable text into the jsonb value expected by the database.
+ */
+function parseLogJsonValue(value: unknown): unknown {
+    if (typeof value !== "string") return value;
+
+    try {
+        return JSON.parse(value);
+    } catch {
+        throw new Error("JSON must be valid");
+    }
+}
+
+/**
+ * Returns a copy of a log mutation row with its JSON field converted from text.
+ */
+function normalizeLogJsonRow<TRow extends Record<string, unknown>>(
+    row: TRow,
+): TRow {
+    if (!("json" in row)) return row;
+
+    return {
+        ...row,
+        json: parseLogJsonValue(row.json),
+    };
+}
+
 export async function getRowsAction(): ReturnType<typeof _getRowsAction> {
     return _getRowsAction(target, "adminLogId");
 }
 
-export async function createRowAction(
-    row: TableRowInsert,
-): ReturnType<typeof _createRowAction> {
-    return _createRowAction(target, row);
+export async function createRowAction(row: TableRowInsert): Promise<void> {
+    const result = await save(target, normalizeLogJsonRow(row), {
+        isUpdate: false,
+    });
+
+    if (!result.ok) {
+        const message = `Failed to create row in action: ${result.error}`;
+        throw new Error(message);
+    }
 }
 
-export async function updateRowAction(
-    fd: FormData,
-): ReturnType<typeof _updateRowAction> {
-    return _updateRowAction(target, id, fd);
+export async function updateRowAction(fd: FormData): Promise<void> {
+    const input = normalizeLogJsonRow(await parseForm(fd));
+    const result = await save(target, input, {
+        isUpdate: true,
+        idColumns: id,
+    });
+
+    if (!result.ok) {
+        const message = `Failed to update row in action: ${result.error}`;
+        throw new Error(message);
+    }
 }
 
 /**
