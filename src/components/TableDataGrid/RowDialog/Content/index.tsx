@@ -178,9 +178,11 @@ export default function RowDialogContent<
     }, [registerSubmit, submit]);
 
     const initialRunRef = useRef<string | null>(null);
-    
+
     useEffect(() => {
-        const rowKey = rowHasId(row, idKey) ? String((row as Record<string, unknown>)[String(idKey)]) : "new";
+        const rowKey = rowHasId(row, idKey)
+            ? String((row as Record<string, unknown>)[String(idKey)])
+            : "new";
         if (initialRunRef.current === rowKey) return;
         initialRunRef.current = rowKey;
 
