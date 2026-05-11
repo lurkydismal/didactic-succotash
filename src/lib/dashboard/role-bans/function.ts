@@ -4,8 +4,8 @@ import { asc, desc, eq, getColumns, ne, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 
 import db from "@/db";
-import { player, round, serverBan } from "@/db/schema";
-import { ServerBanRowInsert as TableRowInsert } from "@/db/types";
+import { player, round, serverRoleBan } from "@/db/schema";
+import { ServerRoleBanRowInsert as TableRowInsert } from "@/db/types";
 import { cacheDbRequest } from "@/lib/cache";
 import { create } from "@/lib/dashboard/common/create";
 import { updateAction } from "@/lib/dashboard/common/update";
@@ -14,10 +14,10 @@ import { formatHwidByteaHex, formatHwidHex } from "@/utils/hwid";
 import log from "@/utils/stdlog";
 import { isDev } from "@/utils/stdvar";
 
-const target: DbTarget = "serverBan";
-const idColumn = serverBan.serverBanId;
+const target: DbTarget = "serverRoleBan";
+const idColumn = serverRoleBan.serverRoleBanId;
 
-type ServerBanMutationInput = TableRowInsert & { playerUsername?: string };
+type ServerRoleBanMutationInput = TableRowInsert & { playerUsername?: string };
 
 /**
  * Normalizes hwid mutation value.
@@ -51,24 +51,24 @@ async function resolvePlayerUserIdByUsername(
  */
 export async function getRowsAction() {
     "use cache";
-    cacheDbRequest(["serverBan", "player"]);
+    cacheDbRequest(["serverRoleBan", "player"]);
 
-    const serverBanColumns = getColumns(serverBan);
+    const serverRoleBanColumns = getColumns(serverRoleBan);
     const banningAdminPlayer = alias(player, "banning_admin_player");
     const rows = await db
         .select({
-            ...serverBanColumns,
-            id: serverBan.serverBanId,
+            ...serverRoleBanColumns,
+            id: serverRoleBan.serverRoleBanId,
             playerUsername: player.lastSeenUserName,
-            address: sql<string>`COALESCE(${serverBan.address}, ${player.lastSeenAddress}, NULL)`,
-            hwid: sql<string>`COALESCE(encode(${serverBan.hwid}, 'hex'), encode(${player.lastSeenHwid}, 'hex'), '')`,
+            address: sql<string>`COALESCE(${serverRoleBan.address}, ${player.lastSeenAddress}, NULL)`,
+            hwid: sql<string>`COALESCE(encode(${serverRoleBan.hwid}, 'hex'), encode(${player.lastSeenHwid}, 'hex'), '')`,
             banningAdmin: banningAdminPlayer.lastSeenUserName,
         })
-        .from(serverBan)
-        .leftJoin(player, eq(serverBan.playerUserId, player.userId))
+        .from(serverRoleBan)
+        .leftJoin(player, eq(serverRoleBan.playerUserId, player.userId))
         .leftJoin(
             banningAdminPlayer,
-            eq(serverBan.banningAdmin, banningAdminPlayer.userId),
+            eq(serverRoleBan.banningAdmin, banningAdminPlayer.userId),
         )
         .orderBy(desc(idColumn))
         .execute();
@@ -181,7 +181,7 @@ export async function getPlayerPackedOptionsAction(): Promise<
  * Creates row action.
  */
 export async function createRowAction(
-    row: ServerBanMutationInput,
+    row: ServerRoleBanMutationInput,
 ): Promise<void> {
     row.playerUserId = await resolvePlayerUserIdByUsername(row.playerUsername);
     if (!row.playerUserId) {
@@ -202,7 +202,7 @@ export async function createRowAction(
 
             if (!randomPlayer?.userId || !randomPlayer.lastSeenUserName) {
                 log.error(
-                    "Create server ban aborted: no available username found",
+                    "Create server role ban aborted: no available username found",
                 );
                 throw new Error("No available username found for ban creation");
             }
@@ -232,12 +232,9 @@ export async function createRowAction(
  * Updates row action.
  */
 export async function updateRowAction(fd: FormData): Promise<void> {
-    const playerUsernameInput = `${fd.get("playerUsername") ?? ""}`.trim();
-    const playerUserId =
-        await resolvePlayerUserIdByUsername(playerUsernameInput);
-    if (playerUsernameInput && !playerUserId) {
-        throw new Error("Invalid player username");
-    }
+    const playerUserId = await resolvePlayerUserIdByUsername(
+        `${fd.get("playerUsername") ?? ""}`,
+    );
     if (playerUserId != null) {
         fd.set("playerUserId", playerUserId);
     } else {
