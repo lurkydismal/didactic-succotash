@@ -13,7 +13,10 @@ import { cacheDbRequest } from "@/lib/cache";
 import db from "@/db";
 
 const target: DbTarget = "adminLog";
-const id = adminLog.adminLogId;
+const id = [
+    { column: adminLog.roundId, valueKey: "roundId" },
+    { column: adminLog.adminLogId, valueKey: "id" },
+];
 
 export async function getRowsAction(): ReturnType<typeof _getRowsAction> {
     return _getRowsAction(target, "adminLogId");

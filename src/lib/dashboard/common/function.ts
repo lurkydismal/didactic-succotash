@@ -2,7 +2,7 @@
 
 import { create } from "@/lib/dashboard/common/create";
 import { getRows } from "@/lib/dashboard/common/get";
-import { updateAction } from "@/lib/dashboard/common/update";
+import { updateAction, UpdateIdColumn } from "@/lib/dashboard/common/update";
 import { DbTarget } from "@/lib/types";
 import { AnyColumn } from "drizzle-orm";
 
@@ -43,7 +43,7 @@ export async function createRowAction<RI extends Record<string, unknown>>(
  */
 export async function updateRowAction(
     target: DbTarget,
-    id: AnyColumn,
+    id: AnyColumn | UpdateIdColumn[],
     fd: FormData,
 ) {
     const result = await updateAction(target, id, fd);
