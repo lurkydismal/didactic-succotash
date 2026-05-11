@@ -158,6 +158,7 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         key: "json",
         label: "JSON",
         type: "multiline",
+        hidden: true,
         required: true,
         placeholder: "{}",
         size: 12,
