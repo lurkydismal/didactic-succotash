@@ -17,7 +17,7 @@ export async function updateAction(
     idColumn: AnyColumn | UpdateIdColumn[],
     formData: FormData,
 ) {
-    const input = parseForm(formData);
+    const input = await parseForm(formData);
     const idOptions = Array.isArray(idColumn)
         ? { idColumns: idColumn }
         : { idColumn };

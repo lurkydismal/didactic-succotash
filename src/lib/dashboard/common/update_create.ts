@@ -1,4 +1,4 @@
-import { AnyColumn, and, eq } from "drizzle-orm";
+"use server";
 
 import db from "@/db";
 import { getSessionData } from "@/lib/auth";
@@ -165,11 +165,11 @@ export async function save(
             // Ensure mutation actually affected one row.
             const affectedRows =
                 typeof (updateResult as { rowCount?: number }).rowCount ===
-                "number"
+                    "number"
                     ? (updateResult as { rowCount: number }).rowCount
                     : Array.isArray(updateResult)
-                      ? updateResult.length
-                      : undefined;
+                        ? updateResult.length
+                        : undefined;
 
             if (affectedRows === undefined) {
                 throw new Error(
@@ -201,7 +201,7 @@ export async function save(
 /**
  * Parses form.
  */
-export function parseForm(formData: FormData): MutationRow {
+export async function parseForm(formData: FormData): Promise<MutationRow> {
     const entries = z
         .record(z.string(), z.unknown())
         .parse(Object.fromEntries(formData.entries())) as MutationRow;
