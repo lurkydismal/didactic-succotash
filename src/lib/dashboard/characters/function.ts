@@ -87,6 +87,28 @@ async function getNextProfileSlot(preferenceId: number): Promise<number> {
 }
 
 /**
+ * Normalizes the profile markings payload so JSON strings from FormData and raw insert values use the same shape.
+ */
+function normalizeProfileMarkings(
+    value: CharacterMutationInput["markings"],
+): TableRowInsert["markings"] {
+    if (typeof value !== "string") {
+        return value;
+    }
+
+    const trimmed = value.trim();
+    if (!trimmed) {
+        return null;
+    }
+
+    try {
+        return JSON.parse(trimmed) as TableRowInsert["markings"];
+    } catch {
+        return value;
+    }
+}
+
+/**
  * Builds a complete profile insert payload with safe character defaults for non-null columns.
  */
 async function buildProfileInsert(
@@ -115,7 +137,7 @@ async function buildProfileInsert(
         preferenceId,
         gender: normalizeDisplayValue(row.gender),
         species: normalizeDisplayValue(row.species),
-        markings: row.markings,
+        markings: normalizeProfileMarkings(row.markings),
         flavorText: normalizeDisplayValue(row.flavorText),
         spawnPriority:
             row.spawnPriority === undefined || row.spawnPriority === null
@@ -175,6 +197,11 @@ function buildProfileUpdate(
             }
             update[fieldName] = parsed;
         }
+    }
+
+    const markings = fd.get("markings");
+    if (markings !== null) {
+        update.markings = normalizeProfileMarkings(markings);
     }
 
     for (const fieldName of [
@@ -294,7 +321,7 @@ async function updateProfileAndFavoriteJobTransaction(
                     .where(eq(profile.profileId, profileId))
                     .limit(1)
                     .execute();
-    
+
                 if (!exists) {
                     throw new Error("Update target no longer exists");
                 }
