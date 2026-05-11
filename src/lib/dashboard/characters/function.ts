@@ -219,7 +219,7 @@ async function setFavoriteJobWithTx(
     if (typeof rawJobName !== "string") {
         throw new Error("Favorite job must be a string");
     }
-    
+
     const jobName = normalizeDisplayValue(rawJobName);
 
     if (!jobName) {
@@ -259,10 +259,60 @@ async function setFavoriteJobWithTx(
 }
 
 /**
- * Updates the profile's high-priority job row so Favorite job maps to job.jobName.
+ * Updates a profile and its Favorite job inside one transaction so either both changes commit or neither does.
  */
-async function setFavoriteJob(profileId: number, rawJobName: unknown) {
+async function updateProfileAndFavoriteJobTransaction(
+    profileId: number,
+    profileUpdate: Partial<TableRowInsert> | null,
+    rawJobName: unknown,
+): Promise<void> {
     await db.transaction(async (tx) => {
+        if (profileUpdate) {
+            const updateResult = await tx
+                .update(profile)
+                .set(profileUpdate)
+                .where(eq(profile.profileId, profileId))
+                .execute();
+
+            const affectedRows =
+                typeof (updateResult as { rowCount?: number }).rowCount ===
+                "number"
+                    ? (updateResult as { rowCount: number }).rowCount
+                    : Array.isArray(updateResult)
+                      ? updateResult.length
+                      : undefined;
+
+            if (affectedRows === 0) {
+                throw new Error("Update target no longer exists");
+            }
+
+            if (affectedRows === undefined) {
+                // Driver did not report affected rows; verify existence explicitly
+                const [exists] = await tx
+                    .select({ profileId: profile.profileId })
+                    .from(profile)
+                    .where(eq(profile.profileId, profileId))
+                    .limit(1)
+                    .execute();
+    
+                if (!exists) {
+                    throw new Error("Update target no longer exists");
+                }
+            }
+        } else {
+            // No profile update; still verify the profile exists before touching jobs
+            const [exists] = await tx
+                .select({ profileId: profile.profileId })
+                .from(profile)
+                .where(eq(profile.profileId, profileId))
+                .limit(1)
+                .execute();
+
+            if (!exists) {
+                throw new Error("Update target no longer exists");
+            }
+        }
+
         await setFavoriteJobWithTx(tx, profileId, rawJobName);
     });
 }
@@ -416,26 +466,15 @@ export async function updateRowAction(fd: FormData): Promise<void> {
     const favoriteJobName = fd.get("jobName");
 
     const profileUpdate = buildProfileUpdate(fd, resolvedPreferenceId);
+    const profileUpdateOrNull =
+        Object.keys(profileUpdate).length > 0 ? profileUpdate : null;
 
     try {
-        const updateResult = await db
-            .update(profile)
-            .set(profileUpdate)
-            .where(eq(profile.profileId, profileId))
-            .execute();
-
-        const affectedRows =
-            typeof (updateResult as { rowCount?: number }).rowCount === "number"
-                ? (updateResult as { rowCount: number }).rowCount
-                : Array.isArray(updateResult)
-                  ? updateResult.length
-                  : undefined;
-
-        if (affectedRows === 0) {
-            throw new Error("Update target no longer exists");
-        }
-
-        await setFavoriteJob(profileId, favoriteJobName);
+        await updateProfileAndFavoriteJobTransaction(
+            profileId,
+            profileUpdateOrNull,
+            favoriteJobName,
+        );
         updateDbCacheTags(["profile", "job"]);
     } catch (error) {
         log.error("Update character error:", error);
