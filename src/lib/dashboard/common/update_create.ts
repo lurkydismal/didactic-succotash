@@ -15,7 +15,7 @@ import { z } from "zod";
 
 type MutationRow = Record<string, unknown>;
 
-import { AnyColumn, and, eq } from "drizzle-orm";
+import { AnyColumn, and, eq, isNull } from "drizzle-orm";
 import { UpdateIdColumn } from "@/lib/dashboard/common/update";
 
 type UpdateId = UpdateIdColumn;
@@ -86,7 +86,9 @@ function getUpdateIdValues(
  * Builds the database WHERE clause that targets one update row.
  */
 function getUpdateWhere(idValues: { column: AnyColumn; value: unknown }[]) {
-    const filters = idValues.map(({ column, value }) => eq(column, value));
+    const filters = idValues.map(({ column, value }) =>
+        value === null ? isNull(column) : eq(column, value),
+    );
     const where = and(...filters);
 
     if (!where) {
