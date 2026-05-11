@@ -126,17 +126,19 @@ async function buildProfileInsert(
             row.height === undefined || row.height === null
                 ? 1
                 : (() => {
-                    const parsed = Number(row.height);
-                    if (!Number.isFinite(parsed)) throw new Error("Invalid height");
-                    return parsed;
+                      const parsed = Number(row.height);
+                      if (!Number.isFinite(parsed))
+                          throw new Error("Invalid height");
+                      return parsed;
                   })(),
         width:
             row.width === undefined || row.width === null
                 ? 1
                 : (() => {
-                    const parsed = Number(row.width);
-                    if (!Number.isFinite(parsed)) throw new Error("Invalid width");
-                    return parsed;
+                      const parsed = Number(row.width);
+                      if (!Number.isFinite(parsed))
+                          throw new Error("Invalid width");
+                      return parsed;
                   })(),
         voice: normalizeDisplayValue(row.voice),
         bodyType: normalizeDisplayValue(row.bodyType),
@@ -204,49 +206,65 @@ function buildProfileUpdate(
     return update;
 }
 
+type DbTransaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
+
 /**
- * Updates the profile's high-priority job row so Favorite job maps to job.jobName.
+ * Updates the profile's high-priority job row within an existing transaction so Favorite job maps to job.jobName.
  */
-async function setFavoriteJob(profileId: number, rawJobName: unknown) {
+async function setFavoriteJobWithTx(
+    tx: DbTransaction,
+    profileId: number,
+    rawJobName: unknown,
+) {
+    if (typeof rawJobName !== "string") {
+        throw new Error("Favorite job must be a string");
+    }
+    
     const jobName = normalizeDisplayValue(rawJobName);
 
     if (!jobName) {
         throw new Error("Favorite job is required");
     }
 
-    await db.transaction(async (tx) => {
-        const [existingNamedJob] = await tx
-            .select({ jobId: job.jobId })
-            .from(job)
-            .where(
-                sql`${job.profileId} = ${profileId} AND ${job.jobName} = ${jobName}`,
-            )
-            .limit(1)
-            .execute();
+    const [existingNamedJob] = await tx
+        .select({ jobId: job.jobId })
+        .from(job)
+        .where(
+            sql`${job.profileId} = ${profileId} AND ${job.jobName} = ${jobName}`,
+        )
+        .limit(1)
+        .execute();
 
+    await tx
+        .update(job)
+        .set({ priority: 2 })
+        .where(
+            sql`${job.profileId} = ${profileId} AND ${job.priority} = ${favoriteJobPriority}`,
+        )
+        .execute();
+
+    if (existingNamedJob) {
         await tx
             .update(job)
-            .set({ priority: 2 })
-            .where(
-                sql`${job.profileId} = ${profileId} AND ${job.priority} = ${favoriteJobPriority}`,
-            )
+            .set({ priority: favoriteJobPriority })
+            .where(eq(job.jobId, existingNamedJob.jobId))
             .execute();
+        return;
+    }
 
-        if (existingNamedJob) {
-            await tx
-                .update(job)
-                .set({ priority: favoriteJobPriority })
-                .where(eq(job.jobId, existingNamedJob.jobId))
-                .execute();
-            return;
-        }
+    await tx
+        .insert(job)
+        .values({ profileId, jobName, priority: favoriteJobPriority })
+        .execute();
+}
 
-        await tx
-            .insert(job)
-            .values({ profileId, jobName, priority: favoriteJobPriority })
-            .execute();
+/**
+ * Updates the profile's high-priority job row so Favorite job maps to job.jobName.
+ */
+async function setFavoriteJob(profileId: number, rawJobName: unknown) {
+    await db.transaction(async (tx) => {
+        await setFavoriteJobWithTx(tx, profileId, rawJobName);
     });
-
 }
 
 /**
@@ -368,7 +386,11 @@ export async function createRowAction(
                 throw new Error("Profile insert did not return an id");
             }
 
-            await setFavoriteJobWithTx(tx, createdProfile.profileId, row.jobName);
+            await setFavoriteJobWithTx(
+                tx,
+                createdProfile.profileId,
+                row.jobName,
+            );
         });
 
         updateDbCacheTags(["profile", "job"]);
