@@ -21,7 +21,7 @@ const loadPackedPlayerRows = () => {
 };
 
 /**
- * Loads player username options once for admin selection.
+ * Loads player username options once for character ownership selection.
  */
 const loadPlayerUsernameOptions = () => {
     return getPlayerUsernameOptionsAction();
@@ -32,24 +32,24 @@ const loadPlayerUsernameOptions = () => {
  */
 const loadPackedPlayerOptions =
     (labelKey: PackedPlayerField) =>
-        async (): Promise<AutocompleteOption[]> => {
-            const packedRows = await loadPackedPlayerRows();
+    async (): Promise<AutocompleteOption[]> => {
+        const packedRows = await loadPackedPlayerRows();
 
-            return packedRows.reduce<AutocompleteOption[]>((options, packedRow) => {
-                const label = packedRow[labelKey];
-                if (!label) return options;
+        return packedRows.reduce<AutocompleteOption[]>((options, packedRow) => {
+            const label = packedRow[labelKey];
+            if (!label) return options;
 
-                const packedValues = packedFieldNames.reduce<
-                    Record<string, unknown>
-                >((values, packedField) => {
-                    values[packedField] = packedRow[packedField] ?? "";
-                    return values;
-                }, {});
+            const packedValues = packedFieldNames.reduce<
+                Record<string, unknown>
+            >((values, packedField) => {
+                values[packedField] = packedRow[packedField] ?? "";
+                return values;
+            }, {});
 
-                options.push({ label, packedValues });
-                return options;
-            }, []);
-        };
+            options.push({ label, packedValues });
+            return options;
+        }, []);
+    };
 
 const fields: FieldConfig<TableRow, TableRowInsert>[] = [
     {
@@ -57,7 +57,7 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         label: "Player",
         type: "autocomplete",
         autocompleteOptions: [],
-        loadOptions: loadPackedPlayerOptions("playerUsername"),
+        loadOptions: loadPlayerUsernameOptions,
         required: true,
     },
     {
