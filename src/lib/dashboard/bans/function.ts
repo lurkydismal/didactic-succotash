@@ -232,9 +232,12 @@ export async function createRowAction(
  * Updates row action.
  */
 export async function updateRowAction(fd: FormData): Promise<void> {
-    const playerUserId = await resolvePlayerUserIdByUsername(
-        `${fd.get("playerUsername") ?? ""}`,
-    );
+    const playerUsernameInput = `${fd.get("playerUsername") ?? ""}`.trim();
+    const playerUserId =
+        await resolvePlayerUserIdByUsername(playerUsernameInput);
+    if (playerUsernameInput && !playerUserId) {
+        throw new Error("Invalid player username");
+    }
     if (playerUserId != null) {
         fd.set("playerUserId", playerUserId);
     } else {
