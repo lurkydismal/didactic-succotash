@@ -119,7 +119,7 @@ export const adminFlag = pgTable(
 export const adminLog = pgTable(
     "admin_log",
     {
-        adminLogId: integer("admin_log_id").notNull(),
+        adminLogId: integer("admin_log_id").generatedByDefaultAsIdentity(),
         roundId: integer("round_id")
             .notNull()
             .references(() => round.roundId, {

@@ -100,6 +100,14 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         required: true,
         size: 12,
     },
+    {
+        key: "json",
+        label: "JSON",
+        type: "multiline",
+        required: true,
+        placeholder: "{}",
+        size: 12,
+    },
 ];
 
 export default fields;
