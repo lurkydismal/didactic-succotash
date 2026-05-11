@@ -3,7 +3,31 @@ import type {
     AdminLogRow as TableRow,
     AdminLogRowInsert as TableRowInsert,
 } from "@/db/types";
-import { hasRoundIdAction } from "@/lib/dashboard/logs/function";
+import {
+    getServerNameByRoundIdAction,
+    hasRoundIdAction,
+} from "@/lib/dashboard/logs/function";
+
+/**
+ * Parses a field value as an integer round ID.
+ */
+function parseRoundId(value: unknown): number | null {
+    if (value === null || value === undefined || value === "") return null;
+
+    const parsed = Number(value);
+    return Number.isInteger(parsed) ? parsed : null;
+}
+
+/**
+ * Resolves dependent log fields from the current round ID field value.
+ */
+async function resolveRoundDependentFields(value: unknown) {
+    const roundId = parseRoundId(value);
+    if (roundId === null) return { serverName: "" };
+
+    const serverName = await getServerNameByRoundIdAction(roundId);
+    return serverName ? { serverName } : { serverName: "" };
+}
 
 const fields: FieldConfig<TableRow, TableRowInsert>[] = [
     {
@@ -11,6 +35,8 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         label: "Round ID",
         type: "text",
         required: true,
+        runOnDialogOpen: true,
+        onValueChange: resolveRoundDependentFields,
         /**
          * Validates that the referenced round exists.
          */
@@ -19,8 +45,8 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
                 return true;
             }
 
-            const parsed = Number(value);
-            if (!Number.isInteger(parsed)) {
+            const parsed = parseRoundId(value);
+            if (parsed === null) {
                 return "No such ID";
             }
 

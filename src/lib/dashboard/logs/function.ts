@@ -1,6 +1,6 @@
 "use server";
 
-import { adminLog, round } from "@/db/schema";
+import { adminLog, round, server } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { AdminLogRowInsert as TableRowInsert } from "@/db/types";
 import { DbTarget } from "@/lib/types";
@@ -48,4 +48,26 @@ export async function hasRoundIdAction(roundId: number): Promise<boolean> {
         .execute();
 
     return !!existingRound;
+}
+
+/**
+ * Gets the server name attached to an existing round.
+ */
+export async function getServerNameByRoundIdAction(
+    roundId: number,
+): Promise<string | null> {
+    "use cache";
+    cacheDbRequest(["round", "server"]);
+
+    if (!Number.isInteger(roundId)) return null;
+
+    const [existingRound] = await db
+        .select({ serverName: server.name })
+        .from(round)
+        .innerJoin(server, eq(round.serverId, server.serverId))
+        .where(eq(round.roundId, roundId))
+        .limit(1)
+        .execute();
+
+    return existingRound?.serverName ?? null;
 }
