@@ -1,4 +1,4 @@
-import { AnyColumn, eq, getColumns } from "drizzle-orm";
+import { AnyColumn, and, eq } from "drizzle-orm";
 
 import db from "@/db";
 import { getSessionData } from "@/lib/auth";
@@ -15,9 +15,15 @@ import { z } from "zod";
 
 type MutationRow = Record<string, unknown>;
 
+import { AnyColumn, and, eq } from "drizzle-orm";
+import { UpdateIdColumn } from "@/lib/dashboard/common/update";
+
+type UpdateId = UpdateIdColumn;
+
 type SaveOptions = {
     isUpdate?: boolean;
     idColumn?: AnyColumn;
+    idColumns?: UpdateId[];
 };
 
 /**
@@ -46,23 +52,48 @@ function toDbMutation(
 }
 
 /**
- * Finds the target table id column by its database column name.
+ * Builds the update identifier list used for existence checks and update filters.
  */
-function getIdColumnByName(
-    rawTarget: DbTarget,
-    idColumnName: string,
-): AnyColumn {
-    const table = parseRawTarget(rawTarget);
-    const columns = getColumns(table) as Record<string, AnyColumn | undefined>;
-    const idColumn = Object.values(columns).find(
-        (column) => column?.name === idColumnName,
-    );
+function getUpdateIds(opts: SaveOptions): UpdateId[] {
+    if (opts.idColumns?.length) return opts.idColumns;
 
-    if (!idColumn) {
-        throw new Error("Unknown id column for update");
+    if (opts.idColumn) {
+        return [{ column: opts.idColumn, valueKey: "id" }];
     }
 
-    return idColumn;
+    return [];
+}
+
+/**
+ * Resolves update identifier values from the parsed mutation input.
+ */
+function getUpdateIdValues(
+    input: MutationRow,
+    ids: UpdateId[],
+): { column: AnyColumn; value: unknown }[] {
+    return ids.map(({ column, valueKey }) => {
+        const value = input[valueKey];
+
+        if (value === undefined) {
+            throw new Error(`Missing ${valueKey} for update`);
+        }
+
+        return { column, value };
+    });
+}
+
+/**
+ * Builds the database WHERE clause that targets one update row.
+ */
+function getUpdateWhere(idValues: { column: AnyColumn; value: unknown }[]) {
+    const filters = idValues.map(({ column, value }) => eq(column, value));
+    const where = and(...filters);
+
+    if (!where) {
+        throw new Error("Missing id columns for update");
+    }
+
+    return where;
 }
 
 /**
@@ -70,16 +101,19 @@ function getIdColumnByName(
  */
 async function getExistingRows(
     rawTarget: DbTarget,
-    idColumnName: string,
-    id: unknown,
+    idValues: { column: AnyColumn; value: unknown }[],
 ): Promise<MutationRow[]> {
     "use cache";
     cacheDbRequest([rawTarget]);
 
     const table = parseRawTarget(rawTarget);
-    const idColumn = getIdColumnByName(rawTarget, idColumnName);
 
-    return db.select().from(table).where(eq(idColumn, id)).limit(1).execute();
+    return db
+        .select()
+        .from(table)
+        .where(getUpdateWhere(idValues))
+        .limit(1)
+        .execute();
 }
 
 /**
@@ -111,18 +145,13 @@ export async function save(
         );
 
         if (opts.isUpdate) {
-            if (parsedInput.id === undefined) {
-                throw new Error("Missing id for update");
-            }
-
-            if (!opts.idColumn) {
-                throw new Error("Missing id column for update");
-            }
+            const updateIds = getUpdateIds(opts);
+            const updateIdValues = getUpdateIdValues(parsedInput, updateIds);
+            const updateWhere = getUpdateWhere(updateIdValues);
 
             const existingRows = await getExistingRows(
                 rawTarget,
-                opts.idColumn.name,
-                parsedInput.id,
+                updateIdValues,
             );
 
             await selectSchema.array().length(1).parseAsync(existingRows);
@@ -130,7 +159,7 @@ export async function save(
             const updateResult = await db
                 .update(table)
                 .set(row)
-                .where(eq(opts.idColumn, parsedInput.id))
+                .where(updateWhere)
                 .execute();
 
             // Ensure mutation actually affected one row.
