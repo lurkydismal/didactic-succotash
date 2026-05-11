@@ -214,36 +214,39 @@ async function setFavoriteJob(profileId: number, rawJobName: unknown) {
         throw new Error("Favorite job is required");
     }
 
-    const [existingNamedJob] = await db
-        .select({ jobId: job.jobId })
-        .from(job)
-        .where(
-            sql`${job.profileId} = ${profileId} AND ${job.jobName} = ${jobName}`,
-        )
-        .limit(1)
-        .execute();
-
-    await db
-        .update(job)
-        .set({ priority: 2 })
-        .where(
-            sql`${job.profileId} = ${profileId} AND ${job.priority} = ${favoriteJobPriority}`,
-        )
-        .execute();
-
-    if (existingNamedJob) {
-        await db
-            .update(job)
-            .set({ priority: favoriteJobPriority })
-            .where(eq(job.jobId, existingNamedJob.jobId))
+    await db.transaction(async (tx) => {
+        const [existingNamedJob] = await tx
+            .select({ jobId: job.jobId })
+            .from(job)
+            .where(
+                sql`${job.profileId} = ${profileId} AND ${job.jobName} = ${jobName}`,
+            )
+            .limit(1)
             .execute();
-        return;
-    }
 
-    await db
-        .insert(job)
-        .values({ profileId, jobName, priority: favoriteJobPriority })
-        .execute();
+        await tx
+            .update(job)
+            .set({ priority: 2 })
+            .where(
+                sql`${job.profileId} = ${profileId} AND ${job.priority} = ${favoriteJobPriority}`,
+            )
+            .execute();
+
+        if (existingNamedJob) {
+            await tx
+                .update(job)
+                .set({ priority: favoriteJobPriority })
+                .where(eq(job.jobId, existingNamedJob.jobId))
+                .execute();
+            return;
+        }
+
+        await tx
+            .insert(job)
+            .values({ profileId, jobName, priority: favoriteJobPriority })
+            .execute();
+    });
+
 }
 
 /**
