@@ -724,6 +724,7 @@ export const preference = pgTable(
     ],
 );
 
+/* Character */
 export const profile = pgTable(
     "profile",
     {
