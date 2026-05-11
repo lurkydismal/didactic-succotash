@@ -219,7 +219,7 @@ async function setFavoriteJobWithTx(
     if (typeof rawJobName !== "string") {
         throw new Error("Favorite job must be a string");
     }
-    
+
     const jobName = normalizeDisplayValue(rawJobName);
 
     if (!jobName) {
@@ -259,10 +259,31 @@ async function setFavoriteJobWithTx(
 }
 
 /**
- * Updates the profile's high-priority job row so Favorite job maps to job.jobName.
+ * Updates a profile and its Favorite job inside one transaction so either both changes commit or neither does.
  */
-async function setFavoriteJob(profileId: number, rawJobName: unknown) {
+async function updateProfileAndFavoriteJobTransaction(
+    profileId: number,
+    profileUpdate: Partial<TableRowInsert>,
+    rawJobName: unknown,
+): Promise<void> {
     await db.transaction(async (tx) => {
+        const updateResult = await tx
+            .update(profile)
+            .set(profileUpdate)
+            .where(eq(profile.profileId, profileId))
+            .execute();
+
+        const affectedRows =
+            typeof (updateResult as { rowCount?: number }).rowCount === "number"
+                ? (updateResult as { rowCount: number }).rowCount
+                : Array.isArray(updateResult)
+                  ? updateResult.length
+                  : undefined;
+
+        if (affectedRows === 0) {
+            throw new Error("Update target no longer exists");
+        }
+
         await setFavoriteJobWithTx(tx, profileId, rawJobName);
     });
 }
@@ -418,24 +439,11 @@ export async function updateRowAction(fd: FormData): Promise<void> {
     const profileUpdate = buildProfileUpdate(fd, resolvedPreferenceId);
 
     try {
-        const updateResult = await db
-            .update(profile)
-            .set(profileUpdate)
-            .where(eq(profile.profileId, profileId))
-            .execute();
-
-        const affectedRows =
-            typeof (updateResult as { rowCount?: number }).rowCount === "number"
-                ? (updateResult as { rowCount: number }).rowCount
-                : Array.isArray(updateResult)
-                  ? updateResult.length
-                  : undefined;
-
-        if (affectedRows === 0) {
-            throw new Error("Update target no longer exists");
-        }
-
-        await setFavoriteJob(profileId, favoriteJobName);
+        await updateProfileAndFavoriteJobTransaction(
+            profileId,
+            profileUpdate,
+            favoriteJobName,
+        );
         updateDbCacheTags(["profile", "job"]);
     } catch (error) {
         log.error("Update character error:", error);
