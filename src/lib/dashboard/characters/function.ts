@@ -216,6 +216,10 @@ async function setFavoriteJobWithTx(
     profileId: number,
     rawJobName: unknown,
 ) {
+    if (typeof rawJobName !== "string") {
+        throw new Error("Favorite job must be a string");
+    }
+    
     const jobName = normalizeDisplayValue(rawJobName);
 
     if (!jobName) {
