@@ -15,10 +15,10 @@ import { z } from "zod";
 
 type MutationRow = Record<string, unknown>;
 
-type UpdateId = {
-    column: AnyColumn;
-    valueKey: string;
-};
+import { AnyColumn, and, eq } from "drizzle-orm";
+import { UpdateIdColumn } from "@/lib/dashboard/common/update";
+
+type UpdateId = UpdateIdColumn;
 
 type SaveOptions = {
     isUpdate?: boolean;
