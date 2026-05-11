@@ -356,18 +356,21 @@ export async function createRowAction(
     }
 
     try {
-        const profileInsert = await buildProfileInsert(row, preferenceId);
-        const [createdProfile] = await db
-            .insert(profile)
-            .values(profileInsert)
-            .returning({ profileId: profile.profileId })
-            .execute();
+        await db.transaction(async (tx) => {
+            const profileInsert = await buildProfileInsert(row, preferenceId);
+            const [createdProfile] = await tx
+                .insert(profile)
+                .values(profileInsert)
+                .returning({ profileId: profile.profileId })
+                .execute();
 
-        if (!createdProfile) {
-            throw new Error("Profile insert did not return an id");
-        }
+            if (!createdProfile) {
+                throw new Error("Profile insert did not return an id");
+            }
 
-        await setFavoriteJob(createdProfile.profileId, row.jobName);
+            await setFavoriteJobWithTx(tx, createdProfile.profileId, row.jobName);
+        });
+
         updateDbCacheTags(["profile", "job"]);
     } catch (error) {
         log.error("Create character error:", error);
