@@ -177,7 +177,13 @@ export default function RowDialogContent<
         return () => registerSubmit(null);
     }, [registerSubmit, submit]);
 
+    const initialRunRef = useRef<string | null>(null);
+    
     useEffect(() => {
+        const rowKey = rowHasId(row, idKey) ? String((row as Record<string, unknown>)[String(idKey)]) : "new";
+        if (initialRunRef.current === rowKey) return;
+        initialRunRef.current = rowKey;
+
         const initialValues = buildInitialValues(row, fields);
 
         for (const field of fields) {
@@ -191,7 +197,7 @@ export default function RowDialogContent<
                 false,
             );
         }
-    }, [fields, row, runFieldValueChange]);
+    }, [fields, idKey, row, runFieldValueChange]);
 
     return (
         <form
