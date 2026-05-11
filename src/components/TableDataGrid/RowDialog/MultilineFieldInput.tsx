@@ -12,6 +12,7 @@ type MultilineFieldInputProps = {
     label: string;
     name: string;
     required: boolean;
+    readOnly?: boolean;
     value: unknown;
     control: Control<Record<string, unknown>>;
     error?: FieldError;
@@ -27,6 +28,7 @@ export default function MultilineFieldInput({
     label,
     name,
     required,
+    readOnly = false,
     value,
     control,
     error,
@@ -47,9 +49,12 @@ export default function MultilineFieldInput({
                     <TextField
                         {...field}
                         required={required}
+                        slotProps={{ htmlInput: { readOnly } }}
                         id={`${fieldKey}-multiline`}
                         value={field.value ?? ""}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                            if (readOnly) return;
+
                             field.onChange(e.target.value);
                             onValueChange(e.target.value);
                         }}

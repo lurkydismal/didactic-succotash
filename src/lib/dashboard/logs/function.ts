@@ -1,8 +1,8 @@
 "use server";
 
 import { adminLog, round } from "@/db/schema";
-import { AdminLogRowInsert as TableRowInsert } from "@/db/types";
 import { eq } from "drizzle-orm";
+import { AdminLogRowInsert as TableRowInsert } from "@/db/types";
 import { DbTarget } from "@/lib/types";
 import {
     createRowAction as _createRowAction,

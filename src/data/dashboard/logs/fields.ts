@@ -32,16 +32,19 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
             }
         },
     },
-    // {
-    //     key: "roundId",
-    //     label: "Server",
-    //     type: "text",
-    // },
+    {
+        key: "serverName",
+        label: "Server",
+        type: "text",
+        required: true,
+        readOnly: true,
+    },
     {
         key: "impact",
         label: "Severity",
         type: "text",
         required: true,
+        placeholder: 0,
         validate: async (value) => {
             const parsed = Number(value);
             return Number.isInteger(parsed) || "Severity must be an integer";

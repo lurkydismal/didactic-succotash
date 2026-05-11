@@ -13,6 +13,7 @@ type AutocompleteFieldInputProps = {
     label: string;
     name: string;
     required: boolean;
+    readOnly?: boolean;
     value: unknown;
     options: readonly AutocompleteOption[];
     loading?: boolean;
@@ -33,6 +34,7 @@ export default function AutocompleteFieldInput({
     label,
     name,
     required,
+    readOnly = false,
     value,
     options,
     loading = false,
@@ -62,7 +64,10 @@ export default function AutocompleteFieldInput({
                         onOpen={onOpen}
                         onClose={onClose}
                         loading={loading}
+                        readOnly={readOnly}
                         onChange={(_, nextValue) => {
+                            if (readOnly) return;
+
                             const mapped =
                                 nextValue as AutocompleteOption | null;
                             field.onChange(mapped);
@@ -79,6 +84,10 @@ export default function AutocompleteFieldInput({
                                 helperText={error?.message}
                                 slotProps={{
                                     ...params.slotProps,
+                                    htmlInput: {
+                                        ...params.slotProps.htmlInput,
+                                        readOnly,
+                                    },
                                     input: {
                                         ...params.slotProps.input,
                                         endAdornment: (

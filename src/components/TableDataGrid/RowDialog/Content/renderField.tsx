@@ -71,6 +71,7 @@ export const renderField = <
                 label={field.label}
                 name={name}
                 required={!!field.required}
+                readOnly={!!field.readOnly}
                 value={value}
                 onValueChange={(nextValue) => setValue(key, nextValue)}
                 control={form.control}
@@ -88,6 +89,7 @@ export const renderField = <
                 label={field.label}
                 name={name}
                 required={!!field.required}
+                readOnly={!!field.readOnly}
                 value={value}
                 options={field.autocompleteOptions ?? []}
                 loading={field.autocompleteLoading}
@@ -129,6 +131,7 @@ export const renderField = <
                 label={field.label}
                 name={name}
                 required={!!field.required}
+                readOnly={!!field.readOnly}
                 type={field.type}
                 value={value}
                 onValueChange={(nextValue) => setValue(key, nextValue)}
@@ -146,6 +149,7 @@ export const renderField = <
             label={field.label}
             name={name}
             required={!!field.required}
+            readOnly={!!field.readOnly}
             value={value}
             onValueChange={(nextValue) => setValue(key, nextValue)}
             control={form.control}
