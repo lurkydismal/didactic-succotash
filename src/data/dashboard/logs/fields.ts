@@ -29,6 +29,60 @@ async function resolveRoundDependentFields(value: unknown) {
     return serverName ? { serverName } : { serverName: "" };
 }
 
+/**
+ * Formats a JSON database value as stable, readable text for grid cells and dialog fields.
+ */
+function formatJsonText(value: unknown): string {
+    if (value === undefined || value === "") return "";
+
+    if (typeof value === "string") {
+        try {
+            return JSON.stringify(JSON.parse(value), null, 2);
+        } catch {
+            // Preserve valid JSON text semantics for scalar strings.
+            return JSON.stringify(value, null, 2);
+        }
+    }
+
+    const serialized = JSON.stringify(value, null, 2);
+    return serialized ?? String(value);
+}
+
+/**
+ * Parses the JSON text entered in the logs dialog back into a JavaScript value.
+ */
+function parseJsonText(value: unknown): unknown {
+    if (typeof value !== "string") return value;
+
+    return JSON.parse(value);
+}
+
+/**
+ * Validates that a logs JSON field contains syntactically valid JSON text.
+ */
+function validateJsonText(value: unknown): true | string {
+    try {
+        parseJsonText(value);
+        return true;
+    } catch {
+        return "JSON must be valid";
+    }
+}
+
+/**
+ * Compares original and edited JSON values after parsing them into canonical text.
+ */
+function isJsonChanged(rowValue: unknown, currentValue: unknown): boolean {
+    try {
+        return (
+            formatJsonText(rowValue) !==
+            formatJsonText(parseJsonText(currentValue))
+        );
+    } catch {
+        return formatJsonText(rowValue) !== String(currentValue ?? "");
+    }
+}
+
 const fields: FieldConfig<TableRow, TableRowInsert>[] = [
     {
         key: "roundId",
@@ -107,6 +161,9 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         required: true,
         placeholder: "{}",
         size: 12,
+        formatValue: formatJsonText,
+        isChanged: isJsonChanged,
+        validate: async (value) => validateJsonText(value),
     },
 ];
 
