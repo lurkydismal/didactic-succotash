@@ -131,6 +131,7 @@ export const adminLog = pgTable(
         message: text().notNull(),
         json: jsonb().notNull(),
         impact: smallint().default(0).notNull(),
+        ...metadataColumns,
     },
     (table) => [
         primaryKey({
@@ -1278,6 +1279,7 @@ export const serverRoleBan = pgTable(
         }),
         severity: integer().default(2).notNull(),
         hwidType: integer("hwid_type").default(0),
+        ...metadataColumns,
     },
     (table) => [
         primaryKey({
@@ -1416,6 +1418,7 @@ export const whitelist = pgTable(
     "whitelist",
     {
         userId: uuid("user_id"),
+        ...metadataColumns,
     },
     (table) => [
         primaryKey({

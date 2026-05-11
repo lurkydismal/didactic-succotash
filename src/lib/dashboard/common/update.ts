@@ -4,14 +4,23 @@ import { DbTarget } from "@/lib/types";
 import { parseForm, save } from "@/lib/dashboard/common/update_create";
 import { AnyColumn } from "drizzle-orm";
 
+export type UpdateIdColumn = {
+    column: AnyColumn;
+    valueKey: string;
+};
+
 /**
  * Updates action.
  */
 export async function updateAction(
     rawTarget: DbTarget,
-    idColumn: AnyColumn,
+    idColumn: AnyColumn | UpdateIdColumn[],
     formData: FormData,
 ) {
-    const input = parseForm(formData);
-    return save(rawTarget, input, { isUpdate: true, idColumn });
+    const input = await parseForm(formData);
+    const idOptions = Array.isArray(idColumn)
+        ? { idColumns: idColumn }
+        : { idColumn };
+
+    return save(rawTarget, input, { isUpdate: true, ...idOptions });
 }

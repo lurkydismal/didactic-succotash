@@ -12,6 +12,7 @@ type TextFieldInputProps = {
     label: string;
     name: string;
     required: boolean;
+    readOnly?: boolean;
     value: unknown;
     control: Control<Record<string, unknown>>;
     error?: FieldError;
@@ -27,6 +28,7 @@ export default function TextFieldInput({
     label,
     name,
     required,
+    readOnly = false,
     value,
     control,
     error,
@@ -43,13 +45,17 @@ export default function TextFieldInput({
                 control={control}
                 defaultValue={value ?? ""}
                 rules={rules}
+                disabled={readOnly}
                 render={({ field }) => (
                     <TextField
                         {...field}
                         required={required}
+                        slotProps={{ htmlInput: { readOnly } }}
                         id={`${fieldKey}-text`}
                         value={field.value ?? ""}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                            if (readOnly) return;
+
                             field.onChange(e.target.value);
                             onValueChange(e.target.value);
                         }}

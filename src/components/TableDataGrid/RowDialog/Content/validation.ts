@@ -14,6 +14,8 @@ export function getFieldRules<
     row: R,
     values: Record<string, unknown>,
 ): RegisterOptions<Record<string, unknown>, string> {
+    if (field.readOnly) return {};
+
     return {
         required: field.required ? `${field.label} is required` : false,
         validate: async (value) => {

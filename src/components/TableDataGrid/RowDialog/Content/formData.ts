@@ -10,6 +10,10 @@ function setFormDataField<
     RI extends Record<string, unknown>,
 >(fd: FormData, field: FieldConfig<R, RI>, sourceValues: Partial<RI>) {
     const name = field.name ?? String(field.key);
+    if (field.readOnly) {
+        fd.delete(name);
+        return;
+    }
     const key = String(field.key);
     const value = toFieldValue(
         field as FieldConfig<Record<string, unknown>, Record<string, unknown>>,

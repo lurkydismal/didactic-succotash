@@ -17,6 +17,7 @@ type DateTimeFieldInputProps = {
     label: string;
     name: string;
     required: boolean;
+    readOnly?: boolean;
     type: "date" | "time" | "datetime";
     value: unknown;
     control: Control<Record<string, unknown>>;
@@ -33,6 +34,7 @@ export default function DateTimeFieldInput({
     label,
     name,
     required,
+    readOnly = false,
     type,
     value,
     control,
@@ -44,6 +46,8 @@ export default function DateTimeFieldInput({
      * Handles change.
      */
     const handleChange = (nextValue: Dayjs | null) => {
+        if (readOnly) return;
+
         if (!nextValue || !nextValue.isValid()) {
             onValueChange(null);
             return;
@@ -76,6 +80,7 @@ export default function DateTimeFieldInput({
                     rules={rules}
                     render={({ field }) => (
                         <DatePicker
+                            readOnly={readOnly}
                             value={
                                 field.value
                                     ? dayjs(field.value as PickerInputValue)
@@ -83,6 +88,8 @@ export default function DateTimeFieldInput({
                             }
                             onChange={(next) => {
                                 handleChange(next);
+                                if (readOnly) return;
+
                                 field.onChange(
                                     next?.isValid()
                                         ? next.format("YYYY-MM-DD")
@@ -94,6 +101,7 @@ export default function DateTimeFieldInput({
                                     id: `${fieldKey}-date`,
                                     name,
                                     required,
+                                    slotProps: { htmlInput: { readOnly } },
                                     fullWidth: true,
                                     error: !!error,
                                     helperText: error?.message,
@@ -112,6 +120,7 @@ export default function DateTimeFieldInput({
                     rules={rules}
                     render={({ field }) => (
                         <TimePicker
+                            readOnly={readOnly}
                             value={
                                 field.value
                                     ? dayjs(
@@ -122,6 +131,8 @@ export default function DateTimeFieldInput({
                             }
                             onChange={(next) => {
                                 handleChange(next);
+                                if (readOnly) return;
+
                                 field.onChange(
                                     next?.isValid()
                                         ? next.format("HH:mm:ss")
@@ -133,6 +144,7 @@ export default function DateTimeFieldInput({
                                     id: `${fieldKey}-time`,
                                     name,
                                     required,
+                                    slotProps: { htmlInput: { readOnly } },
                                     fullWidth: true,
                                     error: !!error,
                                     helperText: error?.message,
@@ -151,6 +163,7 @@ export default function DateTimeFieldInput({
                     rules={rules}
                     render={({ field }) => (
                         <DateTimePicker
+                            readOnly={readOnly}
                             value={
                                 field.value
                                     ? dayjs(field.value as PickerInputValue)
@@ -158,6 +171,8 @@ export default function DateTimeFieldInput({
                             }
                             onChange={(next) => {
                                 handleChange(next);
+                                if (readOnly) return;
+
                                 field.onChange(
                                     next?.isValid() ? next.toISOString() : null,
                                 );
@@ -167,6 +182,7 @@ export default function DateTimeFieldInput({
                                     id: `${fieldKey}-datetime`,
                                     name,
                                     required,
+                                    slotProps: { htmlInput: { readOnly } },
                                     fullWidth: true,
                                     error: !!error,
                                     helperText: error?.message,

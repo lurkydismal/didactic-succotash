@@ -54,20 +54,67 @@ export default function RowDialogContent<
     }, [row]);
 
     /**
-     * Stores an edited field value in local row dialog state.
+     * Stores multiple field values in local row dialog state and optionally mirrors them to React Hook Form.
      */
-    const setValue = (key: string, value: unknown) =>
-        setValues((state) => ({ ...state, [key]: value }));
+    const setValuesAndForm = useCallback(
+        (nextValues: Record<string, unknown>, shouldDirty = true) => {
+            setValues((state) => ({ ...state, ...nextValues }));
 
-    const setValueAndForm = useCallback(
-        (key: string, value: unknown) => {
-            setValue(key, value);
-            form.setValue(key, value, {
-                shouldDirty: true,
-                shouldValidate: true,
-            });
+            for (const [key, value] of Object.entries(nextValues)) {
+                form.setValue(key, value, {
+                    shouldDirty,
+                    shouldValidate: shouldDirty,
+                });
+            }
         },
         [form],
+    );
+
+    /**
+     * Runs a field value-change effect and applies any returned sibling field values.
+     */
+    const runFieldValueChange = useCallback(
+        async (
+            field: FieldConfig<R, RI>,
+            value: unknown,
+            nextValues: Record<string, unknown>,
+            shouldDirty = true,
+        ) => {
+            if (!field.onValueChange) return;
+
+            try {
+                const changedValues = await field.onValueChange(value, {
+                    row,
+                    values: nextValues,
+                });
+
+                if (changedValues && typeof changedValues === "object") {
+                    setValuesAndForm(changedValues, shouldDirty);
+                }
+            } catch (error) {
+                showError(error);
+            }
+        },
+        [row, setValuesAndForm, showError],
+    );
+
+    /**
+     * Stores an edited value, then lets the field derive any dependent values.
+     */
+    const handleFieldValueChange = useCallback(
+        (
+            field: FieldConfig<R, RI>,
+            value: unknown,
+            packedValues: Record<string, unknown> = {},
+        ) => {
+            const key = String(field.key);
+            const changedValues = { [key]: value, ...packedValues };
+            const nextValues = { ...values, ...changedValues };
+
+            setValuesAndForm(changedValues);
+            void runFieldValueChange(field, value, nextValues);
+        },
+        [runFieldValueChange, setValuesAndForm, values],
     );
 
     const updateRow = useCallback(
@@ -130,6 +177,30 @@ export default function RowDialogContent<
         return () => registerSubmit(null);
     }, [registerSubmit, submit]);
 
+    const initialRunRef = useRef<string | null>(null);
+
+    useEffect(() => {
+        const rowKey = rowHasId(row, idKey)
+            ? String((row as Record<string, unknown>)[String(idKey)])
+            : "new";
+        if (initialRunRef.current === rowKey) return;
+        initialRunRef.current = rowKey;
+
+        const initialValues = buildInitialValues(row, fields);
+
+        for (const field of fields) {
+            if (!field.runOnDialogOpen) continue;
+
+            const key = String(field.key);
+            void runFieldValueChange(
+                field,
+                initialValues[key],
+                initialValues,
+                false,
+            );
+        }
+    }, [fields, idKey, row, runFieldValueChange]);
+
     return (
         <form
             ref={formRef}
@@ -161,8 +232,7 @@ export default function RowDialogContent<
                             values,
                             form,
                             getRules,
-                            setValue,
-                            setValueAndForm,
+                            handleFieldValueChange,
                         })}
                     </Grid>
                 ))}

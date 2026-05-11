@@ -23,8 +23,11 @@ type RenderFieldParams<
     getRules: (
         field: FieldConfig<R, RI>,
     ) => RegisterOptions<Record<string, unknown>, string>;
-    setValue: (key: string, value: unknown) => void;
-    setValueAndForm: (key: string, value: unknown) => void;
+    handleFieldValueChange: (
+        field: FieldConfig<R, RI>,
+        value: unknown,
+        packedValues?: Record<string, unknown>,
+    ) => void;
 };
 
 /**
@@ -40,8 +43,7 @@ export const renderField = <
     values,
     form,
     getRules,
-    setValue,
-    setValueAndForm,
+    handleFieldValueChange,
 }: RenderFieldParams<R, RI>) => {
     const key = String(field.key);
     const name = field.name ?? key;
@@ -58,7 +60,9 @@ export const renderField = <
                 field={field}
                 value={value}
                 row={row}
-                onValueChange={(nextValue) => setValue(key, nextValue)}
+                onValueChange={(nextValue) =>
+                    handleFieldValueChange(field, nextValue)
+                }
             />
         );
     }
@@ -71,8 +75,11 @@ export const renderField = <
                 label={field.label}
                 name={name}
                 required={!!field.required}
+                readOnly={!!field.readOnly}
                 value={value}
-                onValueChange={(nextValue) => setValue(key, nextValue)}
+                onValueChange={(nextValue) =>
+                    handleFieldValueChange(field, nextValue)
+                }
                 control={form.control}
                 error={error}
                 rules={rules}
@@ -88,6 +95,7 @@ export const renderField = <
                 label={field.label}
                 name={name}
                 required={!!field.required}
+                readOnly={!!field.readOnly}
                 value={value}
                 options={field.autocompleteOptions ?? []}
                 loading={field.autocompleteLoading}
@@ -95,20 +103,19 @@ export const renderField = <
                 onOpen={field.onAutocompleteOpen}
                 onClose={field.onAutocompleteClose}
                 onValueChange={(nextValue) => {
-                    setValueAndForm(key, nextValue);
-                    if (
+                    const packedValues =
                         nextValue &&
                         typeof nextValue === "object" &&
                         "packedValues" in nextValue &&
                         nextValue.packedValues &&
                         typeof nextValue.packedValues === "object"
-                    ) {
-                        for (const [packedKey, packedValue] of Object.entries(
-                            nextValue.packedValues,
-                        )) {
-                            setValueAndForm(packedKey, packedValue);
-                        }
-                    }
+                            ? (nextValue.packedValues as Record<
+                                  string,
+                                  unknown
+                              >)
+                            : {};
+
+                    handleFieldValueChange(field, nextValue, packedValues);
                 }}
                 control={form.control}
                 error={error}
@@ -129,9 +136,12 @@ export const renderField = <
                 label={field.label}
                 name={name}
                 required={!!field.required}
+                readOnly={!!field.readOnly}
                 type={field.type}
                 value={value}
-                onValueChange={(nextValue) => setValue(key, nextValue)}
+                onValueChange={(nextValue) =>
+                    handleFieldValueChange(field, nextValue)
+                }
                 control={form.control}
                 error={error}
                 rules={rules}
@@ -146,8 +156,11 @@ export const renderField = <
             label={field.label}
             name={name}
             required={!!field.required}
+            readOnly={!!field.readOnly}
             value={value}
-            onValueChange={(nextValue) => setValue(key, nextValue)}
+            onValueChange={(nextValue) =>
+                handleFieldValueChange(field, nextValue)
+            }
             control={form.control}
             error={error}
             rules={rules}
