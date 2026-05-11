@@ -1,14 +1,14 @@
 import type { FieldConfig } from "@/components/TableDataGrid/RowDialog";
 import type { AutocompleteOption } from "@/components/TableDataGrid/RowDialog/types";
 import type {
-    ServerBanRow as TableRow,
-    ServerBanRowInsert as TableRowInsert,
+    ServerRoleBanRow as TableRow,
+    ServerRoleBanRowInsert as TableRowInsert,
 } from "@/db/types";
 import {
     getPlayerPackedOptionsAction,
     getPlayerUsernameOptionsAction,
     hasRoundIdAction,
-} from "@/lib/dashboard/bans/function";
+} from "@/lib/dashboard/role-bans/function";
 import { formatHwidByteaHex, formatHwidHex } from "@/utils/hwid";
 
 const packedFieldNames = ["playerUsername", "address", "hwid"] as const;
@@ -84,30 +84,6 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         placeholder: null,
     },
     {
-        key: "reason",
-        label: "Reason",
-        type: "multiline",
-        required: true,
-    },
-    {
-        key: "banningAdmin",
-        label: "Banning admin",
-        type: "autocomplete",
-        autocompleteOptions: [],
-        loadOptions: loadPlayerUsernameOptions,
-        required: true,
-    },
-    {
-        key: "hwid",
-        label: "HWID",
-        type: "autocomplete",
-        autocompleteOptions: [],
-        loadOptions: loadPackedPlayerOptions("hwid"),
-        formatValue: formatHwidHex,
-        requiredGroup: "banTarget",
-        toFormValue: formatHwidByteaHex,
-    },
-    {
         key: "roundId",
         label: "Round ID",
         type: "text",
@@ -131,6 +107,37 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
                 return "Unable to verify round ID";
             }
         },
+    },
+    {
+        key: "roleId",
+        label: "Role",
+        type: "text",
+        required: true,
+    },
+    {
+        key: "banningAdmin",
+        label: "Banning admin",
+        type: "autocomplete",
+        autocompleteOptions: [],
+        loadOptions: loadPlayerUsernameOptions,
+        required: true,
+    },
+    {
+        key: "hwid",
+        label: "HWID",
+        type: "autocomplete",
+        autocompleteOptions: [],
+        loadOptions: loadPackedPlayerOptions("hwid"),
+        formatValue: formatHwidHex,
+        requiredGroup: "banTarget",
+        toFormValue: formatHwidByteaHex,
+    },
+    {
+        key: "reason",
+        label: "Reason",
+        type: "multiline",
+        required: true,
+        size: 12,
     },
 ];
 
