@@ -348,13 +348,22 @@ async function setFavoriteJobWithTx(
 }
 
 /**
- * Marks the supplied profile slot as the selected character for its preference record.
+ * Marks the supplied profile slot as the selected character, or clears it, for its preference record.
  */
 async function selectPreferenceCharacterWithTx(
     tx: DbTransaction,
     preferenceId: number,
-    slot: number,
+    slot: number | null,
 ): Promise<void> {
+    if (slot === null) {
+        await tx.execute(sql`
+            UPDATE ${preference}
+            SET ${preference.selectedCharacterSlot} = NULL
+            WHERE ${preference.preferenceId} = ${preferenceId}
+        `);
+        return;
+    }
+
     await tx
         .update(preference)
         .set({ selectedCharacterSlot: slot })
@@ -545,9 +554,14 @@ async function updateProfileAndFavoriteJobTransaction(
                 const [currentProfile] = await tx
                     .select({
                         preferenceId: profile.preferenceId,
+                        selectedCharacterSlot: preference.selectedCharacterSlot,
                         slot: profile.slot,
                     })
                     .from(profile)
+                    .innerJoin(
+                        preference,
+                        eq(profile.preferenceId, preference.preferenceId),
+                    )
                     .where(eq(profile.profileId, profileId))
                     .for("update")
                     .limit(1)
@@ -617,6 +631,19 @@ async function updateProfileAndFavoriteJobTransaction(
                     updatedProfile.preferenceId,
                     updatedProfile.slot,
                 );
+
+                if (
+                    currentProfile.preferenceId !==
+                        updatedProfile.preferenceId &&
+                    currentProfile.slot === currentProfile.selectedCharacterSlot
+                ) {
+                    await selectPreferenceCharacterWithTx(
+                        tx,
+                        currentProfile.preferenceId,
+                        null,
+                    );
+                }
+
                 await setFavoriteJobWithTx(tx, profileId, rawJobName);
             });
 
