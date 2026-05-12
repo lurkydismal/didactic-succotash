@@ -66,27 +66,37 @@ type ReturnedRows<T> = {
 };
 
 /**
- * Resolves the selected player from the players table and includes the optional preference link.
+ * Resolves and locks the selected player row inside a transaction before reading its optional preference link.
  */
-async function resolvePlayerPreferenceByUsername(
+async function resolvePlayerPreferenceByUsernameWithTx(
+    tx: DbTransaction,
     rawValue: string | null | undefined,
 ): Promise<PlayerPreference | null> {
     const username = rawValue?.trim();
     if (!username) return null;
 
-    const [targetPlayer] = await db
-        .select({
-            preferenceId: preference.preferenceId,
-            userId: player.userId,
-        })
+    const [targetPlayer] = await tx
+        .select({ userId: player.userId })
         .from(player)
-        .leftJoin(preference, eq(preference.userId, player.userId))
         .where(eq(player.lastSeenUserName, username))
         .orderBy(desc(player.lastSeenTime))
+        .for("update")
         .limit(1)
         .execute();
 
-    return targetPlayer ?? null;
+    if (!targetPlayer) return null;
+
+    const [targetPreference] = await tx
+        .select({ preferenceId: preference.preferenceId })
+        .from(preference)
+        .where(eq(preference.userId, targetPlayer.userId))
+        .limit(1)
+        .execute();
+
+    return {
+        preferenceId: targetPreference?.preferenceId ?? null,
+        userId: targetPlayer.userId,
+    };
 }
 
 /**
@@ -527,7 +537,7 @@ async function updateProfileAndFavoriteJobTransaction(
     profileId: number,
     profileUpdate: Partial<TableRowInsert> | null,
     rawJobName: unknown,
-    targetPlayerPreference: PlayerPreference | null,
+    targetPlayerUsername: string | null,
 ): Promise<void> {
     for (let attempt = 1; attempt <= maxFavoriteJobAttempts; attempt += 1) {
         try {
@@ -547,9 +557,18 @@ async function updateProfileAndFavoriteJobTransaction(
                     throw new Error("Update target no longer exists");
                 }
 
-                let activePreferenceId = currentProfile.preferenceId;
                 let selectedSlot = profileUpdate?.slot ?? currentProfile.slot;
                 let updatePayload = profileUpdate;
+                const targetPlayerPreference = targetPlayerUsername
+                    ? await resolvePlayerPreferenceByUsernameWithTx(
+                          tx,
+                          targetPlayerUsername,
+                      )
+                    : null;
+
+                if (targetPlayerUsername && !targetPlayerPreference) {
+                    throw new Error("Invalid player username");
+                }
 
                 if (
                     targetPlayerPreference &&
@@ -564,16 +583,14 @@ async function updateProfileAndFavoriteJobTransaction(
                                 targetPlayerPreference.preferenceId,
                             ));
 
-                        activePreferenceId =
-                            targetPlayerPreference.preferenceId;
                         selectedSlot = targetSlot;
                         updatePayload = {
                             ...(profileUpdate ?? {}),
-                            preferenceId: activePreferenceId,
+                            preferenceId: targetPlayerPreference.preferenceId,
                             slot: selectedSlot,
                         };
                     } else {
-                        activePreferenceId =
+                        const createdPreferenceId =
                             await createPreferenceForExistingProfileWithTx(
                                 tx,
                                 profileId,
@@ -583,9 +600,9 @@ async function updateProfileAndFavoriteJobTransaction(
                         updatePayload = profileUpdate
                             ? {
                                   ...profileUpdate,
-                                  preferenceId: activePreferenceId,
+                                  preferenceId: createdPreferenceId,
                               }
-                            : { preferenceId: activePreferenceId };
+                            : { preferenceId: createdPreferenceId };
                     }
                 }
 
@@ -711,10 +728,7 @@ export async function getPlayerPackedOptionsAction(): Promise<
 export async function createRowAction(
     row: CharacterMutationInput,
 ): Promise<void> {
-    const targetPlayerPreference = await resolvePlayerPreferenceByUsername(
-        row.playerUsername,
-    );
-    if (!targetPlayerPreference) {
+    if (!normalizeDisplayValue(row.playerUsername)) {
         throw new Error("Invalid player username");
     }
 
@@ -730,6 +744,16 @@ export async function createRowAction(
         ) {
             try {
                 await db.transaction(async (tx) => {
+                    const targetPlayerPreference =
+                        await resolvePlayerPreferenceByUsernameWithTx(
+                            tx,
+                            row.playerUsername,
+                        );
+
+                    if (!targetPlayerPreference) {
+                        throw new Error("Invalid player username");
+                    }
+
                     const preferenceId = targetPlayerPreference.preferenceId;
                     const profileInsert = await buildProfileInsert(
                         tx,
@@ -798,14 +822,6 @@ export async function createRowAction(
 export async function updateRowAction(fd: FormData): Promise<void> {
     const profileId = coerceIntegerField(fd.get("id"), "id");
     const playerUsername = normalizeDisplayValue(fd.get("playerUsername"));
-    const targetPlayerPreference = playerUsername
-        ? await resolvePlayerPreferenceByUsername(playerUsername)
-        : null;
-
-    if (playerUsername && !targetPlayerPreference) {
-        throw new Error("Invalid player username");
-    }
-
     const favoriteJobName = fd.get("jobName");
 
     const profileUpdate = buildProfileUpdate(fd);
@@ -817,7 +833,7 @@ export async function updateRowAction(fd: FormData): Promise<void> {
             profileId,
             profileUpdateOrNull,
             favoriteJobName,
-            targetPlayerPreference,
+            playerUsername || null,
         );
         updateDbCacheTags(["profile", "preference", "job"]);
     } catch (error) {
