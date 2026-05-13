@@ -21,7 +21,6 @@ type CharacterMutationInput = Partial<TableRowInsert> & {
 
 type CharacterPackedOption = {
     playerUsername: string;
-    charName: string;
     jobName: string;
 };
 
@@ -194,20 +193,20 @@ async function buildProfileInsert(
             row.height === undefined || row.height === null
                 ? 1
                 : (() => {
-                      const parsed = Number(row.height);
-                      if (!Number.isFinite(parsed))
-                          throw new Error("Invalid height");
-                      return parsed;
-                  })(),
+                    const parsed = Number(row.height);
+                    if (!Number.isFinite(parsed))
+                        throw new Error("Invalid height");
+                    return parsed;
+                })(),
         width:
             row.width === undefined || row.width === null
                 ? 1
                 : (() => {
-                      const parsed = Number(row.width);
-                      if (!Number.isFinite(parsed))
-                          throw new Error("Invalid width");
-                      return parsed;
-                  })(),
+                    const parsed = Number(row.width);
+                    if (!Number.isFinite(parsed))
+                        throw new Error("Invalid width");
+                    return parsed;
+                })(),
         voice: normalizeDisplayValue(row.voice),
         bodyType: normalizeDisplayValue(row.bodyType),
     };
@@ -575,9 +574,9 @@ async function updateProfileAndFavoriteJobTransaction(
                 let updatePayload = profileUpdate;
                 const targetPlayerPreference = targetPlayerUsername
                     ? await resolvePlayerPreferenceByUsernameWithTx(
-                          tx,
-                          targetPlayerUsername,
-                      )
+                        tx,
+                        targetPlayerUsername,
+                    )
                     : null;
 
                 if (targetPlayerUsername && !targetPlayerPreference) {
@@ -587,7 +586,7 @@ async function updateProfileAndFavoriteJobTransaction(
                 if (
                     targetPlayerPreference &&
                     targetPlayerPreference.preferenceId !==
-                        currentProfile.preferenceId
+                    currentProfile.preferenceId
                 ) {
                     if (targetPlayerPreference.preferenceId) {
                         const targetSlot =
@@ -613,9 +612,9 @@ async function updateProfileAndFavoriteJobTransaction(
                             );
                         updatePayload = profileUpdate
                             ? {
-                                  ...profileUpdate,
-                                  preferenceId: createdPreferenceId,
-                              }
+                                ...profileUpdate,
+                                preferenceId: createdPreferenceId,
+                            }
                             : { preferenceId: createdPreferenceId };
                     }
                 }
@@ -634,7 +633,7 @@ async function updateProfileAndFavoriteJobTransaction(
 
                 if (
                     currentProfile.preferenceId !==
-                        updatedProfile.preferenceId &&
+                    updatedProfile.preferenceId &&
                     currentProfile.slot === currentProfile.selectedCharacterSlot
                 ) {
                     await selectPreferenceCharacterWithTx(
@@ -725,7 +724,6 @@ export async function getPlayerPackedOptionsAction(): Promise<
     const rows = await db
         .select({
             playerUsername: player.lastSeenUserName,
-            charName: profile.charName,
             jobName: sql<string>`COALESCE(${job.jobName}, '')`,
         })
         .from(profile)
@@ -744,7 +742,6 @@ export async function getPlayerPackedOptionsAction(): Promise<
 
     return rows.map((row) => ({
         playerUsername: row.playerUsername.trim(),
-        charName: row.charName.trim(),
         jobName: row.jobName.trim(),
     }));
 }

@@ -9,7 +9,7 @@ import {
     getPlayerUsernameOptionsAction,
 } from "@/lib/dashboard/characters/function";
 
-const packedFieldNames = ["playerUsername", "charName", "jobName"] as const;
+const packedFieldNames = ["playerUsername", "jobName"] as const;
 
 type PackedPlayerField = (typeof packedFieldNames)[number];
 
@@ -32,24 +32,24 @@ const loadPlayerUsernameOptions = () => {
  */
 const loadPackedPlayerOptions =
     (labelKey: PackedPlayerField) =>
-    async (): Promise<AutocompleteOption[]> => {
-        const packedRows = await loadPackedPlayerRows();
+        async (): Promise<AutocompleteOption[]> => {
+            const packedRows = await loadPackedPlayerRows();
 
-        return packedRows.reduce<AutocompleteOption[]>((options, packedRow) => {
-            const label = packedRow[labelKey];
-            if (!label) return options;
+            return packedRows.reduce<AutocompleteOption[]>((options, packedRow) => {
+                const label = packedRow[labelKey];
+                if (!label) return options;
 
-            const packedValues = packedFieldNames.reduce<
-                Record<string, unknown>
-            >((values, packedField) => {
-                values[packedField] = packedRow[packedField] ?? "";
-                return values;
-            }, {});
+                const packedValues = packedFieldNames.reduce<
+                    Record<string, unknown>
+                >((values, packedField) => {
+                    values[packedField] = packedRow[packedField] ?? "";
+                    return values;
+                }, {});
 
-            options.push({ label, packedValues });
-            return options;
-        }, []);
-    };
+                options.push({ label, packedValues });
+                return options;
+            }, []);
+        };
 
 const fields: FieldConfig<TableRow, TableRowInsert>[] = [
     {
@@ -63,9 +63,7 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
     {
         key: "charName",
         label: "Character name",
-        type: "autocomplete",
-        autocompleteOptions: [],
-        loadOptions: loadPackedPlayerOptions("charName"),
+        type: "text",
         required: true,
     },
     {
