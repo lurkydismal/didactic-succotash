@@ -5,46 +5,10 @@ import { alias } from "drizzle-orm/pg-core";
 
 import db from "@/db";
 import { player, round, serverBan } from "@/db/schema";
-import { ServerBanRowInsert as TableRowInsert } from "@/db/types";
 import { cacheDbRequest } from "@/lib/cache";
-import { create } from "@/lib/dashboard/common/create";
-import { updateAction } from "@/lib/dashboard/common/update";
-import { DbTarget } from "@/lib/types";
-import { formatHwidByteaHex, formatHwidHex } from "@/utils/hwid";
-import log from "@/utils/stdlog";
-import { isDev } from "@/utils/stdvar";
+import { formatHwidHex } from "@/utils/hwid";
 
-const target: DbTarget = "serverBan";
 const idColumn = serverBan.serverBanId;
-
-type ServerBanMutationInput = TableRowInsert & { playerUsername?: string };
-
-/**
- * Normalizes hwid mutation value.
- */
-function normalizeHwidMutationValue(value: unknown): string | null {
-    const normalized = formatHwidByteaHex(value);
-    return normalized || null;
-}
-
-/**
- * Resolves player user id by username.
- */
-async function resolvePlayerUserIdByUsername(
-    rawValue: string | null | undefined,
-): Promise<string | null> {
-    const username = rawValue?.trim();
-    if (!username) return null;
-
-    const [targetPlayer] = await db
-        .select({ userId: player.userId })
-        .from(player)
-        .where(eq(player.lastSeenUserName, username))
-        .limit(1)
-        .execute();
-
-    return targetPlayer?.userId ?? null;
-}
 
 /**
  * Gets rows action.
@@ -175,90 +139,6 @@ export async function getPlayerPackedOptionsAction(): Promise<
     }
 
     return [...deduped.values()];
-}
-
-/**
- * Creates row action.
- */
-export async function createRowAction(
-    row: ServerBanMutationInput,
-): Promise<void> {
-    row.playerUserId = await resolvePlayerUserIdByUsername(row.playerUsername);
-    if (!row.playerUserId) {
-        if (isDev) {
-            log.warn(
-                `Dev mode: Player username "${row.playerUsername}" not found, selecting random player`,
-            );
-            const [randomPlayer] = await db
-                .select({
-                    userId: player.userId,
-                    lastSeenUserName: player.lastSeenUserName,
-                })
-                .from(player)
-                .where(ne(player.lastSeenUserName, ""))
-                .orderBy(sql`random()`)
-                .limit(1)
-                .execute();
-
-            if (!randomPlayer?.userId || !randomPlayer.lastSeenUserName) {
-                log.error(
-                    "Create server ban aborted: no available username found",
-                );
-                throw new Error("No available username found for ban creation");
-            }
-
-            row.playerUserId = randomPlayer.userId;
-        } else {
-            throw new Error("Invalid player username");
-        }
-    }
-
-    const banningAdminUserId = await resolvePlayerUserIdByUsername(
-        row.banningAdmin,
-    );
-    if ((row.banningAdmin ?? "").trim() && !banningAdminUserId) {
-        throw new Error("No matching player found for banning admin username");
-    }
-    row.banningAdmin = banningAdminUserId;
-    row.hwid = normalizeHwidMutationValue(row.hwid);
-
-    delete row.playerUsername;
-    const result = await create(target, row);
-    if (!result.ok)
-        throw new Error(`Failed to create row in action: ${result.error}`);
-}
-
-/**
- * Updates row action.
- */
-export async function updateRowAction(fd: FormData): Promise<void> {
-    const playerUsernameInput = `${fd.get("playerUsername") ?? ""}`.trim();
-    const playerUserId =
-        await resolvePlayerUserIdByUsername(playerUsernameInput);
-    if (playerUsernameInput && !playerUserId) {
-        throw new Error("Invalid player username");
-    }
-    if (playerUserId != null) {
-        fd.set("playerUserId", playerUserId);
-    } else {
-        fd.delete("playerUserId");
-    }
-
-    const banningAdminInput = `${fd.get("banningAdmin") ?? ""}`.trim();
-    const banningAdminUserId =
-        await resolvePlayerUserIdByUsername(banningAdminInput);
-    if (banningAdminInput && !banningAdminUserId) {
-        throw new Error("No matching player found for banning admin username");
-    }
-    fd.set("banningAdmin", banningAdminUserId ?? "");
-
-    fd.set("hwid", normalizeHwidMutationValue(fd.get("hwid")) ?? "");
-
-    fd.delete("playerUsername");
-
-    const result = await updateAction(target, idColumn, fd);
-    if (!result.ok)
-        throw new Error(`Failed to update row in action: ${result.error}`);
 }
 
 /**

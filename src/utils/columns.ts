@@ -13,7 +13,7 @@
  * - Call `normalizeColumns(rawColumns, options)` where you need the final GridColDef[]
  */
 
-import { FieldConfig } from "@/components/TableDataGrid/RowDialog";
+import type { FieldConfig } from "@/components/TableDataGrid";
 import { toCamelCase } from "@/utils/stdfunc";
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 

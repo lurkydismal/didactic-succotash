@@ -1,4 +1,4 @@
-import type { FieldConfig } from "@/components/TableDataGrid/RowDialog";
+import type { FieldConfig } from "@/components/TableDataGrid";
 import type {
     PlayerRow as TableRow,
     PlayerRowInsert as TableRowInsert,

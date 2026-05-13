@@ -4,59 +4,17 @@ import { asc, desc, eq, getColumns, ne, sql } from "drizzle-orm";
 
 import db from "@/db";
 import { connectionLog, player, server } from "@/db/schema";
-import { ConnectionLogRowInsert as TableRowInsert } from "@/db/types";
 import { cacheDbRequest } from "@/lib/cache";
-import { create } from "@/lib/dashboard/common/create";
-import { updateAction } from "@/lib/dashboard/common/update";
-import { DbTarget } from "@/lib/types";
-import { formatHwidByteaHex, formatHwidHex } from "@/utils/hwid";
-import log from "@/utils/stdlog";
-import { isDev } from "@/utils/stdvar";
+import { formatHwidHex } from "@/utils/hwid";
 
-const target: DbTarget = "connectionLog";
 const idColumn = connectionLog.connectionLogId;
 
-type ConnectionLogMutationInput = TableRowInsert;
 type PackedPlayerOption = {
     userName: string;
     userId: string;
     address: string;
     hwid: string;
 };
-
-/**
- * Normalizes hwid mutation value.
- */
-function normalizeHwidMutationValue(value: unknown): string | null {
-    const normalized = formatHwidByteaHex(value);
-    return normalized || null;
-}
-
-/**
- * Resolves a connection server id from its display name.
- */
-async function resolveServerIdByName(
-    rawValue: string | number | null | undefined,
-): Promise<number | null> {
-    if (typeof rawValue === "number") return rawValue;
-
-    const serverName = rawValue?.trim();
-    if (!serverName) return null;
-
-    const [targetServer] = await db
-        .select({ serverId: server.serverId })
-        .from(server)
-        .where(eq(server.name, serverName))
-        .limit(1)
-        .execute();
-
-    if (targetServer?.serverId != null) return targetServer.serverId;
-
-    const numericServerId = Number(serverName);
-    if (Number.isInteger(numericServerId)) return numericServerId;
-
-    return null;
-}
 
 /**
  * Gets rows action.
@@ -196,81 +154,6 @@ export async function getPlayerPackedOptionsAction(): Promise<
     }
 
     return [...deduped.values()];
-}
-
-/**
- * Creates row action.
- */
-export async function createRowAction(
-    row: ConnectionLogMutationInput,
-): Promise<void> {
-    if (!row.userId) {
-        if (isDev) {
-            log.warn(
-                `Dev mode: Player username "${row.userName}" not found, selecting random player`,
-            );
-            const [randomPlayer] = await db
-                .select({
-                    userId: player.userId,
-                    lastSeenUserName: player.lastSeenUserName,
-                })
-                .from(player)
-                .where(ne(player.lastSeenUserName, ""))
-                .orderBy(sql`random()`)
-                .limit(1)
-                .execute();
-
-            if (!randomPlayer?.userId || !randomPlayer.lastSeenUserName) {
-                log.error(
-                    "Create connection log aborted: no available username found",
-                );
-                throw new Error(
-                    "No available username found for connection creation",
-                );
-            }
-
-            row.userId = randomPlayer.userId;
-            row.userName = randomPlayer.lastSeenUserName;
-        } else {
-            throw new Error("Invalid player username");
-        }
-    }
-
-    const serverInput = `${row.serverId ?? ""}`.trim();
-    const serverId = await resolveServerIdByName(serverInput);
-    if (!serverInput || serverId == null) {
-        throw new Error("No matching server found for server name");
-    }
-    row.serverId = serverId;
-    row.hwid = normalizeHwidMutationValue(row.hwid);
-
-    const result = await create(target, row);
-    if (!result.ok)
-        throw new Error(`Failed to create row in action: ${result.error}`);
-}
-
-/**
- * Updates row action.
- */
-export async function updateRowAction(fd: FormData): Promise<void> {
-    const userId = `${fd.get("userId") ?? ""}`.trim();
-    if (!userId) {
-        throw new Error("Invalid player username");
-    }
-    fd.set("userId", userId);
-
-    const serverInput = `${fd.get("serverId") ?? ""}`.trim();
-    const serverId = await resolveServerIdByName(serverInput);
-    if (!serverInput || serverId == null) {
-        throw new Error("No matching server found for server name");
-    }
-    fd.set("serverId", String(serverId));
-
-    fd.set("hwid", normalizeHwidMutationValue(fd.get("hwid")) ?? "");
-
-    const result = await updateAction(target, idColumn, fd);
-    if (!result.ok)
-        throw new Error(`Failed to update row in action: ${result.error}`);
 }
 
 /**

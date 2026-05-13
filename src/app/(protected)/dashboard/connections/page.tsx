@@ -7,11 +7,7 @@ import type {
     ConnectionLogRow as TableRow,
     ConnectionLogRowInsert as TableRowInsert,
 } from "@/db/types";
-import {
-    createRowAction,
-    getRowsAction,
-    updateRowAction,
-} from "@/lib/dashboard/connections/function";
+import { getRowsAction } from "@/lib/dashboard/connections/function";
 
 /**
  * Renders the protected connections dashboard page.
@@ -19,18 +15,9 @@ import {
 export default function Page() {
     return (
         <TableDataGrid<TableRow, TableRowInsert>
-            createRowAction={createRowAction}
             fields={fields}
             getRowsAction={getRowsAction}
-            updateRowAction={updateRowAction}
-            extraButtons={
-                <ExtraToolbarButtons
-                    createRowAction={{
-                        type: "direct",
-                        action: createRowAction,
-                    }}
-                />
-            }
+            extraButtons={<ExtraToolbarButtons />}
         />
     );
 }
