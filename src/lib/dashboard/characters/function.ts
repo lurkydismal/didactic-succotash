@@ -143,7 +143,7 @@ function normalizeProfileMarkings(
     try {
         return JSON.parse(trimmed) as TableRowInsert["markings"];
     } catch {
-        return value;
+        throw new Error("Invalid JSON in markings field");
     }
 }
 
