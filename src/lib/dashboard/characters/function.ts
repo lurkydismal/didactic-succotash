@@ -182,12 +182,16 @@ async function buildProfileInsert(
         borgName: normalizeDisplayValue(row.borgName),
         height: (() => {
             const parsed = Number(row.height);
-            if (!Number.isFinite(parsed)) throw new Error("Invalid height");
+            if (!Number.isFinite(parsed) || parsed <= 0 || parsed > 10) {
+                throw new Error("Invalid height (must be between 0 and 10)");
+            }
             return parsed;
         })(),
         width: (() => {
             const parsed = Number(row.width);
-            if (!Number.isFinite(parsed)) throw new Error("Invalid width");
+            if (!Number.isFinite(parsed) || parsed <= 0 || parsed > 10) {
+                throw new Error("Invalid width (must be between 0 and 10)");
+            }
             return parsed;
         })(),
         voice: normalizeDisplayValue(row.voice),
