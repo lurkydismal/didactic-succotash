@@ -815,9 +815,17 @@ export async function createRowAction(
  * Updates a character profile and syncs Favorite job through job.profileId.
  */
 export async function updateRowAction(fd: FormData): Promise<void> {
-    const profileId = coerceIntegerField(fd.get("id"), "id");
-    const playerUsername = normalizeDisplayValue(fd.get("playerUsername"));
-    const favoriteJobName = fd.get("jobName");
+    const rawId = fd.get("id");
+    const rawUsername = fd.get("playerUsername");
+    const rawJobName = fd.get("jobName");
+    
+    if (rawId instanceof File || rawUsername instanceof File || rawJobName instanceof File) {
+        throw new Error("File uploads not supported");
+    }
+    
+    const profileId = coerceIntegerField(rawId, "id");
+    const playerUsername = normalizeDisplayValue(rawUsername);
+    const favoriteJobName = rawJobName;
 
     const profileUpdate = buildProfileUpdate(fd);
     const profileUpdateOrNull =
