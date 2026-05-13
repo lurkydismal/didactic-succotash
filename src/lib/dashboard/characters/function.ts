@@ -421,7 +421,7 @@ async function createPreferenceAndProfileWithTx(
                 ${profileInsert.hairColor},
                 ${profileInsert.hairName},
                 ${profileInsert.height},
-                ${profileInsert.markings},
+                ${profileInsert.markings ?? null}::jsonb,
                 ${profileInsert.prefUnavailable},
                 inserted_preference.preference_id,
                 ${profileInsert.sex},
