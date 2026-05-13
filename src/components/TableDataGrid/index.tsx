@@ -38,7 +38,10 @@ export default function TableDataGrid<
                 if (active) setCurrentRows(rows);
             })
             .catch((err: unknown) => {
-                if (active) showError(err);
+                if (active) {
+                    showError(err);
+                    setCurrentRows([]);
+                }
             });
 
         return () => {
