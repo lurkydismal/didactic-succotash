@@ -714,6 +714,24 @@ export async function getPlayerUsernameOptionsAction(): Promise<string[]> {
 }
 
 /**
+ * Gets distinct job names from every job table row for Favorite job autocomplete options.
+ */
+export async function getJobNameOptionsAction(): Promise<string[]> {
+    "use cache";
+    cacheDbRequest(["job"]);
+
+    const rows = await db
+        .select({ jobName: job.jobName })
+        .from(job)
+        .where(sql`trim(${job.jobName}) <> ''`)
+        .groupBy(job.jobName)
+        .orderBy(asc(job.jobName))
+        .execute();
+
+    return [...new Set(rows.map((row) => row.jobName.trim()).filter(Boolean))];
+}
+
+/**
  * Gets packed character options so selecting a player, character, or favorite job can fill sibling fields.
  */
 export async function getPlayerPackedOptionsAction(): Promise<

@@ -5,6 +5,7 @@ import type {
     ProfileRowInsert as TableRowInsert,
 } from "@/db/types";
 import {
+    getJobNameOptionsAction,
     getPlayerPackedOptionsAction,
     getPlayerUsernameOptionsAction,
 } from "@/lib/dashboard/characters/function";
@@ -25,6 +26,13 @@ const loadPackedPlayerRows = () => {
  */
 const loadPlayerUsernameOptions = () => {
     return getPlayerUsernameOptionsAction();
+};
+
+/**
+ * Loads distinct job names from the job table for Favorite job selection.
+ */
+const loadJobNameOptions = () => {
+    return getJobNameOptionsAction();
 };
 
 /**
@@ -95,7 +103,7 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         label: "Favorite job",
         type: "autocomplete",
         autocompleteOptions: [],
-        loadOptions: loadPackedPlayerOptions("jobName"),
+        loadOptions: loadJobNameOptions,
         required: true,
     },
 ];
