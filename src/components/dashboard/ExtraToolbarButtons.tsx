@@ -18,6 +18,7 @@ export default function ExtraToolbarButtons() {
         <>
             <Tooltip title="Show mock snackbars">
                 <ToolbarButton
+                    aria-label="Show mock snackbars"
                     onClick={() => {
                         showMessage(uuid());
                         showSuccess(uuid());
