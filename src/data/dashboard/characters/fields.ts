@@ -1,25 +1,12 @@
 import type { FieldConfig } from "@/components/TableDataGrid/RowDialog";
-import type { AutocompleteOption } from "@/components/TableDataGrid/RowDialog/types";
 import type {
     ProfileRow as TableRow,
     ProfileRowInsert as TableRowInsert,
 } from "@/db/types";
 import {
     getJobNameOptionsAction,
-    getPlayerPackedOptionsAction,
     getPlayerUsernameOptionsAction,
 } from "@/lib/dashboard/characters/function";
-
-const packedFieldNames = ["playerUsername", "jobName"] as const;
-
-type PackedPlayerField = (typeof packedFieldNames)[number];
-
-/**
- * Loads packed player rows once so multiple autocomplete fields can share them.
- */
-const loadPackedPlayerRows = () => {
-    return getPlayerPackedOptionsAction();
-};
 
 /**
  * Loads player username options once for character ownership selection.
@@ -36,28 +23,58 @@ const loadJobNameOptions = () => {
 };
 
 /**
- * Builds packed autocomplete options for the selected player field.
+ * Formats a JSON database value as stable, readable text for grid cells and dialog fields.
  */
-const loadPackedPlayerOptions =
-    (labelKey: PackedPlayerField) =>
-        async (): Promise<AutocompleteOption[]> => {
-            const packedRows = await loadPackedPlayerRows();
+function formatJsonText(value: unknown): string {
+    if (value === undefined || value === "") return "";
 
-            return packedRows.reduce<AutocompleteOption[]>((options, packedRow) => {
-                const label = packedRow[labelKey];
-                if (!label) return options;
+    if (typeof value === "string") {
+        try {
+            return JSON.stringify(JSON.parse(value), null, 2);
+        } catch {
+            // Preserve valid JSON text semantics for scalar strings.
+            return JSON.stringify(value, null, 2);
+        }
+    }
 
-                const packedValues = packedFieldNames.reduce<
-                    Record<string, unknown>
-                >((values, packedField) => {
-                    values[packedField] = packedRow[packedField] ?? "";
-                    return values;
-                }, {});
+    const serialized = JSON.stringify(value, null, 2);
+    return serialized ?? String(value);
+}
 
-                options.push({ label, packedValues });
-                return options;
-            }, []);
-        };
+/**
+ * Parses the JSON text entered in the logs dialog back into a JavaScript value.
+ */
+function parseJsonText(value: unknown): unknown {
+    if (typeof value !== "string") return value;
+
+    return JSON.parse(value);
+}
+
+/**
+ * Validates that a logs JSON field contains syntactically valid JSON text.
+ */
+function validateJsonText(value: unknown): true | string {
+    try {
+        parseJsonText(value);
+        return true;
+    } catch {
+        return "JSON must be valid";
+    }
+}
+
+/**
+ * Compares original and edited JSON values after parsing them into canonical text.
+ */
+function isJsonChanged(rowValue: unknown, currentValue: unknown): boolean {
+    try {
+        return (
+            formatJsonText(rowValue) !==
+            formatJsonText(parseJsonText(currentValue))
+        );
+    } catch {
+        return formatJsonText(rowValue) !== String(currentValue ?? "");
+    }
+}
 
 const fields: FieldConfig<TableRow, TableRowInsert>[] = [
     {
@@ -102,6 +119,113 @@ const fields: FieldConfig<TableRow, TableRowInsert>[] = [
         type: "autocomplete",
         autocompleteOptions: [],
         loadOptions: loadJobNameOptions,
+        required: true,
+        size: 12,
+    },
+    {
+        key: "hairName",
+        label: "Hair name",
+        type: "text",
+        hidden: true,
+        required: true,
+    },
+    {
+        key: "hairColor",
+        label: "Hair color",
+        type: "text",
+        hidden: true,
+        required: true,
+    },
+    {
+        key: "facialHairName",
+        label: "Facial hair name",
+        type: "text",
+        hidden: true,
+        required: true,
+    },
+    {
+        key: "facialHairColor",
+        label: "Facial hair color",
+        type: "text",
+        hidden: true,
+        required: true,
+    },
+    {
+        key: "eyeColor",
+        label: "Eye color",
+        type: "text",
+        hidden: true,
+        required: true,
+    },
+    {
+        key: "skinColor",
+        label: "Skin color",
+        type: "text",
+        hidden: true,
+        required: true,
+    },
+    {
+        key: "markings",
+        label: "Markings JSON",
+        type: "multiline",
+        hidden: true,
+        required: true,
+        placeholder: "{}",
+        size: 12,
+        formatValue: formatJsonText,
+        isChanged: isJsonChanged,
+        validate: async (value) => validateJsonText(value),
+    },
+    {
+        key: "flavorText",
+        label: "Flavor text",
+        type: "text",
+        hidden: true,
+        required: true,
+    },
+    {
+        key: "spawnPriority",
+        label: "Spawn priority",
+        type: "text",
+        hidden: true,
+        required: true,
+        placeholder: 0,
+    },
+    {
+        key: "borgName",
+        label: "Borg name",
+        type: "text",
+        hidden: true,
+        required: true,
+    },
+    {
+        key: "height",
+        label: "Height",
+        type: "text",
+        hidden: true,
+        required: true,
+        placeholder: 1,
+    },
+    {
+        key: "width",
+        label: "Width",
+        type: "text",
+        hidden: true,
+        required: true,
+        placeholder: 1,
+    },
+    {
+        key: "voice",
+        label: "Voice",
+        type: "text",
+        hidden: true,
+        required: true,
+    },
+    {
+        key: "bodyType",
+        label: "Body type",
+        type: "text",
+        hidden: true,
         required: true,
     },
 ];

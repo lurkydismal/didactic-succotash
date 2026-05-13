@@ -19,11 +19,6 @@ type CharacterMutationInput = Partial<TableRowInsert> & {
     jobName?: string | null;
 };
 
-type CharacterPackedOption = {
-    playerUsername: string;
-    jobName: string;
-};
-
 type CharacterRow = TableRow & {
     id: number;
     playerUsername: string;
@@ -168,13 +163,12 @@ async function buildProfileInsert(
         charName: normalizeDisplayValue(row.charName),
         age: coerceIntegerField(row.age, "age"),
         sex: normalizeDisplayValue(row.sex),
-        hairName: normalizeDisplayValue(row.hairName) || "Bald",
-        hairColor: normalizeDisplayValue(row.hairColor) || "#000000",
-        facialHairName: normalizeDisplayValue(row.facialHairName) || "Shaved",
-        facialHairColor:
-            normalizeDisplayValue(row.facialHairColor) || "#000000",
-        eyeColor: normalizeDisplayValue(row.eyeColor) || "#000000",
-        skinColor: normalizeDisplayValue(row.skinColor) || "#ffffff",
+        hairName: normalizeDisplayValue(row.hairName),
+        hairColor: normalizeDisplayValue(row.hairColor),
+        facialHairName: normalizeDisplayValue(row.facialHairName),
+        facialHairColor: normalizeDisplayValue(row.facialHairColor),
+        eyeColor: normalizeDisplayValue(row.eyeColor),
+        skinColor: normalizeDisplayValue(row.skinColor),
         prefUnavailable:
             row.prefUnavailable === undefined || row.prefUnavailable === null
                 ? 0
@@ -184,29 +178,18 @@ async function buildProfileInsert(
         species: normalizeDisplayValue(row.species),
         markings: normalizeProfileMarkings(row.markings),
         flavorText: normalizeDisplayValue(row.flavorText),
-        spawnPriority:
-            row.spawnPriority === undefined || row.spawnPriority === null
-                ? 0
-                : coerceIntegerField(row.spawnPriority, "spawnPriority"),
+        spawnPriority: coerceIntegerField(row.spawnPriority, "spawnPriority"),
         borgName: normalizeDisplayValue(row.borgName),
-        height:
-            row.height === undefined || row.height === null
-                ? 1
-                : (() => {
-                    const parsed = Number(row.height);
-                    if (!Number.isFinite(parsed))
-                        throw new Error("Invalid height");
-                    return parsed;
-                })(),
-        width:
-            row.width === undefined || row.width === null
-                ? 1
-                : (() => {
-                    const parsed = Number(row.width);
-                    if (!Number.isFinite(parsed))
-                        throw new Error("Invalid width");
-                    return parsed;
-                })(),
+        height: (() => {
+            const parsed = Number(row.height);
+            if (!Number.isFinite(parsed)) throw new Error("Invalid height");
+            return parsed;
+        })(),
+        width: (() => {
+            const parsed = Number(row.width);
+            if (!Number.isFinite(parsed)) throw new Error("Invalid width");
+            return parsed;
+        })(),
         voice: normalizeDisplayValue(row.voice),
         bodyType: normalizeDisplayValue(row.bodyType),
     };
@@ -574,9 +557,9 @@ async function updateProfileAndFavoriteJobTransaction(
                 let updatePayload = profileUpdate;
                 const targetPlayerPreference = targetPlayerUsername
                     ? await resolvePlayerPreferenceByUsernameWithTx(
-                        tx,
-                        targetPlayerUsername,
-                    )
+                          tx,
+                          targetPlayerUsername,
+                      )
                     : null;
 
                 if (targetPlayerUsername && !targetPlayerPreference) {
@@ -586,7 +569,7 @@ async function updateProfileAndFavoriteJobTransaction(
                 if (
                     targetPlayerPreference &&
                     targetPlayerPreference.preferenceId !==
-                    currentProfile.preferenceId
+                        currentProfile.preferenceId
                 ) {
                     if (targetPlayerPreference.preferenceId) {
                         const targetSlot =
@@ -612,9 +595,9 @@ async function updateProfileAndFavoriteJobTransaction(
                             );
                         updatePayload = profileUpdate
                             ? {
-                                ...profileUpdate,
-                                preferenceId: createdPreferenceId,
-                            }
+                                  ...profileUpdate,
+                                  preferenceId: createdPreferenceId,
+                              }
                             : { preferenceId: createdPreferenceId };
                     }
                 }
@@ -633,7 +616,7 @@ async function updateProfileAndFavoriteJobTransaction(
 
                 if (
                     currentProfile.preferenceId !==
-                    updatedProfile.preferenceId &&
+                        updatedProfile.preferenceId &&
                     currentProfile.slot === currentProfile.selectedCharacterSlot
                 ) {
                     await selectPreferenceCharacterWithTx(
@@ -728,40 +711,6 @@ export async function getJobNameOptionsAction(): Promise<string[]> {
         .execute();
 
     return [...new Set(rows.map((row) => row.jobName.trim()).filter(Boolean))];
-}
-
-/**
- * Gets packed character options so selecting a player, character, or favorite job can fill sibling fields.
- */
-export async function getPlayerPackedOptionsAction(): Promise<
-    CharacterPackedOption[]
-> {
-    "use cache";
-    cacheDbRequest(["profile", "preference", "player", "job"]);
-
-    const rows = await db
-        .select({
-            playerUsername: player.lastSeenUserName,
-            jobName: sql<string>`COALESCE(${job.jobName}, '')`,
-        })
-        .from(profile)
-        .innerJoin(
-            preference,
-            eq(profile.preferenceId, preference.preferenceId),
-        )
-        .innerJoin(player, eq(preference.userId, player.userId))
-        .leftJoin(
-            job,
-            sql`${job.profileId} = ${profile.profileId} AND ${job.priority} = ${favoriteJobPriority}`,
-        )
-        .where(sql`${player.lastSeenUserName} <> ''`)
-        .orderBy(asc(player.lastSeenUserName), asc(profile.charName))
-        .execute();
-
-    return rows.map((row) => ({
-        playerUsername: row.playerUsername.trim(),
-        jobName: row.jobName.trim(),
-    }));
 }
 
 /**
