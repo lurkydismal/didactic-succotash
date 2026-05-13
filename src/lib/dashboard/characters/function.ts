@@ -56,24 +56,54 @@ function coerceIntegerField(value: unknown, fieldName: string): number {
     return parsed;
 }
 
+type PlayerPreference = {
+    preferenceId: number | null;
+    userId: string;
+};
+
+type ReturnedRows<T> = {
+    rows?: T[];
+};
+
 /**
- * Resolves the preference id that links a character profile to the selected player username.
+ * Resolves and locks the selected player row inside a transaction before reading its optional preference link.
  */
-async function resolvePreferenceIdByUsername(
+async function resolvePlayerPreferenceByUsernameWithTx(
+    tx: DbTransaction,
     rawValue: string | null | undefined,
-): Promise<number | null> {
+): Promise<PlayerPreference | null> {
     const username = rawValue?.trim();
     if (!username) return null;
 
-    const [targetPreference] = await db
-        .select({ preferenceId: preference.preferenceId })
-        .from(preference)
-        .innerJoin(player, eq(preference.userId, player.userId))
+    const [targetPlayer] = await tx
+        .select({ userId: player.userId })
+        .from(player)
         .where(eq(player.lastSeenUserName, username))
+        .orderBy(desc(player.lastSeenTime))
+        .for("update")
         .limit(1)
         .execute();
 
-    return targetPreference?.preferenceId ?? null;
+    if (!targetPlayer) return null;
+
+    const [targetPreference] = await tx
+        .select({ preferenceId: preference.preferenceId })
+        .from(preference)
+        .where(eq(preference.userId, targetPlayer.userId))
+        .limit(1)
+        .execute();
+
+    return {
+        preferenceId: targetPreference?.preferenceId ?? null,
+        userId: targetPlayer.userId,
+    };
+}
+
+/**
+ * Extracts rows from a raw Drizzle result regardless of whether the driver returns an array or a QueryResult-like object.
+ */
+function getReturnedRows<T>(result: ReturnedRows<T> | T[]): T[] {
+    return Array.isArray(result) ? result : (result.rows ?? []);
 }
 
 /**
@@ -186,10 +216,7 @@ async function buildProfileInsert(
 /**
  * Builds a profile update payload from submitted dialog fields while preserving omitted columns.
  */
-function buildProfileUpdate(
-    fd: FormData,
-    resolvedPreferenceId: number | null,
-): Partial<TableRowInsert> {
+function buildProfileUpdate(fd: FormData): Partial<TableRowInsert> {
     const update: Partial<TableRowInsert> = {};
 
     for (const fieldName of [
@@ -240,10 +267,6 @@ function buildProfileUpdate(
         if (value !== null) {
             update[fieldName] = normalizeDisplayValue(value);
         }
-    }
-
-    if (resolvedPreferenceId !== null) {
-        update.preferenceId = resolvedPreferenceId;
     }
 
     return update;
@@ -325,60 +348,300 @@ async function setFavoriteJobWithTx(
 }
 
 /**
+ * Marks the supplied profile slot as the selected character, or clears it, for its preference record.
+ */
+async function selectPreferenceCharacterWithTx(
+    tx: DbTransaction,
+    preferenceId: number,
+    slot: number | null,
+): Promise<void> {
+    if (slot === null) {
+        await tx.execute(sql`
+            UPDATE ${preference}
+            SET ${preference.selectedCharacterSlot} = NULL
+            WHERE ${preference.preferenceId} = ${preferenceId}
+        `);
+        return;
+    }
+
+    await tx
+        .update(preference)
+        .set({ selectedCharacterSlot: slot })
+        .where(eq(preference.preferenceId, preferenceId))
+        .execute();
+}
+
+/**
+ * Inserts a preference and profile in one SQL statement so the circular foreign keys are satisfied together.
+ */
+async function createPreferenceAndProfileWithTx(
+    tx: DbTransaction,
+    userId: string,
+    profileInsert: TableRowInsert,
+): Promise<number> {
+    const result = await tx.execute<{ profileId: number }>(sql`
+        WITH inserted_preference AS (
+            INSERT INTO "preference" ("user_id", "selected_character_slot")
+            VALUES (${userId}, ${profileInsert.slot})
+            RETURNING "preference_id"
+        ), inserted_profile AS (
+            INSERT INTO "profile" (
+                "age",
+                "body_type",
+                "borg_name",
+                "char_name",
+                "eye_color",
+                "facial_hair_color",
+                "facial_hair_name",
+                "flavor_text",
+                "gender",
+                "hair_color",
+                "hair_name",
+                "height",
+                "markings",
+                "pref_unavailable",
+                "preference_id",
+                "sex",
+                "skin_color",
+                "slot",
+                "spawn_priority",
+                "species",
+                "voice",
+                "width"
+            )
+            SELECT
+                ${profileInsert.age},
+                ${profileInsert.bodyType},
+                ${profileInsert.borgName},
+                ${profileInsert.charName},
+                ${profileInsert.eyeColor},
+                ${profileInsert.facialHairColor},
+                ${profileInsert.facialHairName},
+                ${profileInsert.flavorText},
+                ${profileInsert.gender},
+                ${profileInsert.hairColor},
+                ${profileInsert.hairName},
+                ${profileInsert.height},
+                ${profileInsert.markings},
+                ${profileInsert.prefUnavailable},
+                inserted_preference.preference_id,
+                ${profileInsert.sex},
+                ${profileInsert.skinColor},
+                ${profileInsert.slot},
+                ${profileInsert.spawnPriority},
+                ${profileInsert.species},
+                ${profileInsert.voice},
+                ${profileInsert.width}
+            FROM inserted_preference
+            RETURNING "profile_id"
+        )
+        SELECT profile_id AS "profileId" FROM inserted_profile
+    `);
+    const [createdProfile] = getReturnedRows(result);
+
+    if (!createdProfile) {
+        throw new Error("Profile insert did not return an id");
+    }
+
+    return createdProfile.profileId;
+}
+
+/**
+ * Creates a missing preference for a player and moves an existing profile onto it in one SQL statement.
+ */
+async function createPreferenceForExistingProfileWithTx(
+    tx: DbTransaction,
+    profileId: number,
+    slot: number,
+    userId: string,
+): Promise<number> {
+    const result = await tx.execute<{ preferenceId: number }>(sql`
+        WITH inserted_preference AS (
+            INSERT INTO "preference" ("user_id", "selected_character_slot")
+            VALUES (${userId}, ${slot})
+            RETURNING "preference_id"
+        ), updated_profile AS (
+            UPDATE "profile"
+            SET
+                "preference_id" = inserted_preference.preference_id,
+                "slot" = ${slot}
+            FROM inserted_preference
+            WHERE "profile_id" = ${profileId}
+            RETURNING inserted_preference.preference_id
+        )
+        SELECT preference_id AS "preferenceId" FROM updated_profile
+    `);
+    const [createdPreference] = getReturnedRows(result);
+
+    if (!createdPreference) {
+        throw new Error("Update target no longer exists");
+    }
+
+    return createdPreference.preferenceId;
+}
+
+/**
+ * Counts changed rows from a Drizzle update result when the database driver exposes that metadata.
+ */
+function getAffectedRowCount(updateResult: unknown): number | undefined {
+    if (
+        updateResult &&
+        typeof updateResult === "object" &&
+        typeof (updateResult as { rowCount?: unknown }).rowCount === "number"
+    ) {
+        return (updateResult as { rowCount: number }).rowCount;
+    }
+
+    return Array.isArray(updateResult) ? updateResult.length : undefined;
+}
+
+/**
+ * Applies a profile update and verifies that the target profile still exists.
+ */
+async function updateExistingProfileWithTx(
+    tx: DbTransaction,
+    profileId: number,
+    profileUpdate: Partial<TableRowInsert> | null,
+): Promise<{ preferenceId: number; slot: number }> {
+    const [existingProfile] = await tx
+        .select({
+            preferenceId: profile.preferenceId,
+            slot: profile.slot,
+        })
+        .from(profile)
+        .where(eq(profile.profileId, profileId))
+        .for("update")
+        .limit(1)
+        .execute();
+
+    if (!existingProfile) {
+        throw new Error("Update target no longer exists");
+    }
+
+    if (!profileUpdate) {
+        return existingProfile;
+    }
+
+    const updateResult = await tx
+        .update(profile)
+        .set(profileUpdate)
+        .where(eq(profile.profileId, profileId))
+        .execute();
+
+    if (getAffectedRowCount(updateResult) === 0) {
+        throw new Error("Update target no longer exists");
+    }
+
+    return {
+        preferenceId:
+            profileUpdate.preferenceId ?? existingProfile.preferenceId,
+        slot: profileUpdate.slot ?? existingProfile.slot,
+    };
+}
+
+/**
  * Updates a profile and its Favorite job inside one transaction so either both changes commit or neither does.
  */
 async function updateProfileAndFavoriteJobTransaction(
     profileId: number,
     profileUpdate: Partial<TableRowInsert> | null,
     rawJobName: unknown,
+    targetPlayerUsername: string | null,
 ): Promise<void> {
     for (let attempt = 1; attempt <= maxFavoriteJobAttempts; attempt += 1) {
         try {
             await db.transaction(async (tx) => {
-                if (profileUpdate) {
-                    const updateResult = await tx
-                        .update(profile)
-                        .set(profileUpdate)
-                        .where(eq(profile.profileId, profileId))
-                        .execute();
+                const [currentProfile] = await tx
+                    .select({
+                        preferenceId: profile.preferenceId,
+                        selectedCharacterSlot: preference.selectedCharacterSlot,
+                        slot: profile.slot,
+                    })
+                    .from(profile)
+                    .innerJoin(
+                        preference,
+                        eq(profile.preferenceId, preference.preferenceId),
+                    )
+                    .where(eq(profile.profileId, profileId))
+                    .for("update")
+                    .limit(1)
+                    .execute();
 
-                    const affectedRows =
-                        typeof (updateResult as { rowCount?: number })
-                            .rowCount === "number"
-                            ? (updateResult as { rowCount: number }).rowCount
-                            : Array.isArray(updateResult)
-                              ? updateResult.length
-                              : undefined;
+                if (!currentProfile) {
+                    throw new Error("Update target no longer exists");
+                }
 
-                    if (affectedRows === 0) {
-                        throw new Error("Update target no longer exists");
+                let selectedSlot = profileUpdate?.slot ?? currentProfile.slot;
+                let updatePayload = profileUpdate;
+                const targetPlayerPreference = targetPlayerUsername
+                    ? await resolvePlayerPreferenceByUsernameWithTx(
+                          tx,
+                          targetPlayerUsername,
+                      )
+                    : null;
+
+                if (targetPlayerUsername && !targetPlayerPreference) {
+                    throw new Error("Invalid player username");
+                }
+
+                if (
+                    targetPlayerPreference &&
+                    targetPlayerPreference.preferenceId !==
+                        currentProfile.preferenceId
+                ) {
+                    if (targetPlayerPreference.preferenceId) {
+                        const targetSlot =
+                            profileUpdate?.slot ??
+                            (await getNextProfileSlot(
+                                tx,
+                                targetPlayerPreference.preferenceId,
+                            ));
+
+                        selectedSlot = targetSlot;
+                        updatePayload = {
+                            ...(profileUpdate ?? {}),
+                            preferenceId: targetPlayerPreference.preferenceId,
+                            slot: selectedSlot,
+                        };
+                    } else {
+                        const createdPreferenceId =
+                            await createPreferenceForExistingProfileWithTx(
+                                tx,
+                                profileId,
+                                selectedSlot,
+                                targetPlayerPreference.userId,
+                            );
+                        updatePayload = profileUpdate
+                            ? {
+                                  ...profileUpdate,
+                                  preferenceId: createdPreferenceId,
+                              }
+                            : { preferenceId: createdPreferenceId };
                     }
+                }
 
-                    if (affectedRows === undefined) {
-                        // Driver did not report affected rows; verify existence explicitly
-                        const [exists] = await tx
-                            .select({ profileId: profile.profileId })
-                            .from(profile)
-                            .where(eq(profile.profileId, profileId))
-                            .limit(1)
-                            .execute();
+                const updatedProfile = await updateExistingProfileWithTx(
+                    tx,
+                    profileId,
+                    updatePayload,
+                );
 
-                        if (!exists) {
-                            throw new Error("Update target no longer exists");
-                        }
-                    }
-                } else {
-                    // No profile update; still verify the profile exists before touching jobs
-                    const [exists] = await tx
-                        .select({ profileId: profile.profileId })
-                        .from(profile)
-                        .where(eq(profile.profileId, profileId))
-                        .limit(1)
-                        .execute();
+                await selectPreferenceCharacterWithTx(
+                    tx,
+                    updatedProfile.preferenceId,
+                    updatedProfile.slot,
+                );
 
-                    if (!exists) {
-                        throw new Error("Update target no longer exists");
-                    }
+                if (
+                    currentProfile.preferenceId !==
+                        updatedProfile.preferenceId &&
+                    currentProfile.slot === currentProfile.selectedCharacterSlot
+                ) {
+                    await selectPreferenceCharacterWithTx(
+                        tx,
+                        currentProfile.preferenceId,
+                        null,
+                    );
                 }
 
                 await setFavoriteJobWithTx(tx, profileId, rawJobName);
@@ -434,12 +697,11 @@ export async function getRowsAction(): Promise<CharacterRow[]> {
  */
 export async function getPlayerUsernameOptionsAction(): Promise<string[]> {
     "use cache";
-    cacheDbRequest(["preference", "player"]);
+    cacheDbRequest(["player"]);
 
     const rows = await db
         .select({ playerUsername: player.lastSeenUserName })
-        .from(preference)
-        .innerJoin(player, eq(preference.userId, player.userId))
+        .from(player)
         .where(sql`${player.lastSeenUserName} <> ''`)
         .orderBy(asc(player.lastSeenUserName))
         .execute();
@@ -493,10 +755,7 @@ export async function getPlayerPackedOptionsAction(): Promise<
 export async function createRowAction(
     row: CharacterMutationInput,
 ): Promise<void> {
-    const preferenceId = await resolvePreferenceIdByUsername(
-        row.playerUsername,
-    );
-    if (!preferenceId) {
+    if (!normalizeDisplayValue(row.playerUsername)) {
         throw new Error("Invalid player username");
     }
 
@@ -512,29 +771,59 @@ export async function createRowAction(
         ) {
             try {
                 await db.transaction(async (tx) => {
+                    const targetPlayerPreference =
+                        await resolvePlayerPreferenceByUsernameWithTx(
+                            tx,
+                            row.playerUsername,
+                        );
+
+                    if (!targetPlayerPreference) {
+                        throw new Error("Invalid player username");
+                    }
+
+                    const preferenceId = targetPlayerPreference.preferenceId;
                     const profileInsert = await buildProfileInsert(
                         tx,
                         row,
-                        preferenceId,
+                        preferenceId ?? 0,
                     );
-                    const [createdProfile] = await tx
-                        .insert(profile)
-                        .values(profileInsert)
-                        .returning({ profileId: profile.profileId })
-                        .execute();
 
-                    if (!createdProfile) {
-                        throw new Error("Profile insert did not return an id");
+                    if (preferenceId) {
+                        const [createdProfile] = await tx
+                            .insert(profile)
+                            .values({ ...profileInsert, preferenceId })
+                            .returning({ profileId: profile.profileId })
+                            .execute();
+
+                        if (!createdProfile) {
+                            throw new Error(
+                                "Profile insert did not return an id",
+                            );
+                        }
+
+                        await selectPreferenceCharacterWithTx(
+                            tx,
+                            preferenceId,
+                            profileInsert.slot,
+                        );
+                        await setFavoriteJobWithTx(
+                            tx,
+                            createdProfile.profileId,
+                            row.jobName,
+                        );
+                        return;
                     }
 
-                    await setFavoriteJobWithTx(
+                    const profileId = await createPreferenceAndProfileWithTx(
                         tx,
-                        createdProfile.profileId,
-                        row.jobName,
+                        targetPlayerPreference.userId,
+                        profileInsert,
                     );
+
+                    await setFavoriteJobWithTx(tx, profileId, row.jobName);
                 });
 
-                updateDbCacheTags(["profile", "job"]);
+                updateDbCacheTags(["profile", "preference", "job"]);
                 return;
             } catch (error) {
                 if (
@@ -560,16 +849,9 @@ export async function createRowAction(
 export async function updateRowAction(fd: FormData): Promise<void> {
     const profileId = coerceIntegerField(fd.get("id"), "id");
     const playerUsername = normalizeDisplayValue(fd.get("playerUsername"));
-    const resolvedPreferenceId =
-        await resolvePreferenceIdByUsername(playerUsername);
-
-    if (playerUsername && !resolvedPreferenceId) {
-        throw new Error("Invalid player username");
-    }
-
     const favoriteJobName = fd.get("jobName");
 
-    const profileUpdate = buildProfileUpdate(fd, resolvedPreferenceId);
+    const profileUpdate = buildProfileUpdate(fd);
     const profileUpdateOrNull =
         Object.keys(profileUpdate).length > 0 ? profileUpdate : null;
 
@@ -578,8 +860,9 @@ export async function updateRowAction(fd: FormData): Promise<void> {
             profileId,
             profileUpdateOrNull,
             favoriteJobName,
+            playerUsername || null,
         );
-        updateDbCacheTags(["profile", "job"]);
+        updateDbCacheTags(["profile", "preference", "job"]);
     } catch (error) {
         log.error("Update character error:", error);
         throw error;
