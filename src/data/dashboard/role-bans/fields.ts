@@ -1,5 +1,5 @@
-import type { FieldConfig } from "@/components/TableDataGrid/RowDialog";
-import type { AutocompleteOption } from "@/components/TableDataGrid/RowDialog/types";
+import type { FieldConfig } from "@/components/TableDataGrid";
+import type { AutocompleteOption } from "@/components/TableDataGrid/types";
 import type {
     ServerRoleBanRow as TableRow,
     ServerRoleBanRowInsert as TableRowInsert,

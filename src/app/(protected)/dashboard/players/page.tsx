@@ -7,11 +7,7 @@ import type {
     PlayerRow as TableRow,
     PlayerRowInsert as TableRowInsert,
 } from "@/db/types";
-import {
-    createRowAction,
-    getRowsAction,
-    updateRowAction,
-} from "@/lib/dashboard/players/function";
+import { getRowsAction } from "@/lib/dashboard/players/function";
 
 /**
  * Renders the protected players dashboard page.
@@ -19,18 +15,9 @@ import {
 export default function Page() {
     return (
         <TableDataGrid<TableRow, TableRowInsert>
-            createRowAction={createRowAction}
             fields={fields}
             getRowsAction={getRowsAction}
-            updateRowAction={updateRowAction}
-            extraButtons={
-                <ExtraToolbarButtons
-                    createRowAction={{
-                        type: "direct",
-                        action: createRowAction,
-                    }}
-                />
-            }
+            extraButtons={<ExtraToolbarButtons />}
         />
     );
 }

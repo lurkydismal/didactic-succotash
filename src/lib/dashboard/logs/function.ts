@@ -2,44 +2,8 @@
 
 import { adminLog, round, server } from "@/db/schema";
 import { desc, eq, getColumns } from "drizzle-orm";
-import { AdminLogRowInsert as TableRowInsert } from "@/db/types";
-import { DbTarget } from "@/lib/types";
 import { cacheDbRequest } from "@/lib/cache";
 import db from "@/db";
-import { parseForm, save } from "@/lib/dashboard/common/update_create";
-
-const target: DbTarget = "adminLog";
-const id = [
-    { column: adminLog.roundId, valueKey: "roundId" },
-    { column: adminLog.adminLogId, valueKey: "id" },
-];
-
-/**
- * Parses the logs JSON field from editable text into the jsonb value expected by the database.
- */
-function parseLogJsonValue(value: unknown): unknown {
-    if (typeof value !== "string") return value;
-
-    try {
-        return JSON.parse(value);
-    } catch {
-        throw new Error("JSON must be valid");
-    }
-}
-
-/**
- * Returns a copy of a log mutation row with its JSON field converted from text.
- */
-function normalizeLogJsonRow<TRow extends Record<string, unknown>>(
-    row: TRow,
-): TRow {
-    if (!("json" in row)) return row;
-
-    return {
-        ...row,
-        json: parseLogJsonValue(row.json),
-    };
-}
 
 /**
  * Gets log rows with the related server name needed by the dashboard table.
@@ -65,31 +29,6 @@ export async function getRowsAction() {
         id: row.adminLogId,
     }));
 }
-
-export async function createRowAction(row: TableRowInsert): Promise<void> {
-    const result = await save(target, normalizeLogJsonRow(row), {
-        isUpdate: false,
-    });
-
-    if (!result.ok) {
-        const message = `Failed to create row in action: ${result.error}`;
-        throw new Error(message);
-    }
-}
-
-export async function updateRowAction(fd: FormData): Promise<void> {
-    const input = normalizeLogJsonRow(await parseForm(fd));
-    const result = await save(target, input, {
-        isUpdate: true,
-        idColumns: id,
-    });
-
-    if (!result.ok) {
-        const message = `Failed to update row in action: ${result.error}`;
-        throw new Error(message);
-    }
-}
-
 /**
  * Handles has round id action behavior.
  */
