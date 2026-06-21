@@ -43,16 +43,8 @@ import {
     serverUnban,
     trait,
     uploadedResourceLog,
-    users,
     whitelist,
 } from "./schema";
-
-export type UsersRow = typeof users.$inferSelect;
-export type UsersRowInsert = typeof users.$inferInsert;
-export type UsersRowPublic = Omit<
-    UsersRow,
-    "id" | "password_hash" | "created_at" | "updated_at"
->;
 
 export type EfMigrationsHistoryRow = typeof efMigrationsHistory.$inferSelect;
 export type EfMigrationsHistoryRowInsert =

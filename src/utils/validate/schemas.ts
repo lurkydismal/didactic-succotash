@@ -1,10 +1,4 @@
 import { z } from "zod";
-import {
-    createInsertSchema,
-    createSelectSchema,
-    createUpdateSchema,
-} from "drizzle-zod";
-import { users } from "@/db/schema";
 import dayjs from "@/utils/dayjs";
 import { Dayjs } from "dayjs";
 
@@ -55,28 +49,6 @@ export const dateInputSchema = z
     })
     .transform((v) => dayjs(v))
     .describe("Date input (string, Date, or Dayjs)");
-
-/**
- * User schemas for select, insert, and update operations.
- * - `userSelectSchema` – full user selection schema
- * - `userInsertSchema` – fields required for insertion
- * - `userUpdateSchema` – fields allowed for update
- * - `userSelectPublicSchema` – public-facing version excluding sensitive fields
- */
-export const userSelectSchema = createSelectSchema(users);
-export const userInsertSchema = createInsertSchema(users);
-export const userUpdateSchema = createUpdateSchema(users);
-export const userSelectPublicSchema = userSelectSchema
-    .omit({
-        id: true,
-        password_hash: true,
-        created_at: true,
-        updated_at: true,
-    })
-    .extend({
-        username: z.string().trim().min(1),
-        username_normalized: z.string().trim().min(1).lowercase(),
-    });
 
 // TODO: Comment
 export const mutationInputSchema = z.record(z.string(), z.unknown()).and(

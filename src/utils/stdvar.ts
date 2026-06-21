@@ -131,13 +131,11 @@ export const maxRetries = 3;
 export const storageKeys = {
     client: isBrowser
         ? {
-              authStorageKey: "user", // FIX: Not found
-          }
+        }
         : null,
 
     server: isServer
         ? {
-              accessToken: getEnv("COOKIE_NAME"),
-          }
+        }
         : null,
 };
