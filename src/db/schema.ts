@@ -23,7 +23,6 @@ import {
     unique,
 } from "drizzle-orm/pg-core";
 import { timestampsColumns } from "./helpers";
-import { metadataColumns } from "./helpers";
 import { sql } from "drizzle-orm";
 
 export const users = pgTable(
@@ -131,7 +130,6 @@ export const adminLog = pgTable(
         message: text().notNull(),
         json: jsonb().notNull(),
         impact: smallint().default(0).notNull(),
-        ...metadataColumns,
     },
     (table) => [
         primaryKey({
@@ -527,7 +525,6 @@ export const connectionLog = pgTable(
             }),
         hwidType: integer("hwid_type").default(0),
         trust: real().default(0).notNull(),
-        ...metadataColumns,
     },
     (table) => [
         primaryKey({
@@ -644,7 +641,6 @@ export const player = pgTable(
         lastReadRules: timestamp("last_read_rules", { withTimezone: true }),
         lastSeenHwidType: integer("last_seen_hwid_type").default(0),
         lastRolledAntag: interval("last_rolled_antag"),
-        ...metadataColumns,
     },
     (table) => [
         primaryKey({
@@ -1157,7 +1153,6 @@ export const serverBan = pgTable(
         }),
         severity: integer().default(3).notNull(),
         hwidType: integer("hwid_type").default(0),
-        ...metadataColumns,
     },
     (table) => [
         primaryKey({
@@ -1280,7 +1275,6 @@ export const serverRoleBan = pgTable(
         }),
         severity: integer().default(2).notNull(),
         hwidType: integer("hwid_type").default(0),
-        ...metadataColumns,
     },
     (table) => [
         primaryKey({
@@ -1419,7 +1413,6 @@ export const whitelist = pgTable(
     "whitelist",
     {
         userId: uuid("user_id"),
-        ...metadataColumns,
     },
     (table) => [
         primaryKey({
