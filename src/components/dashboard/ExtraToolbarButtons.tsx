@@ -2,7 +2,6 @@
 
 import CustomDivider from "@/components/TableDataGrid/CustomDivider";
 import { useSnackbar } from "@/providers/snackbar";
-import { isDev } from "@/utils/stdvar";
 import uuid from "@/utils/uuid";
 import { Queue as MockShowIcon } from "@mui/icons-material";
 import { Tooltip } from "@mui/material";
@@ -16,7 +15,7 @@ export default function ExtraToolbarButtons() {
         useSnackbar();
 
     return (
-        isDev && (
+        false && (
             <>
                 <Tooltip title="Show mock snackbars">
                     <ToolbarButton
