@@ -204,7 +204,7 @@ CREATE TABLE "preference" (
 	"user_id" uuid NOT NULL,
 	"selected_character_slot" integer NOT NULL,
 	"admin_ooc_color" text DEFAULT '#ff0000' NOT NULL,
-	"construction_favorites" text[] DEFAULT ARRAY::text[] NOT NULL,
+	"construction_favorites" text[] DEFAULT '{}'::text[] NOT NULL,
 	CONSTRAINT "PK_preference" PRIMARY KEY("preference_id")
 );
 --> statement-breakpoint
