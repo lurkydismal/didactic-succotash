@@ -1,7 +1,9 @@
-import { NavItem } from "@/data/navbar";
-import NextLink from "@/components/Link";
 import { Badge, Box, Button, SxProps } from "@mui/material";
 import { usePathname } from "next/navigation";
+
+import NextLink from "@/components/Link";
+import { NavItem } from "@/data/navbar";
+
 import { activeButtonSx, navButtonSx } from "./styles";
 
 const badgeSx = {
@@ -96,11 +98,7 @@ export default function DesktopNav({
                 }}
             >
                 {left.map((value) => (
-                    <NavButton
-                        key={value.href}
-                        item={value}
-                        isActive={isActive(value.href)}
-                    />
+                    <NavButton key={value.href} item={value} isActive={isActive(value.href)} />
                 ))}
             </Box>
 
@@ -113,11 +111,7 @@ export default function DesktopNav({
                 }}
             >
                 {right.map((value) => (
-                    <NavButton
-                        key={value.href}
-                        item={value}
-                        isActive={isActive(value.href)}
-                    />
+                    <NavButton key={value.href} item={value} isActive={isActive(value.href)} />
                 ))}
             </Box>
         </Box>

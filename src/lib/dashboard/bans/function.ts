@@ -30,10 +30,7 @@ export async function getRowsAction() {
         })
         .from(serverBan)
         .leftJoin(player, eq(serverBan.playerUserId, player.userId))
-        .leftJoin(
-            banningAdminPlayer,
-            eq(serverBan.banningAdmin, banningAdminPlayer.userId),
-        )
+        .leftJoin(banningAdminPlayer, eq(serverBan.banningAdmin, banningAdminPlayer.userId))
         .orderBy(desc(idColumn))
         .execute();
 
@@ -54,11 +51,7 @@ export async function getPlayerUsernameOptionsAction(): Promise<string[]> {
         .orderBy(asc(player.lastSeenUserName))
         .execute();
 
-    return [
-        ...new Set(
-            rows.map((row) => row.playerUsername.trim()).filter(Boolean),
-        ),
-    ];
+    return [...new Set(rows.map((row) => row.playerUsername.trim()).filter(Boolean))];
 }
 
 /**
@@ -75,13 +68,7 @@ export async function getPlayerAddressOptionsAction(): Promise<string[]> {
         .orderBy(asc(player.lastSeenAddress))
         .execute();
 
-    return [
-        ...new Set(
-            rows
-                .map((row) => (row.address ? row.address.trim() : ""))
-                .filter(Boolean),
-        ),
-    ];
+    return [...new Set(rows.map((row) => (row.address ? row.address.trim() : "")).filter(Boolean))];
 }
 
 /**
@@ -98,9 +85,7 @@ export async function getPlayerHwidOptionsAction(): Promise<string[]> {
         .orderBy(asc(player.lastSeenHwid))
         .execute();
 
-    return [
-        ...new Set(rows.map((row) => formatHwidHex(row.hwid)).filter(Boolean)),
-    ];
+    return [...new Set(rows.map((row) => formatHwidHex(row.hwid)).filter(Boolean))];
 }
 
 /**
@@ -123,10 +108,7 @@ export async function getPlayerPackedOptionsAction(): Promise<
         .orderBy(asc(player.lastSeenUserName))
         .execute();
 
-    const deduped = new Map<
-        string,
-        { playerUsername: string; address: string; hwid: string }
-    >();
+    const deduped = new Map<string, { playerUsername: string; address: string; hwid: string }>();
     for (const row of rows) {
         const label = row.playerUsername.trim();
         if (!label || deduped.has(label)) continue;

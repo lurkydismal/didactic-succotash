@@ -1,13 +1,16 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import CustomDataGrid from "./CustomDataGrid";
-import type { FieldConfig } from "./types";
-import { useSnackbar } from "@/providers/snackbar";
-import CustomToolbar from "./Toolbar";
-import { GridRowsProp } from "@mui/x-data-grid";
 import { Box, CircularProgress } from "@mui/material";
+import { GridRowsProp } from "@mui/x-data-grid";
+import React, { useEffect, useState } from "react";
+
+import { useSnackbar } from "@/providers/snackbar";
 import { columnsFromFields } from "@/utils/columns";
+
+import type { FieldConfig } from "./types";
+
+import CustomDataGrid from "./CustomDataGrid";
+import CustomToolbar from "./Toolbar";
 
 export type { FieldConfig } from "./types";
 
@@ -27,8 +30,7 @@ export default function TableDataGrid<
     fields: FieldConfig<R, RI>[];
 }>) {
     const { showError } = useSnackbar();
-    const [currentRows, setCurrentRows] =
-        useState<Readonly<GridRowsProp> | null>(null);
+    const [currentRows, setCurrentRows] = useState<Readonly<GridRowsProp> | null>(null);
 
     useEffect(() => {
         let active = true;

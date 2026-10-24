@@ -7,8 +7,8 @@ import { createSelectSchema } from "drizzle-zod";
 import db from "@/db";
 import { cacheDbRequest } from "@/lib/cache";
 import { ActionResult, DbTarget, parseRawTarget } from "@/lib/types";
-import log from "@/utils/stdlog";
 import { toCamelCase } from "@/utils/stdfunc";
+import log from "@/utils/stdlog";
 
 /**
  * Gets rows.
@@ -23,10 +23,7 @@ export async function getRows(
     try {
         const table = parseRawTarget(rawTarget);
 
-        const columns = getColumns(table) as Record<
-            string,
-            AnyColumn | undefined
-        >;
+        const columns = getColumns(table) as Record<string, AnyColumn | undefined>;
         const id = columns[idColumnName];
         if (!id) {
             return { ok: false, error: "Unknown id column" };
@@ -50,9 +47,7 @@ export async function getRows(
             ? validRows
             : validRows.map((row: Row) => ({
                   ...row,
-                  id:
-                      row[toCamelCase(id.name) as keyof Row] ??
-                      row[id.name as keyof Row], // fallback to original name
+                  id: row[toCamelCase(id.name) as keyof Row] ?? row[id.name as keyof Row], // fallback to original name
               }));
 
         return {

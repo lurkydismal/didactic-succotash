@@ -1,8 +1,6 @@
 import type { FieldConfig } from "@/components/TableDataGrid";
-import type {
-    PlayerRow as TableRow,
-    PlayerRowInsert as TableRowInsert,
-} from "@/db/types";
+import type { PlayerRow as TableRow, PlayerRowInsert as TableRowInsert } from "@/db/types";
+
 import { formatHwidByteaHex, formatHwidHex } from "@/utils/hwid";
 
 const fields: FieldConfig<TableRow, TableRowInsert>[] = [

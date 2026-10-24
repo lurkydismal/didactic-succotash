@@ -31,10 +31,7 @@ export async function getRowsAction(): Promise<CharacterRow[]> {
             jobName: sql<string>`COALESCE(${job.jobName}, '')`,
         })
         .from(profile)
-        .innerJoin(
-            preference,
-            eq(profile.preferenceId, preference.preferenceId),
-        )
+        .innerJoin(preference, eq(profile.preferenceId, preference.preferenceId))
         .innerJoin(player, eq(preference.userId, player.userId))
         .leftJoin(
             job,
@@ -60,11 +57,7 @@ export async function getPlayerUsernameOptionsAction(): Promise<string[]> {
         .orderBy(asc(player.lastSeenUserName))
         .execute();
 
-    return [
-        ...new Set(
-            rows.map((row) => row.playerUsername.trim()).filter(Boolean),
-        ),
-    ];
+    return [...new Set(rows.map((row) => row.playerUsername.trim()).filter(Boolean))];
 }
 
 /**

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+
 import { useSnackbar } from "@/providers/snackbar";
 
 /**
@@ -62,9 +63,7 @@ export default function ErrorPage({
                 </div>
 
                 {error?.digest && (
-                    <p className="text-xs text-gray-400 dark:text-gray-500">
-                        Ref: {error.digest}
-                    </p>
+                    <p className="text-xs text-gray-400 dark:text-gray-500">Ref: {error.digest}</p>
                 )}
 
                 <button

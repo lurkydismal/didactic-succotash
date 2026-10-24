@@ -1,7 +1,7 @@
 "use server";
 
-import { DbTarget } from "@/lib/types";
 import { getRowsAction as _getRowsAction } from "@/lib/dashboard/common/function";
+import { DbTarget } from "@/lib/types";
 
 const target: DbTarget = "player";
 

@@ -186,11 +186,7 @@ export function delay(milliseconds: number): Promise<void> {
  * @example
  * paginate(["a", "b", "c", "d"], 2, 2); // ["c", "d"]
  */
-export function paginate<T>(
-    items: T[],
-    currentPage: number,
-    perPage: number,
-): T[] {
+export function paginate<T>(items: T[], currentPage: number, perPage: number): T[] {
     const start = (currentPage - 1) * perPage;
     const end = start + perPage;
 

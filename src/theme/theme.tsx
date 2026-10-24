@@ -1,23 +1,14 @@
 "use client";
 
-import { ReactNode } from "react";
-import {
-    colorSchemes,
-    shadows,
-    shape,
-    typography,
-} from "@/theme/themePrimitives";
-import * as DG from "@mui/x-data-grid/locales";
-import * as DP from "@mui/x-date-pickers/locales";
+import { ThemeOptions, createTheme, ThemeProvider, useMediaQuery } from "@mui/material";
 import * as MUI from "@mui/material/locale";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import * as DG from "@mui/x-data-grid/locales";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import {
-    ThemeOptions,
-    createTheme,
-    ThemeProvider,
-    useMediaQuery,
-} from "@mui/material";
+import * as DP from "@mui/x-date-pickers/locales";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { ReactNode } from "react";
+
+import { colorSchemes, shadows, shape, typography } from "@/theme/themePrimitives";
 
 // Props for AppTheme wrapper
 export interface AppThemeProps {
@@ -46,12 +37,8 @@ export default function AppTheme(props: AppThemeProps) {
      */
     const getLocales = (localeName: string) => ({
         mui: (MUI as Record<string, typeof MUI.enUS>)[localeName] || MUI.enUS,
-        dg:
-            (DG as unknown as Record<string, typeof DG.enUS>)[localeName] ||
-            DG.enUS,
-        dp:
-            (DP as unknown as Record<string, typeof DP.enUS>)[localeName] ||
-            DP.enUS,
+        dg: (DG as unknown as Record<string, typeof DG.enUS>)[localeName] || DG.enUS,
+        dp: (DP as unknown as Record<string, typeof DP.enUS>)[localeName] || DP.enUS,
     });
 
     // Destructure the selected locales
@@ -82,10 +69,7 @@ export default function AppTheme(props: AppThemeProps) {
     // Render ThemeProvider and LocalizationProvider wrapping the app's children
     return (
         <ThemeProvider theme={theme} disableTransitionOnChange>
-            <LocalizationProvider
-                dateAdapter={AdapterDayjs}
-                adapterLocale={lang}
-            >
+            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={lang}>
                 {children}
             </LocalizationProvider>
         </ThemeProvider>

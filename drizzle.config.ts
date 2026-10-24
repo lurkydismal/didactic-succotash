@@ -1,5 +1,5 @@
-import 'dotenv/config';
-import { defineConfig } from 'drizzle-kit';
+import "dotenv/config";
+import { defineConfig } from "drizzle-kit";
 
 function checkEnv(name: string) {
     const x = process.env[name];
@@ -22,8 +22,8 @@ export default defineConfig({
         ssl: false,
         user: checkEnv("POSTGRES_USER"),
     },
-    dialect: 'postgresql',
-    out: './drizzle',
-    schema: './src/db/schema.ts',
+    dialect: "postgresql",
+    out: "./drizzle",
+    schema: "./src/db/schema.ts",
     strict: true,
 });

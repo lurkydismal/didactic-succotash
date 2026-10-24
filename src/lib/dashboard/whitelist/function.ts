@@ -56,9 +56,7 @@ export async function getUsernameOptionsAction(): Promise<string[]> {
 /**
  * Gets player packed options action.
  */
-export async function getPlayerPackedOptionsAction(): Promise<
-    PackedPlayerOption[]
-> {
+export async function getPlayerPackedOptionsAction(): Promise<PackedPlayerOption[]> {
     "use cache";
     cacheDbRequest(["player"]);
 

@@ -1,12 +1,7 @@
 import type { FieldConfig } from "@/components/TableDataGrid";
-import type {
-    AdminLogRow as TableRow,
-    AdminLogRowInsert as TableRowInsert,
-} from "@/db/types";
-import {
-    getServerNameByRoundIdAction,
-    hasRoundIdAction,
-} from "@/lib/dashboard/logs/function";
+import type { AdminLogRow as TableRow, AdminLogRowInsert as TableRowInsert } from "@/db/types";
+
+import { getServerNameByRoundIdAction, hasRoundIdAction } from "@/lib/dashboard/logs/function";
 
 /**
  * Parses a field value as an integer round ID.
@@ -74,10 +69,7 @@ function validateJsonText(value: unknown): true | string {
  */
 function isJsonChanged(rowValue: unknown, currentValue: unknown): boolean {
     try {
-        return (
-            formatJsonText(rowValue) !==
-            formatJsonText(parseJsonText(currentValue))
-        );
+        return formatJsonText(rowValue) !== formatJsonText(parseJsonText(currentValue));
     } catch {
         return formatJsonText(rowValue) !== String(currentValue ?? "");
     }

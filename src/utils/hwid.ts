@@ -21,8 +21,7 @@ const bytesToHex = (bytes: ArrayLike<number>) =>
 /**
  * Checks whether the value is an array buffer view.
  */
-const isArrayBufferView = (value: unknown): value is ArrayBufferView =>
-    ArrayBuffer.isView(value);
+const isArrayBufferView = (value: unknown): value is ArrayBufferView => ArrayBuffer.isView(value);
 
 /**
  * Checks whether the value is a buffer json.
@@ -31,9 +30,7 @@ const isBufferJson = (value: unknown): value is BufferJson => {
     if (!value || typeof value !== "object") return false;
 
     const maybeBufferJson = value as BufferJson;
-    return (
-        maybeBufferJson.type === "Buffer" && Array.isArray(maybeBufferJson.data)
-    );
+    return maybeBufferJson.type === "Buffer" && Array.isArray(maybeBufferJson.data);
 };
 
 /**
@@ -44,9 +41,7 @@ export function formatHwidHex(value: unknown): string {
 
     if (typeof value === "string") {
         const normalized =
-            value.startsWith("\\x") || value.startsWith("\\X")
-                ? value.slice(2)
-                : value;
+            value.startsWith("\\x") || value.startsWith("\\X") ? value.slice(2) : value;
         return normalized.toLowerCase();
     }
 
@@ -55,9 +50,7 @@ export function formatHwidHex(value: unknown): string {
     }
 
     if (isArrayBufferView(value)) {
-        return bytesToHex(
-            new Uint8Array(value.buffer, value.byteOffset, value.byteLength),
-        );
+        return bytesToHex(new Uint8Array(value.buffer, value.byteOffset, value.byteLength));
     }
 
     if (Array.isArray(value)) {

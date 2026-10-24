@@ -1,9 +1,10 @@
 "use server";
 
-import { adminLog, round, server } from "@/db/schema";
 import { desc, eq, getColumns } from "drizzle-orm";
-import { cacheDbRequest } from "@/lib/cache";
+
 import db from "@/db";
+import { adminLog, round, server } from "@/db/schema";
+import { cacheDbRequest } from "@/lib/cache";
 
 /**
  * Gets log rows with the related server name needed by the dashboard table.
@@ -51,9 +52,7 @@ export async function hasRoundIdAction(roundId: number): Promise<boolean> {
 /**
  * Gets the server name attached to an existing round.
  */
-export async function getServerNameByRoundIdAction(
-    roundId: number,
-): Promise<string | null> {
+export async function getServerNameByRoundIdAction(roundId: number): Promise<string | null> {
     "use cache";
     cacheDbRequest(["round", "server"]);
 

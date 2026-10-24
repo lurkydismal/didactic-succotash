@@ -13,9 +13,11 @@
  * - Call `normalizeColumns(rawColumns, options)` where you need the final GridColDef[]
  */
 
-import type { FieldConfig } from "@/components/TableDataGrid";
-import { toCamelCase } from "@/utils/stdfunc";
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+
+import type { FieldConfig } from "@/components/TableDataGrid";
+
+import { toCamelCase } from "@/utils/stdfunc";
 
 type NormalizeOptions = {
     defaultFlex?: number; // fallback flex when column.flex is missing

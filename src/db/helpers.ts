@@ -21,12 +21,8 @@ import { timestamp, varchar } from "drizzle-orm/pg-core";
  * });
  */
 export const timestampsColumns = {
-    updated_at: timestamp({ precision: 0, withTimezone: true })
-        .defaultNow()
-        .notNull(),
-    created_at: timestamp({ precision: 0, withTimezone: true })
-        .defaultNow()
-        .notNull(),
+    updated_at: timestamp({ precision: 0, withTimezone: true }).defaultNow().notNull(),
+    created_at: timestamp({ precision: 0, withTimezone: true }).defaultNow().notNull(),
 };
 
 // * NOTE: PSQL function to automatically update updated_at on any row change

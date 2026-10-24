@@ -1,8 +1,6 @@
 import type { FieldConfig } from "@/components/TableDataGrid";
-import type {
-    ProfileRow as TableRow,
-    ProfileRowInsert as TableRowInsert,
-} from "@/db/types";
+import type { ProfileRow as TableRow, ProfileRowInsert as TableRowInsert } from "@/db/types";
+
 import {
     getJobNameOptionsAction,
     getPlayerUsernameOptionsAction,
@@ -67,10 +65,7 @@ function validateJsonText(value: unknown): true | string {
  */
 function isJsonChanged(rowValue: unknown, currentValue: unknown): boolean {
     try {
-        return (
-            formatJsonText(rowValue) !==
-            formatJsonText(parseJsonText(currentValue))
-        );
+        return formatJsonText(rowValue) !== formatJsonText(parseJsonText(currentValue));
     } catch {
         return formatJsonText(rowValue) !== String(currentValue ?? "");
     }

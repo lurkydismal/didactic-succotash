@@ -1,4 +1,5 @@
 import { defineRelations } from "drizzle-orm";
+
 import * as schema from "./schema";
 
 export const relations = defineRelations(schema, (r) => ({
@@ -89,9 +90,7 @@ export const relations = defineRelations(schema, (r) => ({
         }),
         rmcDiscordAccountsViaRmcLinkedAccounts: r.many.rmcDiscordAccounts({
             from: r.player.userId.through(r.rmcLinkedAccounts.playerId),
-            to: r.rmcDiscordAccounts.rmcDiscordAccountsId.through(
-                r.rmcLinkedAccounts.discordId,
-            ),
+            to: r.rmcDiscordAccounts.rmcDiscordAccountsId.through(r.rmcLinkedAccounts.discordId),
             alias: "player_userId_rmcDiscordAccounts_rmcDiscordAccountsId_via_rmcLinkedAccounts",
         }),
         rmcDiscordAccountsViaRmcLinkedAccountsLogs: r.many.rmcDiscordAccounts({
@@ -230,9 +229,7 @@ export const relations = defineRelations(schema, (r) => ({
             to: r.server.serverId,
         }),
         serverBans: r.many.serverBan({
-            from: r.connectionLog.connectionLogId.through(
-                r.serverBanHit.connectionId,
-            ),
+            from: r.connectionLog.connectionLogId.through(r.serverBanHit.connectionId),
             to: r.serverBan.serverBanId.through(r.serverBanHit.banId),
         }),
     },
@@ -248,10 +245,7 @@ export const relations = defineRelations(schema, (r) => ({
     },
     preference: {
         profile: r.one.profile({
-            from: [
-                r.preference.selectedCharacterSlot,
-                r.preference.preferenceId,
-            ],
+            from: [r.preference.selectedCharacterSlot, r.preference.preferenceId],
             to: [r.profile.slot, r.profile.preferenceId],
             alias: "preference_selectedCharacterSlot_preferenceId_profile_slot_preferenceId",
         }),

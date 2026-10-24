@@ -73,9 +73,7 @@ export async function getServerNameOptionsAction(): Promise<string[]> {
         .orderBy(asc(server.name))
         .execute();
 
-    return [
-        ...new Set(rows.map((row) => row.serverName.trim()).filter(Boolean)),
-    ];
+    return [...new Set(rows.map((row) => row.serverName.trim()).filter(Boolean))];
 }
 
 /**
@@ -92,13 +90,7 @@ export async function getPlayerAddressOptionsAction(): Promise<string[]> {
         .orderBy(asc(player.lastSeenAddress))
         .execute();
 
-    return [
-        ...new Set(
-            rows
-                .map((row) => (row.address ? row.address.trim() : ""))
-                .filter(Boolean),
-        ),
-    ];
+    return [...new Set(rows.map((row) => (row.address ? row.address.trim() : "")).filter(Boolean))];
 }
 
 /**
@@ -115,17 +107,13 @@ export async function getPlayerHwidOptionsAction(): Promise<string[]> {
         .orderBy(asc(player.lastSeenHwid))
         .execute();
 
-    return [
-        ...new Set(rows.map((row) => formatHwidHex(row.hwid)).filter(Boolean)),
-    ];
+    return [...new Set(rows.map((row) => formatHwidHex(row.hwid)).filter(Boolean))];
 }
 
 /**
  * Gets player packed options action.
  */
-export async function getPlayerPackedOptionsAction(): Promise<
-    PackedPlayerOption[]
-> {
+export async function getPlayerPackedOptionsAction(): Promise<PackedPlayerOption[]> {
     "use cache";
     cacheDbRequest(["player"]);
 

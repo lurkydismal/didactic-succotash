@@ -1,9 +1,7 @@
 import type { FieldConfig } from "@/components/TableDataGrid";
 import type { AutocompleteOption } from "@/components/TableDataGrid/types";
-import type {
-    ServerBanRow as TableRow,
-    ServerBanRowInsert as TableRowInsert,
-} from "@/db/types";
+import type { ServerBanRow as TableRow, ServerBanRowInsert as TableRowInsert } from "@/db/types";
+
 import {
     getPlayerPackedOptionsAction,
     getPlayerUsernameOptionsAction,
@@ -33,20 +31,20 @@ const loadPlayerUsernameOptions = () => {
  * Builds packed autocomplete options for the selected player field.
  */
 const loadPackedPlayerOptions =
-    (labelKey: PackedPlayerField) =>
-    async (): Promise<AutocompleteOption[]> => {
+    (labelKey: PackedPlayerField) => async (): Promise<AutocompleteOption[]> => {
         const packedRows = await loadPackedPlayerRows();
 
         return packedRows.reduce<AutocompleteOption[]>((options, packedRow) => {
             const label = packedRow[labelKey];
             if (!label) return options;
 
-            const packedValues = packedFieldNames.reduce<
-                Record<string, unknown>
-            >((values, packedField) => {
-                values[packedField] = packedRow[packedField] ?? "";
-                return values;
-            }, {});
+            const packedValues = packedFieldNames.reduce<Record<string, unknown>>(
+                (values, packedField) => {
+                    values[packedField] = packedRow[packedField] ?? "";
+                    return values;
+                },
+                {},
+            );
 
             options.push({ label, packedValues });
             return options;

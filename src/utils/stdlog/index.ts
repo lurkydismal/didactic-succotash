@@ -1,5 +1,7 @@
 import { Logger } from "tslog";
+
 import { isBrowser, isDev, needTrace } from "@/utils/stdvar";
+
 import { browserLogger } from "./browser";
 import { CommonLogger } from "./types";
 
@@ -34,9 +36,7 @@ export const serverLogger = new Logger({
  * It is typed as `CommonLogger` so consumers can call `.trace/.debug/.info/.warn/.error/.fatal`
  * uniformly without knowing the underlying implementation.
  */
-const log: CommonLogger = isBrowser
-    ? browserLogger
-    : (serverLogger as unknown as CommonLogger);
+const log: CommonLogger = isBrowser ? browserLogger : (serverLogger as unknown as CommonLogger);
 
 export default log;
 

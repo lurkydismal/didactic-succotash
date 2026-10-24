@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import {
     pgTable,
     varchar,
@@ -21,7 +22,6 @@ import {
     primaryKey,
     unique,
 } from "drizzle-orm/pg-core";
-import { sql } from "drizzle-orm";
 
 export const efMigrationsHistory = pgTable(
     "__EFMigrationsHistory",
@@ -42,10 +42,10 @@ export const admin = pgTable(
     {
         userId: uuid("user_id"),
         title: text(),
-        adminRankId: integer("admin_rank_id").references(
-            () => adminRank.adminRankId,
-            { onDelete: "set null", name: "FK_admin_admin_rank_admin_rank_id" },
-        ),
+        adminRankId: integer("admin_rank_id").references(() => adminRank.adminRankId, {
+            onDelete: "set null",
+            name: "FK_admin_admin_rank_admin_rank_id",
+        }),
         deadminned: boolean().default(false).notNull(),
         suspended: boolean().default(false).notNull(),
     },
@@ -54,10 +54,7 @@ export const admin = pgTable(
             name: "PK_admin",
             columns: [table.userId],
         }),
-        index("IX_admin_admin_rank_id").using(
-            "btree",
-            table.adminRankId.asc().nullsLast(),
-        ),
+        index("IX_admin_admin_rank_id").using("btree", table.adminRankId.asc().nullsLast()),
     ],
 );
 
@@ -79,10 +76,7 @@ export const adminFlag = pgTable(
             name: "PK_admin_flag",
             columns: [table.adminFlagId],
         }),
-        index("IX_admin_flag_admin_id").using(
-            "btree",
-            table.adminId.asc().nullsLast(),
-        ),
+        index("IX_admin_flag_admin_id").using("btree", table.adminId.asc().nullsLast()),
         uniqueIndex("IX_admin_flag_flag_admin_id").using(
             "btree",
             table.flag.asc().nullsLast(),
@@ -113,10 +107,7 @@ export const adminLog = pgTable(
             name: "PK_admin_log",
         }),
         index("IX_admin_log_date").using("btree", table.date.asc().nullsLast()),
-        index("IX_admin_log_message").using(
-            "gin",
-            sql`to_tsvector('english'::regconfig, message)`,
-        ),
+        index("IX_admin_log_message").using("gin", sql`to_tsvector('english'::regconfig, message)`),
         index("IX_admin_log_type").using("btree", table.type.asc().nullsLast()),
     ],
 );
@@ -153,8 +144,7 @@ export const adminLogPlayer = pgTable(
 export const adminMessages = pgTable(
     "admin_messages",
     {
-        adminMessagesId:
-            integer("admin_messages_id").generatedByDefaultAsIdentity(),
+        adminMessagesId: integer("admin_messages_id").generatedByDefaultAsIdentity(),
         roundId: integer("round_id").references(() => round.roundId, {
             name: "FK_admin_messages_round_round_id",
         }),
@@ -169,13 +159,10 @@ export const adminMessages = pgTable(
             name: "FK_admin_messages_player_created_by_id",
         }),
         createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
-        lastEditedById: uuid("last_edited_by_id").references(
-            () => player.userId,
-            {
-                onDelete: "set null",
-                name: "FK_admin_messages_player_last_edited_by_id",
-            },
-        ),
+        lastEditedById: uuid("last_edited_by_id").references(() => player.userId, {
+            onDelete: "set null",
+            name: "FK_admin_messages_player_last_edited_by_id",
+        }),
         lastEditedAt: timestamp("last_edited_at", { withTimezone: true }),
         expirationTime: timestamp("expiration_time", { withTimezone: true }),
         deleted: boolean().notNull(),
@@ -208,10 +195,7 @@ export const adminMessages = pgTable(
             "btree",
             table.playerUserId.asc().nullsLast(),
         ),
-        index("IX_admin_messages_round_id").using(
-            "btree",
-            table.roundId.asc().nullsLast(),
-        ),
+        index("IX_admin_messages_round_id").using("btree", table.roundId.asc().nullsLast()),
         check("NotDismissedAndSeen", sql`((NOT dismissed) OR seen)`),
     ],
 );
@@ -233,13 +217,10 @@ export const adminNotes = pgTable(
             name: "FK_admin_notes_player_created_by_id",
         }),
         createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
-        lastEditedById: uuid("last_edited_by_id").references(
-            () => player.userId,
-            {
-                onDelete: "set null",
-                name: "FK_admin_notes_player_last_edited_by_id",
-            },
-        ),
+        lastEditedById: uuid("last_edited_by_id").references(() => player.userId, {
+            onDelete: "set null",
+            name: "FK_admin_notes_player_last_edited_by_id",
+        }),
         lastEditedAt: timestamp("last_edited_at", {
             withTimezone: true,
         }).notNull(),
@@ -252,35 +233,21 @@ export const adminNotes = pgTable(
         secret: boolean().notNull(),
         expirationTime: timestamp("expiration_time", { withTimezone: true }),
         severity: integer().default(1).notNull(),
-        playtimeAtNote: interval("playtime_at_note")
-            .default("00:00:00")
-            .notNull(),
+        playtimeAtNote: interval("playtime_at_note").default("00:00:00").notNull(),
     },
     (table) => [
         primaryKey({
             name: "PK_admin_notes",
             columns: [table.adminNotesId],
         }),
-        index("IX_admin_notes_created_by_id").using(
-            "btree",
-            table.createdById.asc().nullsLast(),
-        ),
-        index("IX_admin_notes_deleted_by_id").using(
-            "btree",
-            table.deletedById.asc().nullsLast(),
-        ),
+        index("IX_admin_notes_created_by_id").using("btree", table.createdById.asc().nullsLast()),
+        index("IX_admin_notes_deleted_by_id").using("btree", table.deletedById.asc().nullsLast()),
         index("IX_admin_notes_last_edited_by_id").using(
             "btree",
             table.lastEditedById.asc().nullsLast(),
         ),
-        index("IX_admin_notes_player_user_id").using(
-            "btree",
-            table.playerUserId.asc().nullsLast(),
-        ),
-        index("IX_admin_notes_round_id").using(
-            "btree",
-            table.roundId.asc().nullsLast(),
-        ),
+        index("IX_admin_notes_player_user_id").using("btree", table.playerUserId.asc().nullsLast()),
+        index("IX_admin_notes_round_id").using("btree", table.roundId.asc().nullsLast()),
     ],
 );
 
@@ -301,8 +268,7 @@ export const adminRank = pgTable(
 export const adminRankFlag = pgTable(
     "admin_rank_flag",
     {
-        adminRankFlagId:
-            integer("admin_rank_flag_id").generatedByDefaultAsIdentity(),
+        adminRankFlagId: integer("admin_rank_flag_id").generatedByDefaultAsIdentity(),
         flag: text().notNull(),
         adminRankId: integer("admin_rank_id")
             .notNull()
@@ -331,9 +297,7 @@ export const adminRankFlag = pgTable(
 export const adminWatchlists = pgTable(
     "admin_watchlists",
     {
-        adminWatchlistsId: integer(
-            "admin_watchlists_id",
-        ).generatedByDefaultAsIdentity(),
+        adminWatchlistsId: integer("admin_watchlists_id").generatedByDefaultAsIdentity(),
         roundId: integer("round_id").references(() => round.roundId, {
             name: "FK_admin_watchlists_round_round_id",
         }),
@@ -348,13 +312,10 @@ export const adminWatchlists = pgTable(
             name: "FK_admin_watchlists_player_created_by_id",
         }),
         createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
-        lastEditedById: uuid("last_edited_by_id").references(
-            () => player.userId,
-            {
-                onDelete: "set null",
-                name: "FK_admin_watchlists_player_last_edited_by_id",
-            },
-        ),
+        lastEditedById: uuid("last_edited_by_id").references(() => player.userId, {
+            onDelete: "set null",
+            name: "FK_admin_watchlists_player_last_edited_by_id",
+        }),
         lastEditedAt: timestamp("last_edited_at", {
             withTimezone: true,
         }).notNull(),
@@ -387,10 +348,7 @@ export const adminWatchlists = pgTable(
             "btree",
             table.playerUserId.asc().nullsLast(),
         ),
-        index("IX_admin_watchlists_round_id").using(
-            "btree",
-            table.roundId.asc().nullsLast(),
-        ),
+        index("IX_admin_watchlists_round_id").using("btree", table.roundId.asc().nullsLast()),
     ],
 );
 
@@ -422,9 +380,7 @@ export const antag = pgTable(
 export const assignedUserId = pgTable(
     "assigned_user_id",
     {
-        assignedUserIdId: integer(
-            "assigned_user_id_id",
-        ).generatedByDefaultAsIdentity(),
+        assignedUserIdId: integer("assigned_user_id_id").generatedByDefaultAsIdentity(),
         userName: text("user_name").notNull(),
         userId: uuid("user_id").notNull(),
     },
@@ -433,10 +389,7 @@ export const assignedUserId = pgTable(
             name: "PK_assigned_user_id",
             columns: [table.assignedUserIdId],
         }),
-        uniqueIndex("IX_assigned_user_id_user_id").using(
-            "btree",
-            table.userId.asc().nullsLast(),
-        ),
+        uniqueIndex("IX_assigned_user_id_user_id").using("btree", table.userId.asc().nullsLast()),
         uniqueIndex("IX_assigned_user_id_user_name").using(
             "btree",
             table.userName.asc().nullsLast(),
@@ -447,8 +400,7 @@ export const assignedUserId = pgTable(
 export const banTemplate = pgTable(
     "ban_template",
     {
-        banTemplateId:
-            integer("ban_template_id").generatedByDefaultAsIdentity(),
+        banTemplateId: integer("ban_template_id").generatedByDefaultAsIdentity(),
         title: text().notNull(),
         length: interval().notNull(),
         reason: text().notNull(),
@@ -481,8 +433,7 @@ export const blacklist = pgTable(
 export const connectionLog = pgTable(
     "connection_log",
     {
-        connectionLogId:
-            integer("connection_log_id").generatedByDefaultAsIdentity(),
+        connectionLogId: integer("connection_log_id").generatedByDefaultAsIdentity(),
         userId: uuid("user_id").notNull(),
         userName: text("user_name").notNull(),
         time: timestamp({ withTimezone: true }).notNull(),
@@ -507,26 +458,16 @@ export const connectionLog = pgTable(
             name: "PK_connection_log",
             columns: [table.connectionLogId],
         }),
-        index("IX_connection_log_time").using(
-            "btree",
-            table.time.asc().nullsLast(),
-        ),
-        index("IX_connection_log_user_id").using(
-            "btree",
-            table.userId.asc().nullsLast(),
-        ),
-        check(
-            "AddressNotIPv6MappedIPv4",
-            sql`(NOT ('::ffff:0.0.0.0/96'::inet >>= address))`,
-        ),
+        index("IX_connection_log_time").using("btree", table.time.asc().nullsLast()),
+        index("IX_connection_log_user_id").using("btree", table.userId.asc().nullsLast()),
+        check("AddressNotIPv6MappedIPv4", sql`(NOT ('::ffff:0.0.0.0/96'::inet >>= address))`),
     ],
 );
 
 export const ipintelCache = pgTable(
     "ipintel_cache",
     {
-        ipintelCacheId:
-            integer("ipintel_cache_id").generatedByDefaultAsIdentity(),
+        ipintelCacheId: integer("ipintel_cache_id").generatedByDefaultAsIdentity(),
         address: inet().notNull(),
         time: timestamp({ withTimezone: true }).notNull(),
         score: real().notNull(),
@@ -536,10 +477,7 @@ export const ipintelCache = pgTable(
             name: "PK_ipintel_cache",
             columns: [table.ipintelCacheId],
         }),
-        uniqueIndex("idx_ipintel_cache_address").using(
-            "btree",
-            table.address.asc().nullsLast(),
-        ),
+        uniqueIndex("idx_ipintel_cache_address").using("btree", table.address.asc().nullsLast()),
     ],
 );
 
@@ -564,10 +502,7 @@ export const job = pgTable(
         uniqueIndex("IX_job_one_high_priority")
             .using("btree", table.profileId.asc().nullsLast())
             .where(sql`(priority = 3)`),
-        index("IX_job_profile_id").using(
-            "btree",
-            table.profileId.asc().nullsLast(),
-        ),
+        index("IX_job_profile_id").using("btree", table.profileId.asc().nullsLast()),
         uniqueIndex("IX_job_profile_id_job_name").using(
             "btree",
             table.profileId.asc().nullsLast(),
@@ -627,10 +562,7 @@ export const player = pgTable(
             "btree",
             table.lastSeenUserName.asc().nullsLast(),
         ),
-        uniqueIndex("IX_player_user_id").using(
-            "btree",
-            table.userId.asc().nullsLast(),
-        ),
+        uniqueIndex("IX_player_user_id").using("btree", table.userId.asc().nullsLast()),
         unique("ak_player_user_id").on(table.userId),
         check(
             "LastSeenAddressNotIPv6MappedIPv4",
@@ -660,10 +592,7 @@ export const playerRound = pgTable(
             columns: [table.playersId, table.roundsId],
             name: "PK_player_round",
         }),
-        index("IX_player_round_rounds_id").using(
-            "btree",
-            table.roundsId.asc().nullsLast(),
-        ),
+        index("IX_player_round_rounds_id").using("btree", table.roundsId.asc().nullsLast()),
     ],
 );
 
@@ -689,10 +618,7 @@ export const preference = pgTable(
             foreignColumns: [profile.slot, profile.preferenceId],
             name: "FK_preference_profile_selected_character_slot_preference_id",
         }),
-        uniqueIndex("IX_preference_user_id").using(
-            "btree",
-            table.userId.asc().nullsLast(),
-        ),
+        uniqueIndex("IX_preference_user_id").using("btree", table.userId.asc().nullsLast()),
     ],
 );
 
@@ -734,10 +660,7 @@ export const profile = pgTable(
             name: "PK_profile",
             columns: [table.profileId],
         }),
-        index("IX_profile_preference_id").using(
-            "btree",
-            table.preferenceId.asc().nullsLast(),
-        ),
+        index("IX_profile_preference_id").using("btree", table.preferenceId.asc().nullsLast()),
         uniqueIndex("IX_profile_slot_preference_id").using(
             "btree",
             table.slot.asc().nullsLast(),
@@ -749,8 +672,7 @@ export const profile = pgTable(
 export const profileLoadout = pgTable(
     "profile_loadout",
     {
-        profileLoadoutId:
-            integer("profile_loadout_id").generatedByDefaultAsIdentity(),
+        profileLoadoutId: integer("profile_loadout_id").generatedByDefaultAsIdentity(),
         profileLoadoutGroupId: integer("profile_loadout_group_id")
             .notNull()
             .references(() => profileLoadoutGroup.profileLoadoutGroupId, {
@@ -774,9 +696,7 @@ export const profileLoadout = pgTable(
 export const profileLoadoutGroup = pgTable(
     "profile_loadout_group",
     {
-        profileLoadoutGroupId: integer(
-            "profile_loadout_group_id",
-        ).generatedByDefaultAsIdentity(),
+        profileLoadoutGroupId: integer("profile_loadout_group_id").generatedByDefaultAsIdentity(),
         profileRoleLoadoutId: integer("profile_role_loadout_id")
             .notNull()
             .references(() => profileRoleLoadout.profileRoleLoadoutId, {
@@ -800,9 +720,7 @@ export const profileLoadoutGroup = pgTable(
 export const profileRoleLoadout = pgTable(
     "profile_role_loadout",
     {
-        profileRoleLoadoutId: integer(
-            "profile_role_loadout_id",
-        ).generatedByDefaultAsIdentity(),
+        profileRoleLoadoutId: integer("profile_role_loadout_id").generatedByDefaultAsIdentity(),
         profileId: integer("profile_id")
             .notNull()
             .references(() => profile.profileId, {
@@ -891,10 +809,7 @@ export const rmcLinkedAccountsLogs = pgTable(
             name: "PK_rmc_linked_accounts_logs",
             columns: [table.rmcLinkedAccountsLogsId],
         }),
-        index("IX_rmc_linked_accounts_logs_at").using(
-            "btree",
-            table.at.asc().nullsLast(),
-        ),
+        index("IX_rmc_linked_accounts_logs_at").using("btree", table.at.asc().nullsLast()),
         index("IX_rmc_linked_accounts_logs_discord_id").using(
             "btree",
             table.discordId.asc().nullsLast(),
@@ -923,10 +838,7 @@ export const rmcLinkingCodes = pgTable(
             name: "PK_rmc_linking_codes",
             columns: [table.playerId],
         }),
-        index("IX_rmc_linking_codes_code").using(
-            "btree",
-            table.code.asc().nullsLast(),
-        ),
+        index("IX_rmc_linking_codes_code").using("btree", table.code.asc().nullsLast()),
     ],
 );
 
@@ -967,9 +879,7 @@ export const rmcPatronRoundEndNtShoutouts = pgTable(
 export const rmcPatronTiers = pgTable(
     "rmc_patron_tiers",
     {
-        rmcPatronTiersId: integer(
-            "rmc_patron_tiers_id",
-        ).generatedByDefaultAsIdentity(),
+        rmcPatronTiersId: integer("rmc_patron_tiers_id").generatedByDefaultAsIdentity(),
         showOnCredits: boolean("show_on_credits").notNull(),
         lobbyMessage: boolean("lobby_message").notNull(),
         roundEndShoutout: boolean("round_end_shoutout").notNull(),
@@ -1024,10 +934,7 @@ export const rmcPatrons = pgTable(
             name: "PK_rmc_patrons",
             columns: [table.playerId],
         }),
-        index("IX_rmc_patrons_tier_id").using(
-            "btree",
-            table.tierId.asc().nullsLast(),
-        ),
+        index("IX_rmc_patrons_tier_id").using("btree", table.tierId.asc().nullsLast()),
     ],
 );
 
@@ -1068,14 +975,8 @@ export const round = pgTable(
             name: "PK_round",
             columns: [table.roundId],
         }),
-        index("IX_round_server_id").using(
-            "btree",
-            table.serverId.asc().nullsLast(),
-        ),
-        index("IX_round_start_date").using(
-            "btree",
-            table.startDate.asc().nullsLast(),
-        ),
+        index("IX_round_server_id").using("btree", table.serverId.asc().nullsLast()),
+        index("IX_round_start_date").using("btree", table.startDate.asc().nullsLast()),
     ],
 );
 
@@ -1114,16 +1015,11 @@ export const serverBan = pgTable(
         autoDelete: boolean("auto_delete").default(false).notNull(),
         hidden: boolean().default(false).notNull(),
         lastEditedAt: timestamp("last_edited_at", { withTimezone: true }),
-        lastEditedById: uuid("last_edited_by_id").references(
-            () => player.userId,
-            {
-                onDelete: "set null",
-                name: "FK_server_ban_player_last_edited_by_id",
-            },
-        ),
-        playtimeAtNote: interval("playtime_at_note")
-            .default("00:00:00")
-            .notNull(),
+        lastEditedById: uuid("last_edited_by_id").references(() => player.userId, {
+            onDelete: "set null",
+            name: "FK_server_ban_player_last_edited_by_id",
+        }),
+        playtimeAtNote: interval("playtime_at_note").default("00:00:00").notNull(),
         roundId: integer("round_id").references(() => round.roundId, {
             name: "FK_server_ban_round_round_id",
         }),
@@ -1135,30 +1031,15 @@ export const serverBan = pgTable(
             name: "PK_server_ban",
             columns: [table.serverBanId],
         }),
-        index("IX_server_ban_address").using(
-            "btree",
-            table.address.asc().nullsLast(),
-        ),
-        index("IX_server_ban_banning_admin").using(
-            "btree",
-            table.banningAdmin.asc().nullsLast(),
-        ),
+        index("IX_server_ban_address").using("btree", table.address.asc().nullsLast()),
+        index("IX_server_ban_banning_admin").using("btree", table.banningAdmin.asc().nullsLast()),
         index("IX_server_ban_last_edited_by_id").using(
             "btree",
             table.lastEditedById.asc().nullsLast(),
         ),
-        index("IX_server_ban_player_user_id").using(
-            "btree",
-            table.playerUserId.asc().nullsLast(),
-        ),
-        index("IX_server_ban_round_id").using(
-            "btree",
-            table.roundId.asc().nullsLast(),
-        ),
-        check(
-            "AddressNotIPv6MappedIPv4",
-            sql`(NOT ('::ffff:0.0.0.0/96'::inet >>= address))`,
-        ),
+        index("IX_server_ban_player_user_id").using("btree", table.playerUserId.asc().nullsLast()),
+        index("IX_server_ban_round_id").using("btree", table.roundId.asc().nullsLast()),
+        check("AddressNotIPv6MappedIPv4", sql`(NOT ('::ffff:0.0.0.0/96'::inet >>= address))`),
         check(
             "HaveEitherAddressOrUserIdOrHWId",
             sql`((address IS NOT NULL) OR (player_user_id IS NOT NULL) OR (hwid IS NOT NULL))`,
@@ -1184,8 +1065,7 @@ export const serverBanExemption = pgTable(
 export const serverBanHit = pgTable(
     "server_ban_hit",
     {
-        serverBanHitId:
-            integer("server_ban_hit_id").generatedByDefaultAsIdentity(),
+        serverBanHitId: integer("server_ban_hit_id").generatedByDefaultAsIdentity(),
         banId: integer("ban_id")
             .notNull()
             .references(() => serverBan.serverBanId, {
@@ -1204,10 +1084,7 @@ export const serverBanHit = pgTable(
             name: "PK_server_ban_hit",
             columns: [table.serverBanHitId],
         }),
-        index("IX_server_ban_hit_ban_id").using(
-            "btree",
-            table.banId.asc().nullsLast(),
-        ),
+        index("IX_server_ban_hit_ban_id").using("btree", table.banId.asc().nullsLast()),
         index("IX_server_ban_hit_connection_id").using(
             "btree",
             table.connectionId.asc().nullsLast(),
@@ -1218,8 +1095,7 @@ export const serverBanHit = pgTable(
 export const serverRoleBan = pgTable(
     "server_role_ban",
     {
-        serverRoleBanId:
-            integer("server_role_ban_id").generatedByDefaultAsIdentity(),
+        serverRoleBanId: integer("server_role_ban_id").generatedByDefaultAsIdentity(),
         playerUserId: uuid("player_user_id"),
         address: inet(),
         /**
@@ -1236,16 +1112,11 @@ export const serverRoleBan = pgTable(
         roleId: text("role_id").notNull(),
         hidden: boolean().default(true).notNull(),
         lastEditedAt: timestamp("last_edited_at", { withTimezone: true }),
-        lastEditedById: uuid("last_edited_by_id").references(
-            () => player.userId,
-            {
-                onDelete: "set null",
-                name: "FK_server_role_ban_player_last_edited_by_id",
-            },
-        ),
-        playtimeAtNote: interval("playtime_at_note")
-            .default("00:00:00")
-            .notNull(),
+        lastEditedById: uuid("last_edited_by_id").references(() => player.userId, {
+            onDelete: "set null",
+            name: "FK_server_role_ban_player_last_edited_by_id",
+        }),
+        playtimeAtNote: interval("playtime_at_note").default("00:00:00").notNull(),
         roundId: integer("round_id").references(() => round.roundId, {
             name: "FK_server_role_ban_round_round_id",
         }),
@@ -1257,10 +1128,7 @@ export const serverRoleBan = pgTable(
             name: "PK_server_role_ban",
             columns: [table.serverRoleBanId],
         }),
-        index("IX_server_role_ban_address").using(
-            "btree",
-            table.address.asc().nullsLast(),
-        ),
+        index("IX_server_role_ban_address").using("btree", table.address.asc().nullsLast()),
         index("IX_server_role_ban_banning_admin").using(
             "btree",
             table.banningAdmin.asc().nullsLast(),
@@ -1273,10 +1141,7 @@ export const serverRoleBan = pgTable(
             "btree",
             table.playerUserId.asc().nullsLast(),
         ),
-        index("IX_server_role_ban_round_id").using(
-            "btree",
-            table.roundId.asc().nullsLast(),
-        ),
+        index("IX_server_role_ban_round_id").using("btree", table.roundId.asc().nullsLast()),
         check(
             "CK_server_role_ban_AddressNotIPv6MappedIPv4",
             sql`(NOT ('::ffff:0.0.0.0/96'::inet >>= address))`,
@@ -1306,10 +1171,7 @@ export const serverRoleUnban = pgTable(
             name: "PK_server_role_unban",
             columns: [table.roleUnbanId],
         }),
-        uniqueIndex("IX_server_role_unban_ban_id").using(
-            "btree",
-            table.banId.asc().nullsLast(),
-        ),
+        uniqueIndex("IX_server_role_unban_ban_id").using("btree", table.banId.asc().nullsLast()),
     ],
 );
 
@@ -1331,10 +1193,7 @@ export const serverUnban = pgTable(
             name: "PK_server_unban",
             columns: [table.unbanId],
         }),
-        uniqueIndex("IX_server_unban_ban_id").using(
-            "btree",
-            table.banId.asc().nullsLast(),
-        ),
+        uniqueIndex("IX_server_unban_ban_id").using("btree", table.banId.asc().nullsLast()),
     ],
 );
 
@@ -1366,9 +1225,7 @@ export const trait = pgTable(
 export const uploadedResourceLog = pgTable(
     "uploaded_resource_log",
     {
-        uploadedResourceLogId: integer(
-            "uploaded_resource_log_id",
-        ).generatedByDefaultAsIdentity(),
+        uploadedResourceLogId: integer("uploaded_resource_log_id").generatedByDefaultAsIdentity(),
         date: timestamp({ withTimezone: true }).notNull(),
         userId: uuid("user_id").notNull(),
         path: text().notNull(),

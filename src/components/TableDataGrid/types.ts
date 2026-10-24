@@ -16,18 +16,16 @@ export type DefaultFieldType =
     | "datetime";
 
 export type FieldValueChangeResult =
-    void | Record<string, unknown> | Promise<void | Record<string, unknown>>;
+    | void
+    | Record<string, unknown>
+    | Promise<void | Record<string, unknown>>;
 
 export type FieldValueChangeContext<R> = {
     row: R;
     values: Record<string, unknown>;
 };
 
-export type FieldConfig<
-    R,
-    RI = unknown,
-    K extends PropertyKey = keyof R | keyof RI | string,
-> = {
+export type FieldConfig<R, RI = unknown, K extends PropertyKey = keyof R | keyof RI | string> = {
     key: K;
     label: string;
     type?: DefaultFieldType;
@@ -46,17 +44,10 @@ export type FieldConfig<
     onAutocompleteOpen?: () => void;
     onAutocompleteClose?: () => void;
     formatValue?: (value: unknown) => unknown;
-    render?: (
-        value: unknown,
-        setValue: (v: unknown) => void,
-        row: R,
-    ) => React.ReactNode;
+    render?: (value: unknown, setValue: (v: unknown) => void, row: R) => React.ReactNode;
     toFormValue?: (v: unknown) => string | Blob | undefined;
     isChanged?: (rowValue: unknown, currentValue: unknown) => boolean;
-    onValueChange?: (
-        value: unknown,
-        context: FieldValueChangeContext<R>,
-    ) => FieldValueChangeResult;
+    onValueChange?: (value: unknown, context: FieldValueChangeContext<R>) => FieldValueChangeResult;
     runOnDialogOpen?: boolean;
     validate?: (
         value: unknown,

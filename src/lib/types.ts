@@ -1,13 +1,12 @@
 import z from "zod";
+
 import * as schema from "@/db/schema";
 
 export const TABLES = schema;
 
 export type DbTarget = keyof typeof TABLES;
 
-export const DbTargetSchema = z.enum(
-    Object.keys(TABLES) as [DbTarget, ...DbTarget[]],
-);
+export const DbTargetSchema = z.enum(Object.keys(TABLES) as [DbTarget, ...DbTarget[]]);
 
 /**
  * Parses raw target.

@@ -1,7 +1,5 @@
 "use client";
 
-import log from "@/utils/stdlog";
-import { LogFn } from "@/utils/stdlog/types";
 import {
     NotificationsNone as DefaultIcon,
     CheckCircleOutlined as SuccessIcon,
@@ -11,13 +9,11 @@ import {
     Close as CloseIcon,
 } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
-import {
-    SnackbarProvider,
-    VariantType,
-    enqueueSnackbar,
-    closeSnackbar,
-} from "notistack";
+import { SnackbarProvider, VariantType, enqueueSnackbar, closeSnackbar } from "notistack";
 import { createContext, useContext } from "react";
+
+import log from "@/utils/stdlog";
+import { LogFn } from "@/utils/stdlog/types";
 
 const SnackbarContext = createContext<{
     showMessage: (message: string) => void;
