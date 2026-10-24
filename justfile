@@ -3,16 +3,16 @@
 default: run-debug
 
 # Start development server with hot reload and debug-friendly output.
-run-debug:
-    pnpm dev
+run-debug port='3000':
+    pnpm dev -p '{{ port }}'
 
 # Build the production-ready optimized application bundle.
 build-release:
     pnpm build
 
 # Start the built production server.
-run-release:
-    pnpm start
+run-release port='3000':
+    pnpm start -p '{{ port }}'
 
 # Run the test suite.
 run-tests:
@@ -42,9 +42,9 @@ migrate:
 packages-upgrade:
     ncu -ui
 
-# Install project dependencies.
+# Install project dependencies using cached packages when available.
 packages-install:
-    pnpm i
+    pnpm i --prefer-offline
 
 # Pull the current database schema into schema.
 pull-db-schema:

@@ -2,18 +2,19 @@
     "name": "didactic-succotash",
     "version": "0.1.0",
     "private": true,
+    "sideEffects": false,
     "scripts": {
-        "dev": "next dev",
         "build": "next build",
-        "start": "next start",
-        "test": "vitest",
+        "dev": "next dev",
+        "format": "oxfmt",
+        "format:check": "oxfmt --check",
         "generate": "drizzle-kit generate",
+        "lint": "fallow",
         "migrate": "drizzle-kit migrate",
-        "push": "drizzle-kit push",
         "pull": "drizzle-kit pull",
-        "lint": "eslint",
-        "format": "prettier --write \"src/**/*.{js,ts,jsx,tsx,json,css,scss,md}\"",
-        "format:check": "prettier --check \"src/**/*.{js,ts,jsx,tsx,json,css,scss,md}\""
+        "push": "drizzle-kit push",
+        "start": "next start",
+        "test": "vitest"
     },
     "dependencies": {
         "@emotion/cache": "^11.14.0",
