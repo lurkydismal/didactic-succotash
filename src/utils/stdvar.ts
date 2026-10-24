@@ -129,13 +129,7 @@ export const maxRetries = 3;
  * storageKeys.client?.authStorageKey;
  */
 export const storageKeys = {
-    client: isBrowser
-        ? {
-        }
-        : null,
+    client: isBrowser ? {} : null,
 
-    server: isServer
-        ? {
-        }
-        : null,
+    server: isServer ? {} : null,
 };

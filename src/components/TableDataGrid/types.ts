@@ -16,9 +16,7 @@ export type DefaultFieldType =
     | "datetime";
 
 export type FieldValueChangeResult =
-    | void
-    | Record<string, unknown>
-    | Promise<void | Record<string, unknown>>;
+    void | Record<string, unknown> | Promise<void | Record<string, unknown>>;
 
 export type FieldValueChangeContext<R> = {
     row: R;
