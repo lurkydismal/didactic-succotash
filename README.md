@@ -62,6 +62,8 @@ The current implementation focuses on reading and exploring data; it does not pr
 ![5 screenshot](./screenshots/5.png)
 ![6 screenshot](./screenshots/6.png)
 ![7 screenshot](./screenshots/7.png)
+![8 screenshot](./screenshots/8.png)
+![9 screenshot](./screenshots/9.png)
 
 ## Setup
 
