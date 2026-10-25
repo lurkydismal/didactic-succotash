@@ -55,7 +55,13 @@ The current implementation focuses on reading and exploring data; it does not pr
 
 ## Screenshots
 
-Screenshots are not included in the current repository snapshot.
+![1 screenshot](./screenshots/1.png)
+![2 screenshot](./screenshots/2.png)
+![3 screenshot](./screenshots/3.png)
+![4 screenshot](./screenshots/4.png)
+![5 screenshot](./screenshots/5.png)
+![6 screenshot](./screenshots/6.png)
+![7 screenshot](./screenshots/7.png)
 
 ## Setup
 
