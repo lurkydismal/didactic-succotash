@@ -142,7 +142,9 @@ The `lint` and `format` package scripts currently reference `fallow` and `oxfmt`
 
 ## Project Status
 
-Project is: _in progress_. The current implementation focuses on read-only, database-backed administration views and reusable table components. It is not yet ready to expose to untrusted users.
+Project is: _in progress_.
+
+The current implementation focuses on read-only, database-backed administration views and reusable table components. It is not yet ready to expose to untrusted users.
 
 ## Room for Improvement
 
