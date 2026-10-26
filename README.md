@@ -152,7 +152,7 @@ To do:
 - Add create, update, and delete workflows if editing records is required.
 - Complete the Docker Compose configuration and document a reliable database setup process.
 - Align linting and formatting scripts with the declared dependencies.
-- Add screenshots and deployment instructions.
+- Add deployment instructions.
 
 ## Acknowledgements
 
